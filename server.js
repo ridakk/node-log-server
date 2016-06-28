@@ -5,6 +5,9 @@ let fs = require('fs');
 let app = express();
 let bodyParser = require('body-parser');
 let https = require('https');
+let morgan = require('morgan');
+let mongoose = require('mongoose');
+let config = require('./config');
 
 let privateKey = fs.readFileSync('server.key', 'utf8');
 let certificate = fs.readFileSync('server.crt', 'utf8');
@@ -15,10 +18,17 @@ let credentials = {
   passphrase: 'odun'
 };
 
+mongoose.connect(config.database);
+app.set('superSecret', config.secret);
+
 app.set('port', (process.env.PORT || 8443));
 
 app.use(express.static(__dirname + '/ui/dist/'));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 
 require('./routes/log')(app);
 require('./routes/admin')(app);

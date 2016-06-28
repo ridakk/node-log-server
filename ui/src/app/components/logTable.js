@@ -39,14 +39,18 @@ class LogTable extends React.Component {
   render() {
     return (
       <Table>
-        <TableHeader>
+        <TableHeader
+          displaySelectAll={false}
+          adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>ID</TableHeaderColumn>
             <TableHeaderColumn>Content</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody showRowHover={true}>
+        <TableBody
+          showRowHover={true}
+          displayRowCheckbox={false}>
           {this.state.logs.map(function(log) {
               return <TableRow key={log.id}>
                 <TableRowColumn>{log.id}</TableRowColumn>
