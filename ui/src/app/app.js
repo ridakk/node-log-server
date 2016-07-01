@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Router, Route, hashHistory } from 'react-router'
 import Home from './components/home';
+import Login from './components/login';
 
 require('./main.css');
 
@@ -16,6 +17,7 @@ injectTapEventPlugin();
 // For more details see: https://facebook.github.io/react/docs/top-level-api.html#react.render
 ReactDOM.render(
   <Router history={hashHistory}>
-    <Route path='/' component={Home}/>
+    <Route path='/' component={Login}/>
+    <Route path='/home' component={Home}/>
   </Router>, document.getElementById('app')
 );

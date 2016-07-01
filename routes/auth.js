@@ -1,15 +1,15 @@
 "use strict";
 
+let passport = require('passport');
+
 module.exports = (app) => {
 
-  app.post('/auth',
+  app.get('/auth',
     passport.authenticate('basic', {
       session: false
     }),
     function(req, res) {
-      res.json({
-        token: req.user.token
-      });
+      res.json(req.user);
     });
 
 };

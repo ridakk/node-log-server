@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "webpack-dev-server --config webpack-dev-server.config.ui.js --progress --inline --colors",
-    "prod": "webpack --config webpack-production.config.ui.js --progress --colors && nodemon server"
+    "prod": "webpack --config webpack-production.config.ui.js --progress --colors && nodemon --ignore ui/ server"
   },
   "repository": {
     "type": "git",
@@ -18,13 +18,16 @@
   },
   "homepage": "https://github.com/ridakk/node-log-server#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "cors": "^2.7.1",
     "express": "^4.14.0",
     "jsonwebtoken": "^7.0.1",
     "mongoose": "^4.5.2",
     "morgan": "^1.7.0",
-    "node-uuid": "^1.4.7"
+    "node-uuid": "^1.4.7",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",

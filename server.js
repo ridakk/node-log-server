@@ -30,8 +30,13 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
+// load auth strategies
+require('./auth/basicStrategy')(app);
+
 require('./routes/log')(app);
 require('./routes/admin')(app);
+require('./routes/auth')(app);
+require('./routes/user')(app);
 
 let httpsServer = https.createServer(credentials, app);
 
