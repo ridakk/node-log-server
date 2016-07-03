@@ -16,6 +16,8 @@ let userSchema = new Schema({
     unique: true,
     required: true
   },
+  role: String,
+  applications: [String],
   admin: Boolean
 });
 
