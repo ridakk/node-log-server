@@ -11,3 +11,15 @@
 //   if (!response.ok) { return false;}
 //	return response.json();
 //}).then((res)=> {console.log("response", res)}).catch((err)=> {console.log(err)})
+
+// fetch('/profile', {
+//   method: 'post',
+//   headers: new Headers({
+// 		'Authorization': 'JWT '+ '<token>'
+// 	})
+// }).then(function(response) {
+// 	// Convert to JSON
+//     console.log('1', response)
+//    if (!response.ok) { return false;}
+// 	return response.json();
+// }).then((res)=> {console.log("response", res)}).catch((err)=> {console.log(err)}

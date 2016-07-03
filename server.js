@@ -32,6 +32,7 @@ app.use(morgan('dev'));
 
 // load auth strategies
 require('./auth/basicStrategy')(app);
+require('./auth/JwtStrategy')(app);
 
 require('./routes/log')(app);
 require('./routes/admin')(app);

@@ -1,5 +1,6 @@
 "use strict";
 
+let passport = require('passport');
 let User = require('../models/user');
 let Error = require('../models/error');
 
@@ -19,6 +20,7 @@ module.exports = (app) => {
     newUser.save(function(err) {
       if (err) {
         // TODO: need to map mongo errors to user friendly error objects.
+        console.log(err)
         res.status(500).send(new Error(1000, 'DB error'));
       }
       else {
@@ -26,5 +28,11 @@ module.exports = (app) => {
       }
     });
   });
+
+  app.post('/profile', passport.authenticate('jwt', { session: false}),
+      function(req, res) {
+          res.send(req.user);
+      }
+  );
 
 };

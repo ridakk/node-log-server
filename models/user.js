@@ -1,13 +1,21 @@
 'use strict'
 
-let mongoose = require('mongoose'),
-  Schema = mongoose.Schema,
-  bcrypt = require('bcrypt-nodejs');
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
+let bcrypt = require('bcrypt-nodejs');
 
 // create a schema
 let userSchema = new Schema({
-  username: {type: String, unique : true, required: true},
-  password: {type: String, unique : true, required: true},
+  username: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  password: {
+    type: String,
+    unique: true,
+    required: true
+  },
   admin: Boolean
 });
 

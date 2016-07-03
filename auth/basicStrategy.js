@@ -34,7 +34,7 @@ module.exports = (app) => {
                     return cb(null, false, { message: 'Incorrect password.' });
                 }
 
-                let token = jwt.sign(user, app.get('superSecret'), {
+                let token = jwt.sign({user: user}, app.get('superSecret'), {
                     expiresIn: 3600 // expires in 1 hour
                 });
 
