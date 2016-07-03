@@ -1,3 +1,6 @@
 'use strict'
 
-module.exports const ROLE = ['ADMIN', 'GUEST'];
+module.exports = {
+  ADMIN: 'Admin',
+  GUEST: 'Guest'
+}

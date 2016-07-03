@@ -23,17 +23,17 @@ let keySchema = new Schema({
   }
 });
 
-userSchema.methods.generateHash = function(key) {
+userSchema.methods.generateHash = (key) => {
   return bcrypt.hashSync(key, bcrypt.genSaltSync(8), null);
 };
 
 // checking if product key is valid
-userSchema.methods.validProductKey = function(productKey) {
+userSchema.methods.validProductKey = (productKey) => {
   return bcrypt.compareSync(prodKey, this.productKey);
 };
 
 // checking if javascript key is valid
-userSchema.methods.validJsKey = function(jsKey) {
+userSchema.methods.validJsKey = (jsKey) => {
   return bcrypt.compareSync(jsKey, this.jsKey);
 };
 
