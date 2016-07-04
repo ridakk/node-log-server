@@ -17,11 +17,9 @@ module.exports = (app) => {
   // authentication.
   passport.use('basic', new Strategy(
     (username, password, cb) => {
-      console.log(cb)
-      var query = User.where({
+      User.findOne({
         username: username
-      });
-      query.findOne((err, user) => {
+      },(err, user) => {
         if (err) {
           console.log('user retrieve err: \n');
           console.log(err);
@@ -42,6 +40,8 @@ module.exports = (app) => {
           });
         }
 
+        // TODO: this is creating new tokens
+        // should return previous token if user has one.
         let token = jwt.sign({
           user: user
         }, app.get('superSecret'), {
