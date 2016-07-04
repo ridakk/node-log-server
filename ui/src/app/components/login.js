@@ -7,6 +7,7 @@ import Username from './username';
 import LoginButton from './loginButton';
 import { withRouter } from 'react-router'
 import Notification from './notification';
+import API from '../services/api';
 
 const styles = {
   container: {
@@ -54,6 +55,7 @@ class Login extends React.Component {
 
   handleLoginButtonClick() {
       console.log('login clicked', this.state);
+      API.auth(this.state.username, this.state.password);
   }
 
   render() {

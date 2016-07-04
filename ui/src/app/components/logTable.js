@@ -1,6 +1,5 @@
 import React from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import LogService from './../services/logService';
 
 
 class LogTable extends React.Component {
@@ -25,15 +24,6 @@ class LogTable extends React.Component {
         content: '111'
       }]
     };
-
-    LogService.getAll().then((res) => {
-      console.log(res);
-      this.setState({
-        logs: res
-      });
-    }, (error) => {
-      console.log(error);
-    });
   }
 
   render() {
