@@ -11,8 +11,15 @@ let applicationSchema = new Schema({
     unique: true,
     required: true
   },
-  name: String,
-  url: String,
+  name: {
+    type: String,
+    required: true
+  },
+  createdBy: String,
+  url: {
+    type: String,
+    required: true
+  },
   keys: [String]
 });
 

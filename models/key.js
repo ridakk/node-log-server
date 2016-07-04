@@ -11,6 +11,7 @@ let keySchema = new Schema({
     unique: true,
     required: true
   },
+  applicationId: String,
   productKey: {
     type: String,
     unique: true,

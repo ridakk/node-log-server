@@ -72,18 +72,91 @@ module.exports = (app) => {
     }
   );
 
-  app.get('/user/:username', passport.authenticate('jwt', {
+  app.put('/user/:username', passport.authenticate('jwt', {
       session: false
     }),
     (req, res) => {
-      let username = req.params.username;
-
-      if (username !== req.user.username) {
+      if (req.user.role !== ROLES.ADMIN) {
         res.status(403).json(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.NOT_AUTHORIZED));
         return;
       };
 
+      User.findOne({
+        username: username
+      }, (err, user) => {
+        if (err) {
+          console.log('application retrieve err: \n');
+          console.log(err);
+          res.status(500).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.UNKNOWN));
+          return;
+        }
+
+        if (!user) {
+          res.status(404).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.USER_NOT_FOUND));
+          return;
+        }
+
+        Application.findOne({
+          id: req.body.applicationId
+        }, (err, application) => {
+          if (err) {
+            console.log('application retrieve err: \n');
+            console.log(err);
+            res.status(500).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.UNKNOWN));
+            return;
+          }
+
+          if (!application) {
+            res.status(404).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.APP_NOT_FOUND));
+            return;
+          }
+
+          user.applications.push(application.id);
+
+          // save the user
+          user.save((err) => {
+            if (err) {
+              // TODO: need to map mongo errors to user friendly error objects.
+              res.status(500).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.UNKNOWN));
+            } else {
+              res.status(200).json(user);
+            }
+          });
+        });
+
+
+      });
+
       res.status(200).json(req.user);
+    }
+  );
+
+  app.get('/user/:username', passport.authenticate('jwt', {
+      session: false
+    }),
+    (req, res) => {
+      if (req.params.username !== req.user.username || req.user.role !== ROLES.ADMIN) {
+        res.status(403).json(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.NOT_AUTHORIZED));
+        return;
+      };
+
+      User.findOne({
+        username: req.params.username
+      }, (err, user) => {
+        if (err) {
+          console.log('application retrieve err: \n');
+          console.log(err);
+          res.status(500).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.UNKNOWN));
+          return;
+        }
+
+        if (!user) {
+          res.status(404).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.USER_NOT_FOUND));
+          return;
+        }
+
+        res.status(200).json(user);
+      });
     }
   );
 

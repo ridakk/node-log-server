@@ -35,9 +35,9 @@ require('./auth/basicStrategy')(app);
 require('./auth/JwtStrategy')(app);
 
 require('./routes/log')(app);
-require('./routes/admin')(app);
 require('./routes/auth')(app);
 require('./routes/user')(app);
+require('./routes/application')(app);
 
 let httpsServer = https.createServer(credentials, app);
 
