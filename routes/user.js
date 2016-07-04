@@ -17,7 +17,7 @@ module.exports = (app) => {
   //
   //   newUser.username = req.body.username;
   //   newUser.password = newUser.generateHash(req.body.password);
-  //   newUser.admin = true;
+  //   newUser.role = ROLES.ADMIN;
   //
   //   // save the user
   //   newUser.save((err) => {
@@ -64,6 +64,8 @@ module.exports = (app) => {
       newUser.save((err) => {
         if (err) {
           // TODO: need to map mongo errors to user friendly error objects.
+          console.log('new user save err: \n');
+          console.log(err);
           res.status(500).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.UNKNOWN));
         } else {
           res.status(202).json(newUser);
@@ -117,6 +119,8 @@ module.exports = (app) => {
           user.save((err) => {
             if (err) {
               // TODO: need to map mongo errors to user friendly error objects.
+              console.log('user save err: \n');
+              console.log(err);
               res.status(500).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.UNKNOWN));
             } else {
               res.status(200).json(user);

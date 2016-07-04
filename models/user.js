@@ -17,8 +17,7 @@ let userSchema = new Schema({
     required: true
   },
   role: String,
-  applications: [String],
-  admin: Boolean
+  applications: [String]
 });
 
 userSchema.methods.generateHash = (password) => {
