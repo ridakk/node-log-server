@@ -31,6 +31,28 @@ module.exports = (app) => {
   //   });
   // });
 
+  app.get('/userx/:username', (req, res) => {
+    console.log(req.params.username);
+
+    User.findOne({
+      username: req.params.username
+    }, (err, user) => {
+      if (err) {
+        console.log('application retrieve err: \n');
+        console.log(err);
+        res.status(500).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.UNKNOWN));
+        return;
+      }
+
+      if (!user) {
+        res.status(404).send(new Error(ErrorCodes.ROUTE_USER, ReasonTexts.USER_NOT_FOUND));
+        return;
+      }
+
+      res.status(200).json(user);
+    });
+  });
+
   app.post('/user', passport.authenticate('jwt', {
       session: false
     }),
@@ -84,7 +106,7 @@ module.exports = (app) => {
       };
 
       User.findOne({
-        username: username
+        username: req.params.username
       }, (err, user) => {
         if (err) {
           console.log('application retrieve err: \n');

@@ -17,20 +17,26 @@ module.exports = (app) => {
   // authentication.
   passport.use('basic', new Strategy(
     (username, password, cb) => {
-      User.findOne({
+      console.log(cb)
+      var query = User.where({
         username: username
-      }, (err, user) => {
+      });
+      query.findOne((err, user) => {
         if (err) {
+          console.log('user retrieve err: \n');
+          console.log(err);
           return cb(err);
         }
 
         if (!user) {
+          console.log('Incorrect username.');
           return cb(null, false, {
             message: 'Incorrect username.'
           });
         }
 
         if (!user.validPassword(password)) {
+          console.log('Incorrect username.');
           return cb(null, false, {
             message: 'Incorrect password.'
           });

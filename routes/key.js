@@ -40,8 +40,8 @@ module.exports = (app) => {
         let newKey = new Key();
 
         newKey.id = uuid.v1();
-        newKey.productKey = uuid.v4();
-        newKey.jsKey = uuid.v4();
+        newKey.productKey = newKey.generateHash(uuid.v4());
+        newKey.jsKey = newKey.generateHash(uuid.v4());
         newKey.applicationId = application.id;
 
         // save the user

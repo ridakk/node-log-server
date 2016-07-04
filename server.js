@@ -38,6 +38,7 @@ require('./routes/log')(app);
 require('./routes/auth')(app);
 require('./routes/user')(app);
 require('./routes/application')(app);
+require('./routes/key')(app);
 
 let httpsServer = https.createServer(credentials, app);
 

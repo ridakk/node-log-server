@@ -20,12 +20,12 @@ let userSchema = new Schema({
   applications: [String]
 });
 
-userSchema.methods.generateHash = (password) => {
+userSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
 // checking if password is valid
-userSchema.methods.validPassword = (password) => {
+userSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 
