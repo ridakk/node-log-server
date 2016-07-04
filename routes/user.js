@@ -2,7 +2,7 @@
 
 let passport = require('passport');
 let UserCtrl = require('../controllers/userController');
-let Error = require('../models/error');
+let Error = require('../utils/error');
 let ErrorCodes = require('../constants/errorCodes.js');
 let ReasonTexts = require('../constants/reasonTexts.js');
 let ROLES = require('../constants/roles.js');
