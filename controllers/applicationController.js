@@ -1,11 +1,11 @@
 "use strict";
 
-let Application = require('../models/application');
+let Key = require('../models/key');
 let uuid = require('node-uuid');
 let Promise = require('es6-promise').Promise;
 let ReasonTexts = require('../constants/reasonTexts.js');
 
-exports.findByUsername = (appid) => {
+exports.findByAppId = (appid) => {
     return new Promise((resolve, reject) => {
         Application.findOne({
             id: name

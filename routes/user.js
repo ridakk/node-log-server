@@ -80,6 +80,7 @@ module.exports = (app) => {
             AppCtrl.findByUsername(req.params.id).then((application) => {
                 user.applications.push(application.id);
 
+                //TODO: move this user save to user controller
                 // save the user
                 user.save((err) => {
                     if (err) {

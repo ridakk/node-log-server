@@ -42,7 +42,7 @@ exports.create = (username, password, role) => {
         newUser.save((err) => {
             if (err) {
                 // TODO: need to map mongo errors to user friendly error objects.
-                console.log('new user save err: \n');
+                console.log('user create err: \n');
                 console.log(err);
                 reject(ReasonTexts.UNKNOWN);
             } else {
