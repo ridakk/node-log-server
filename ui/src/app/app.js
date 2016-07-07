@@ -5,6 +5,7 @@ import { Router, Route, hashHistory } from 'react-router'
 import Home from './components/home';
 import NewApp from './components/newApp';
 import NewUser from './components/newUser';
+import Apps from './components/apps';
 import Login from './components/login';
 
 require('./main.css');
@@ -23,5 +24,6 @@ ReactDOM.render(
     <Route path='/home' component={Home}/>
     <Route path='/newApp' component={NewApp}/>
     <Route path='/newUser' component={NewUser}/>
+    <Route path='/apps' component={Apps}/>
   </Router>, document.getElementById('app')
 );

@@ -85,7 +85,7 @@ class NewUser extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <TopBar admin={this.state.admin} title={'Create Application'}/>
+          <TopBar admin={this.state.admin} title={'Create User'}/>
           <TextBox
             onChange={this.handleUsernameChange}
             type={'text'} hint={'jhonsnow'}

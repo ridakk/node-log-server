@@ -5,6 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TopBar from './topBar';
 import AppList from './appList';
 import userModel from '../models/userModel';
+import api from '../services/api';
 
 let ROLES = require('../../../../constants/roles.js');
 
@@ -20,24 +21,28 @@ const muiTheme = getMuiTheme({
   },
 });
 
-class Home extends React.Component {
+class Apps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       token: userModel.getToken(),
       admin: userModel.getRole() === ROLES.ADMIN,
-      username: userModel.getUsername(),
-      applications: userModel.getApplications(),
+      applications: [],
       selectedApp: null
     };
-    console.log('home page state: ', this.state)
+    console.log('home page state: ', this.state);
+    api.send(this.state.token, '/applications', 'GET').then((applications)=>{
+      this.setState({
+        applications: applications
+      });
+    });
   }
 
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <TopBar admin={this.state.admin} title={'Your applications'}/>
+          <TopBar admin={this.state.admin} title={'Applications'}/>
           {this.state.applications.length > 0 && <AppList apps={this.state.applications}/>}
           {this.state.applications.length === 0 && <h3>Please create new application from left menu</h3>}
         </div>
@@ -46,4 +51,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default Apps;
