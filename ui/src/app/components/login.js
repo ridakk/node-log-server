@@ -2,12 +2,12 @@ import React from 'react';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Password from './password';
-import Username from './username';
-import LoginButton from './loginButton';
+import TextBox from './textBox';
+import Button from './button';
 import { withRouter } from 'react-router'
 import Notification from './notification';
-import API from '../services/api';
+import api from '../services/api';
+import userModel from '../models/userModel';
 
 const styles = {
   container: {
@@ -38,33 +38,62 @@ class Login extends React.Component {
   }
 
   handleUsernameChange(username) {
-      this.state.username = username;
-      this.setState({
-          buttonDisabled: this.state.username.length === 0 ||
-              this.state.password.length === 0
-      });
+    this.state.username = username;
+    this.setState({
+      buttonDisabled: this.state.username.length === 0 ||
+        this.state.password.length === 0,
+      notificationOpen: false,
+      notificationMessage: ''
+    });
   }
 
   handlePasswordChange(password) {
-      this.state.password = password;
-      this.setState({
-          buttonDisabled: this.state.username.length === 0 ||
-              this.state.password.length === 0
-      });
+    this.state.password = password;
+    this.setState({
+      buttonDisabled: this.state.username.length === 0 ||
+        this.state.password.length === 0,
+      notificationOpen: false,
+      notificationMessage: ''
+    });
   }
 
   handleLoginButtonClick() {
-      console.log('login clicked', this.state);
-      API.auth(this.state.username, this.state.password);
+    console.log('login clicked', this.state);
+    api.auth(this.state.username, this.state.password).then((data) => {
+      console.log('auth success ', data);
+      userModel.set(data);
+      this.props.router.push('/home');
+    }, (data) => {
+      //if(data.status === 401) {
+      this.setState({
+        notificationOpen: true,
+        notificationMessage: 'Username or Password is wrong'
+      });
+      //}
+    });
+
+    // userModel.set({
+    //   role: 'Admin',
+    //   applications: []
+    // });
+    // this.props.router.push('/home');
   }
 
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <Username onUsernameChange={this.handleUsernameChange}/>
-          <Password onPasswordChange={this.handlePasswordChange}/>
-          <LoginButton
+          <TextBox
+            onChange={this.handleUsernameChange}
+            type={'text'} hint={'Enter your user name'}
+            floatingLabel={'Username'}/>
+          <TextBox
+            onChange={this.handlePasswordChange}
+            type={'password'}
+            hint={'Enter your password'}
+            floatingLabel={'Password'}/>
+          <Button
+            label={'Login'}
             disabled={this.state.buttonDisabled}
             onClick={this.handleLoginButtonClick}
           />

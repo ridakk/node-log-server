@@ -1,6 +1,6 @@
 "use strict";
 
-let Application = require('../models/application');
+let Key = require('../models/key');
 let uuid = require('node-uuid');
 let Promise = require('es6-promise').Promise;
 let ReasonTexts = require('../constants/reasonTexts.js');
@@ -13,6 +13,7 @@ exports.findByAppId = (appid) => {
             if (err) {
                 console.log('keys retrieve err: \n');
                 console.log(err);
+                console.log(err.code);
                 reject(ErrorCodes.ROUTE_KEY, ReasonTexts.UNKNOWN);
                 return;
             }
@@ -44,6 +45,7 @@ exports.create = (appId) => {
                 // TODO: need to map mongo errors to user friendly error objects.
                 console.log('new key create err: \n');
                 console.log(err);
+                console.log(err.code);
                 reject(ReasonTexts.UNKNOWN);
             } else {
                 resolve({

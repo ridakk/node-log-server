@@ -4,7 +4,7 @@ let passport = require('passport');
 let Strategy = require('passport-http').BasicStrategy;
 let UserCtrl = require('../controllers/userController');
 let jwt = require('jsonwebtoken');
-
+let ReasonTexts = require('../constants/reasonTexts.js');
 
 module.exports = (app) => {
 
@@ -17,6 +17,7 @@ module.exports = (app) => {
     // authentication.
     passport.use('basic', new Strategy(
         (username, password, cb) => {
+          console.log('BasicStrategy' + username + ':' + password);
             UserCtrl.findByUsername(username).then((user) => {
                 if (!user.validPassword(password)) {
                     console.log('Incorrect username.');
@@ -33,17 +34,22 @@ module.exports = (app) => {
                     expiresIn: 3600 // expires in 1 hour
                 });
 
+                console.log('returning success');
                 return cb(null, {
                     username: user.username,
-                    admin: user.admin,
+                    role: user.role,
+                    applications: user.applications,
                     token: token
                 });
             }, (reason) => {
+              console.log('auth error: unkown');
                 if (reason === ReasonTexts.USER_NOT_FOUND) {
+                  console.log('auth error: user not found');
                     return cb(null, false, {
                         message: 'Incorrect username.'
                     });
                 } else {
+                  console.log('auth error: unkown');
                     return cb(err);
                 }
             });

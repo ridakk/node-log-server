@@ -30,18 +30,6 @@ module.exports = (app) => {
   //   });
   // });
 
-  app.get('/userx/:username', (req, res) => {
-    UserCtrl.findByUsername(req.params.username).then((user) => {
-      res.status(200).json(user);
-    }, (reason) => {
-      if (reason === ReasonTexts.USER_NOT_FOUND) {
-        res.status(404).send(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
-      } else {
-        res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
-      }
-    });
-  });
-
   app.post('/user', passport.authenticate('jwt', {
     session: false
   }), (req, res) => {
@@ -67,7 +55,8 @@ module.exports = (app) => {
     });
   });
 
-  app.put('/user/:username', passport.authenticate('jwt', {
+  // TODO: delete app from user is missing, implement it.
+  app.post('/user/:username/:appId', passport.authenticate('jwt', {
     session: false
   }), (req, res) => {
     if (req.user.role !== ROLES.ADMIN) {
@@ -76,8 +65,11 @@ module.exports = (app) => {
     };
 
     UserCtrl.findByUsername(req.params.username).then((user) => {
-      AppCtrl.findByUsername(req.params.id).then((application) => {
-        user.applications.push(application.id);
+      AppCtrl.findByUsername(req.params.appId).then((application) => {
+        user.applications.push({
+          id: application.id,
+          name: application.name
+        });
 
         //TODO: move this user save to user controller
         // save the user
@@ -106,6 +98,8 @@ module.exports = (app) => {
       }
     });
   });
+
+  // TODO: get all users is missing
 
   app.get('/user/:username', passport.authenticate('jwt', {
     session: false

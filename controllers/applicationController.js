@@ -1,6 +1,6 @@
 "use strict";
 
-let Key = require('../models/key');
+let Application = require('../models/application');
 let uuid = require('node-uuid');
 let Promise = require('es6-promise').Promise;
 let ReasonTexts = require('../constants/reasonTexts.js');
@@ -13,6 +13,7 @@ exports.findByAppId = (appid) => {
             if (err) {
                 console.log('application retrieve err: \n');
                 console.log(err);
+                console.log(err.code);
                 reject(ReasonTexts.UNKNOWN);
                 return;
             }
@@ -36,12 +37,17 @@ exports.create = (name, url, createdBy) => {
         newApplication.url = url;
         newApplication.createdBy = createdBy;
 
+        console.log('new app: \n');
+        console.log(newApplication);
+
         // save the user
         newApplication.save((err) => {
             if (err) {
                 // TODO: need to map mongo errors to user friendly error objects.
+                // 11000 means duplicate key
                 console.log('application create err: \n');
                 console.log(err);
+                console.log(err.code);
                 reject(ReasonTexts.UNKNOWN);
             } else {
                 resolve(newApplication);

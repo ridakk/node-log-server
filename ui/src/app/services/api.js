@@ -1,26 +1,41 @@
 let Api = () => {
-  let token;
-  return {
-    auth: (username, password) => {
-      fetch('/auth', {
-          method: 'GET',
-          headers: new Headers({
-            'Authorization': 'Basic ' + btoa(username + ':' + password)
-          })
+  function sendRequest(url, method, headers, data) {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+          method: method,
+          headers: headers,
+          body: JSON.stringify(data)
         }).then((response) => {
-          // Convert to JSON
-          console.log('1', response)
+          console.log(url + ' ' + method + ' response: ', response);
           if (!response.ok) {
-            return false;
+            reject({
+              errorCode: response.status,
+              reasonText: response.statusText
+            });
+            return;
           }
-          return response.json();
-        })
-        .then((res) => {
-          console.log("response", res)
+          resolve(response.json());
         })
         .catch((err) => {
-          console.log(err)
-        })
+          reject(err);
+        });
+    });
+  }
+
+  return {
+    auth: (username, password) => {
+      return sendRequest('/auth', 'GET', new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(username + ':' + password)
+      }));
+    },
+    send: (token, url, method, data) => {
+      return sendRequest(url, method, new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'JWT ' + token
+      }), data);
     }
   };
 };

@@ -5,7 +5,7 @@ const style = {
   margin: 12,
 };
 
-class LoginButton extends React.Component {
+class Button extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -13,7 +13,7 @@ class LoginButton extends React.Component {
   render() {
     return (
       <div>
-        <RaisedButton label='Login' primary={true} style={style}
+        <RaisedButton label={this.props.label} primary={true} style={style}
         onTouchTap={this.props.onClick}
         disabled={this.props.disabled}/>
       </div>
@@ -21,4 +21,4 @@ class LoginButton extends React.Component {
   }
 }
 
-export default LoginButton
+export default Button

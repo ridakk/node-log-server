@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
 
-class Username extends React.Component {
+class TextBox extends React.Component {
   constructor(props) {
     super(props)
     this.state = { errorText: '', value: props.value }
@@ -9,17 +9,17 @@ class Username extends React.Component {
   }
 
   onChange(event) {
-      let username = event.target.value.trim();
-      if (username.length === 0) {
+      let text = event.target.value.trim();
+      if (text.length === 0) {
           this.setState({
-              errorText: 'Please enter your user name'
+              errorText: 'This field is required'
           })
-          this.props.onUsernameChange('');
+          this.props.onChange('');
       } else {
           this.setState({
               errorText: ''
           })
-          this.props.onUsernameChange(username);
+          this.props.onChange(text);
       }
   }
 
@@ -28,9 +28,9 @@ class Username extends React.Component {
       <div>
         <TextField
           className="textFieldContainer"
-          hintText="Your user name"
-          floatingLabelText="Username"
-          type="username"
+          hintText={this.props.hint}
+          floatingLabelText={this.props.floatingLabel}
+          type={this.props.type}
           errorText= {this.state.errorText}
           onChange={this.onChange}
         /><br />
@@ -39,4 +39,4 @@ class Username extends React.Component {
   }
 }
 
-export default Username;
+export default TextBox;

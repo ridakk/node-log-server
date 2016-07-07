@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Router, Route, hashHistory } from 'react-router'
 import Home from './components/home';
+import NewApp from './components/newApp';
+import NewUser from './components/newUser';
 import Login from './components/login';
 
 require('./main.css');
@@ -19,5 +21,7 @@ ReactDOM.render(
   <Router history={hashHistory}>
     <Route path='/' component={Login}/>
     <Route path='/home' component={Home}/>
+    <Route path='/newApp' component={NewApp}/>
+    <Route path='/newUser' component={NewUser}/>
   </Router>, document.getElementById('app')
 );

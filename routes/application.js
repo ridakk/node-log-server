@@ -31,10 +31,13 @@ module.exports = (app) => {
       AppCtrl.create(req.body.name, req.body.url, req.user.username).then((application) => {
         res.status(202).json(application);
       }, (reason) => {
+        console.log('failed\n')
         res.status(500).send(new RouteAppError(ReasonTexts.UNKNOWN));
       });
     }
   );
+
+  // TODO: get all applications is missing
 
   app.get('/application/:id', passport.authenticate('jwt', {
     session: false
