@@ -47,11 +47,6 @@ module.exports = (app) => {
     }
 
     AppCtrl.getAll().then((applications) => {
-      if (req.user.role !== ROLES.ADMIN) {
-        res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
-        return;
-      }
-
       res.status(200).json(applications);
     }, (reason) => {
       if (reason === ReasonTexts.APP_NOT_FOUND) {

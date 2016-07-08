@@ -6,6 +6,7 @@ import Home from './components/home';
 import NewApp from './components/newApp';
 import NewUser from './components/newUser';
 import Apps from './components/apps';
+import Users from './components/users';
 import Login from './components/login';
 
 require('./main.css');
@@ -25,5 +26,6 @@ ReactDOM.render(
     <Route path='/newApp' component={NewApp}/>
     <Route path='/newUser' component={NewUser}/>
     <Route path='/apps' component={Apps}/>
+    <Route path='/users' component={Users}/>
   </Router>, document.getElementById('app')
 );

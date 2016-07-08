@@ -74,7 +74,7 @@ class Login extends React.Component {
 
     // userModel.set({
     //   role: 'Admin',
-    //   applications: []
+    //   applications: [{id:1, name: 'asd', url: 'a@a.com'}, {id:2, name: 'qwe', url: 'b@b.com'}]
     // });
     // this.props.router.push('/home');
   }

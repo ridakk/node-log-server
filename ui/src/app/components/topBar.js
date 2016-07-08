@@ -38,7 +38,8 @@ class TopBar extends React.Component {
             menuStyle={{width: '%100'}}
             onItemTouchTap={this.handleMenuItemClick}
           >
-            <MenuItem primaryText="Applications" path={'/apps'}/>
+            <MenuItem primaryText="Home" path={'/home'}/>
+            {this.props.admin && <MenuItem primaryText="Applications" path={'/apps'}/>}
             {this.props.admin && <MenuItem primaryText="Users" path={'/users'}/>}
             {this.props.admin && <Divider />}
             {this.props.admin && <MenuItem primaryText="Create New Application" path={'/newApp'}/>}

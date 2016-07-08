@@ -9,24 +9,13 @@ let ROLES = require('../constants/roles.js');
 module.exports = (app) => {
 
   // // TODO: Development only api, remove before production !!!
-  // app.post('/user', (req, res) => {
+  // app.post('/userdev', (req, res) => {
   //   console.log(req.body);
   //
-  //   var newUser = new User();
-  //
-  //   newUser.username = req.body.username;
-  //   newUser.password = newUser.generateHash(req.body.password);
-  //   newUser.role = ROLES.ADMIN;
-  //
-  //   // save the user
-  //   newUser.save((err) => {
-  //     if (err) {
-  //       // TODO: need to map mongo errors to user friendly error objects.
-  //       console.log(err)
-  //       res.status(500).send(new Error(ErrorCodes.ROUTE_USER, 'DB error'));
-  //     } else {
-  //       res.status(202).send(newUser);
-  //     }
+  //   UserCtrl.create(req.body.username, req.body.password, ROLES.ADMIN).then((user) => {
+  //     res.status(202).json(user);
+  //   }, (reason) => {
+  //     res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
   //   });
   // });
 
@@ -99,7 +88,24 @@ module.exports = (app) => {
     });
   });
 
-  // TODO: get all users is missing
+  app.get('/users', passport.authenticate('jwt', {
+    session: false
+  }), (req, res) => {
+    if (req.user.role !== ROLES.ADMIN) {
+      res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+      return;
+    };
+
+    UserCtrl.getAll(req.params.username).then((user) => {
+      res.status(200).json(user);
+    }, (reason) => {
+      if (reason === ReasonTexts.USER_NOT_FOUND) {
+        res.status(404).send(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
+      } else {
+        res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
+      }
+    });
+  });
 
   app.get('/user/:username', passport.authenticate('jwt', {
     session: false

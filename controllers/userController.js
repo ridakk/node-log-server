@@ -3,6 +3,7 @@
 let User = require('../models/user');
 let Promise = require('es6-promise').Promise;
 let ReasonTexts = require('../constants/reasonTexts.js');
+let ROLES = require('../constants/roles.js');
 
 exports.findByUsername = (username) => {
   console.log('UserCtrl.findByUsername' + username);
@@ -31,6 +32,27 @@ exports.findByUsername = (username) => {
             resolve(user);
         });
     });
+}
+
+exports.getAll = () => {
+  return new Promise((resolve, reject) => {
+    User.find({}, (err, users) => {
+      if (err) {
+        console.log('user retrieve err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+        return;
+      }
+
+      if (!users) {
+        reject(ReasonTexts.USER_NOT_FOUND);
+        return;
+      }
+
+      resolve(users);
+    });
+  });
 }
 
 exports.create = (username, password, role) => {
