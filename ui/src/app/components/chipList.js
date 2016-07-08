@@ -26,11 +26,11 @@ class ChipList extends React.Component {
       <div>
         {self.state.chipData.map(function(data) {
             return <Chip
-                    key={data[self.props.idKey]}
-                    onRequestDelete={() => self.handleRequestDelete(data[self.props.idKey])}
-                  >
-                    {data[self.props.labelKey]}
-                  </Chip>
+                      key={data[self.props.idKey]}
+                      onRequestDelete={() => self.handleRequestDelete(data[self.props.idKey])}
+                   >
+                      {data[self.props.labelKey]}
+                   </Chip>
         })}
       </div>
     )

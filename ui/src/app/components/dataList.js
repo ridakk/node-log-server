@@ -19,7 +19,7 @@ class DataList extends React.Component {
           {self.props.content.map(function(data) {
               return <ListItem key={data[self.props.idKey]}
                 leftAvatar={self.props.leftAvatar}
-                rightIconButton={self.props.rightIconMenu}
+                rightIconButton={self.props.rightIconMenu(data[self.props.idKey])}
                 primaryText={data[self.props.primaryTextKey]}
                 secondaryText={data[self.props.secondaryTextKey]}
               />

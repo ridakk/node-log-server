@@ -62,7 +62,7 @@ class Login extends React.Component {
     // api.auth(this.state.username, this.state.password).then((data) => {
     //   console.log('auth success ', data);
     //   userModel.set(data);
-    //   this.props.router.push('/home');
+    //   this.props.router.push('/myApps');
     // }, (data) => {
     //   //if(data.status === 401) {
     //   this.setState({
@@ -76,7 +76,7 @@ class Login extends React.Component {
       role: 'Admin',
       applications: [{id:1, name: 'asd', url: 'a@a.com'}, {id:2, name: 'qwe', url: 'b@b.com'}]
     });
-    this.props.router.push('/home');
+    this.props.router.push('/myApps');
   }
 
   render() {

@@ -1,17 +1,12 @@
 import React from 'react';
-import {grey400, deepOrange500} from 'material-ui/styles/colors';
+import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TopBar from './topBar';
 import DataList from './dataList';
 import userModel from '../models/userModel';
 import api from '../services/api';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import Avatar from 'material-ui/Avatar';
-import SocialPerson from 'material-ui/svg-icons/social/person';
+import {RightMenu, leftIcon} from '../constants/userDataList';
 
 let ROLES = require('../../../../constants/roles.js');
 
@@ -26,24 +21,6 @@ const muiTheme = getMuiTheme({
     accent1Color: deepOrange500,
   },
 });
-
-const iconButtonElement = (
-  <IconButton
-    touch={true}
-  >
-    <MoreVertIcon color={grey400} />
-  </IconButton>
-);
-
-const rightMenu = (
-  <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem>Delete</MenuItem>
-  </IconMenu>
-);
-
-const leftIcon = (
-  <Avatar icon={<SocialPerson />} />
-);
 
 class Apps extends React.Component {
   constructor(props) {
@@ -71,7 +48,7 @@ class Apps extends React.Component {
             idKey={'username'}
             primaryTextKey={'username'}
             secondaryTextKey={'role'}
-            rightIconMenu={rightMenu}
+            rightIconMenu={RightMenu}
             leftAvatar={leftIcon}/>}
           {this.state.users.length === 0 && <h3>You can create new user from left menu</h3>}
         </div>

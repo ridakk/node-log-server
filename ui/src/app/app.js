@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Router, Route, hashHistory } from 'react-router'
-import Home from './components/home';
+import MyApps from './components/myApps';
 import NewApp from './components/newApp';
 import NewUser from './components/newUser';
 import Apps from './components/apps';
@@ -22,7 +22,7 @@ injectTapEventPlugin();
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path='/' component={Login}/>
-    <Route path='/home' component={Home}/>
+    <Route path='/myApps' component={MyApps}/>
     <Route path='/newApp' component={NewApp}/>
     <Route path='/newUser' component={NewUser}/>
     <Route path='/apps' component={Apps}/>

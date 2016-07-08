@@ -5,12 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TopBar from './topBar';
 import DataList from './dataList';
 import userModel from '../models/userModel';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import Avatar from 'material-ui/Avatar';
-import FileFolder from 'material-ui/svg-icons/file/folder';
+import {RightMenu, leftIcon} from '../constants/appDataList';
 
 import ChipList from './chipList';
 
@@ -28,27 +23,7 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const iconButtonElement = (
-  <IconButton
-    touch={true}
-  >
-    <MoreVertIcon color={grey400} />
-  </IconButton>
-);
-
-const rightMenu = (
-  <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem>Logs</MenuItem>
-    <MenuItem>Analytics</MenuItem>
-    <MenuItem>Edit</MenuItem>
-  </IconMenu>
-);
-
-const leftIcon = (
-  <Avatar icon={<FileFolder />} />
-);
-
-class Home extends React.Component {
+class MyApps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,20 +40,19 @@ class Home extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <TopBar admin={this.state.admin} title={'Your applications'}/>
+          <TopBar admin={this.state.admin} title={'My apps'}/>
           {this.state.applications.length > 0 && <DataList
             content={this.state.applications}
             idKey={'id'}
             primaryTextKey={'name'}
             secondaryTextKey={'url'}
-            rightIconMenu={rightMenu}
+            rightIconMenu={RightMenu}
             leftAvatar={leftIcon}/>}
           {this.state.applications.length === 0 && <h3>Please create new application from left menu</h3>}
-          <ChipList idKey={'username'} labelKey={'username'} content={[{username: 'kadir'}]}/>
         </div>
       </MuiThemeProvider>
     )
   }
 }
 
-export default Home;
+export default MyApps;

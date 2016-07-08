@@ -21,6 +21,8 @@ class TopBar extends React.Component {
       this.props.router.push(child.props.path);
     } else {
       // log out menu item clicked
+      // TODO: need to implement a way to invalidate jwt tokens in server first
+      window.location.href = '.';
     }
   }
 
@@ -38,8 +40,8 @@ class TopBar extends React.Component {
             menuStyle={{width: '%100'}}
             onItemTouchTap={this.handleMenuItemClick}
           >
-            <MenuItem primaryText="Home" path={'/home'}/>
-            {this.props.admin && <MenuItem primaryText="Applications" path={'/apps'}/>}
+            <MenuItem primaryText="My Apps" path={'/myApps'}/>
+            {this.props.admin && <MenuItem primaryText="Apps" path={'/apps'}/>}
             {this.props.admin && <MenuItem primaryText="Users" path={'/users'}/>}
             {this.props.admin && <Divider />}
             {this.props.admin && <MenuItem primaryText="Create New Application" path={'/newApp'}/>}
