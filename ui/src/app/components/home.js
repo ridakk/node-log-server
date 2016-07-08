@@ -12,6 +12,8 @@ import MenuItem from 'material-ui/MenuItem';
 import Avatar from 'material-ui/Avatar';
 import FileFolder from 'material-ui/svg-icons/file/folder';
 
+import ChipList from './chipList';
+
 let ROLES = require('../../../../constants/roles.js');
 
 const styles = {
@@ -72,6 +74,7 @@ class Home extends React.Component {
             rightIconMenu={rightMenu}
             leftAvatar={leftIcon}/>}
           {this.state.applications.length === 0 && <h3>Please create new application from left menu</h3>}
+          <ChipList idKey={'username'} labelKey={'username'} content={[{username: 'kadir'}]}/>
         </div>
       </MuiThemeProvider>
     )

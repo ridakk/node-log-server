@@ -59,24 +59,24 @@ class Login extends React.Component {
 
   handleLoginButtonClick() {
     console.log('login clicked', this.state);
-    api.auth(this.state.username, this.state.password).then((data) => {
-      console.log('auth success ', data);
-      userModel.set(data);
-      this.props.router.push('/home');
-    }, (data) => {
-      //if(data.status === 401) {
-      this.setState({
-        notificationOpen: true,
-        notificationMessage: 'Username or Password is wrong'
-      });
-      //}
-    });
-
-    // userModel.set({
-    //   role: 'Admin',
-    //   applications: [{id:1, name: 'asd', url: 'a@a.com'}, {id:2, name: 'qwe', url: 'b@b.com'}]
+    // api.auth(this.state.username, this.state.password).then((data) => {
+    //   console.log('auth success ', data);
+    //   userModel.set(data);
+    //   this.props.router.push('/home');
+    // }, (data) => {
+    //   //if(data.status === 401) {
+    //   this.setState({
+    //     notificationOpen: true,
+    //     notificationMessage: 'Username or Password is wrong'
+    //   });
+    //   //}
     // });
-    // this.props.router.push('/home');
+
+    userModel.set({
+      role: 'Admin',
+      applications: [{id:1, name: 'asd', url: 'a@a.com'}, {id:2, name: 'qwe', url: 'b@b.com'}]
+    });
+    this.props.router.push('/home');
   }
 
   render() {
