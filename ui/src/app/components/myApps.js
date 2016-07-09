@@ -5,7 +5,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TopBar from './topBar';
 import DataList from './dataList';
 import session from '../models/session';
-import {RightMenu, leftIcon} from '../constants/appDataList';
+import {AppRightMenu} from '../constants/rightMenu';
+import {folderIcon} from '../constants/icons';
+import { withRouter } from 'react-router';
 
 import ChipList from './chipList';
 
@@ -26,12 +28,19 @@ const muiTheme = getMuiTheme({
 class MyApps extends React.Component {
   constructor(props) {
     super(props);
+    this.handleRightIconMenuClick = this.handleRightIconMenuClick.bind(this);
     this.state = {
       username: session.get('username'),
       applications: session.get('applications'),
       selectedApp: null
     };
     console.log('home page state: ', this.state)
+  }
+
+  handleRightIconMenuClick(event, child) {
+    console.log('selected app id', child.props.id);
+    session.set('selectedAppId', child.props.id);
+    this.props.router.push(child.props.path);
   }
 
   render() {
@@ -44,8 +53,9 @@ class MyApps extends React.Component {
             idKey={'id'}
             primaryTextKey={'name'}
             secondaryTextKey={'url'}
-            rightIconMenu={RightMenu}
-            leftAvatar={leftIcon}/>}
+            rightIconMenu={AppRightMenu}
+            rightIconMenuClick={this.handleRightIconMenuClick}
+            leftAvatar={folderIcon}/>}
           {this.state.applications.length === 0 && <h3>Please create new application from left menu</h3>}
         </div>
       </MuiThemeProvider>
@@ -53,4 +63,4 @@ class MyApps extends React.Component {
   }
 }
 
-export default MyApps;
+export default  withRouter(MyApps);

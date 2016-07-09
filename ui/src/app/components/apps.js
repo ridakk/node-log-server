@@ -6,7 +6,9 @@ import TopBar from './topBar';
 import DataList from './dataList';
 import session from '../models/session';
 import api from '../services/api';
-import {RightMenu, leftIcon} from '../constants/appDataList';
+import {AppRightMenu} from '../constants/rightMenu';
+import {folderIcon} from '../constants/icons';
+import { withRouter } from 'react-router';
 
 let ROLES = require('../../../../constants/roles.js');
 
@@ -25,6 +27,7 @@ const muiTheme = getMuiTheme({
 class Apps extends React.Component {
   constructor(props) {
     super(props);
+    this.handleRightIconMenuClick = this.handleRightIconMenuClick.bind(this);
     this.state = {
       applications: [],
       selectedApp: null
@@ -37,6 +40,12 @@ class Apps extends React.Component {
     });
   }
 
+  handleRightIconMenuClick(event, child) {
+    console.log('selected app id', child.props.id);
+    session.set('selectedAppId', child.props.id);
+    this.props.router.push(child.props.path);
+  }
+
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -47,8 +56,9 @@ class Apps extends React.Component {
             idKey={'id'}
             primaryTextKey={'name'}
             secondaryTextKey={'url'}
-            rightIconMenu={RightMenu}
-            leftAvatar={leftIcon}/>}
+            rightIconMenu={AppRightMenu}
+            rightIconMenuClick={this.handleRightIconMenuClick}
+            leftAvatar={folderIcon}/>}
           {this.state.applications.length === 0 && <h3>Please create new application from left menu</h3>}
         </div>
       </MuiThemeProvider>
@@ -56,4 +66,4 @@ class Apps extends React.Component {
   }
 }
 
-export default Apps;
+export default  withRouter(Apps);

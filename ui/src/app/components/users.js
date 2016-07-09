@@ -6,7 +6,9 @@ import TopBar from './topBar';
 import DataList from './dataList';
 import session from '../models/session';
 import api from '../services/api';
-import {RightMenu, leftIcon} from '../constants/userDataList';
+import {UserRightMenu} from '../constants/rightMenu';
+import {personIcon} from '../constants/icons';
+import { withRouter } from 'react-router';
 
 let ROLES = require('../../../../constants/roles.js');
 
@@ -25,8 +27,9 @@ const muiTheme = getMuiTheme({
 class Apps extends React.Component {
   constructor(props) {
     super(props);
+    this.handleRightIconMenuClick = this.handleRightIconMenuClick.bind(this);
     this.state = {
-      users: []
+      users: [{id: 1, username: 'kadir', role: 'admin'}]
     };
     console.log('home page state: ', this.state);
     api.send('/users', 'GET').then((users)=>{
@@ -34,6 +37,10 @@ class Apps extends React.Component {
         users: users
       });
     });
+  }
+
+  handleRightIconMenuClick(event, child) {
+    console.log('selected user id', child.props.id)
   }
 
   render() {
@@ -46,8 +53,9 @@ class Apps extends React.Component {
             idKey={'username'}
             primaryTextKey={'username'}
             secondaryTextKey={'role'}
-            rightIconMenu={RightMenu}
-            leftAvatar={leftIcon}/>}
+            rightIconMenu={UserRightMenu}
+            rightIconMenuClick={this.handleRightIconMenuClick}
+            leftAvatar={personIcon}/>}
           {this.state.users.length === 0 && <h3>You can create new user from left menu</h3>}
         </div>
       </MuiThemeProvider>
@@ -55,4 +63,4 @@ class Apps extends React.Component {
   }
 }
 
-export default Apps;
+export default  withRouter(Apps);

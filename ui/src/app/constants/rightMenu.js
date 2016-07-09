@@ -4,8 +4,6 @@ import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import Avatar from 'material-ui/Avatar';
-import FileFolder from 'material-ui/svg-icons/file/folder';
 
 const iconButtonElement = (
   <IconButton
@@ -15,14 +13,9 @@ const iconButtonElement = (
   </IconButton>
 );
 
-function handleMenuItemClick(event, child) {
-  console.log('event: ', event)
-  console.log('child: ', child)
-}
-
-export const RightMenu = (id) => {
+export const AppRightMenu = (id, fn) => {
   return (
-    <IconMenu onItemTouchTap={handleMenuItemClick} iconButtonElement={iconButtonElement}>
+    <IconMenu onItemTouchTap={fn} iconButtonElement={iconButtonElement}>
       <MenuItem id={id} path={'/appLogs'}>Logs</MenuItem>
       <MenuItem id={id} path={'/appAnalytics'}>Analytics</MenuItem>
       <MenuItem id={id} path={'/appEdit'}>Edit</MenuItem>
@@ -30,6 +23,10 @@ export const RightMenu = (id) => {
   );
 };
 
-export const leftIcon = (
-  <Avatar icon={<FileFolder />} />
-);
+export const UserRightMenu = (id, fn) => {
+  return (
+    <IconMenu onItemTouchTap={fn} iconButtonElement={iconButtonElement}>
+      <MenuItem id={id}>Delete</MenuItem>
+    </IconMenu>
+  );
+};

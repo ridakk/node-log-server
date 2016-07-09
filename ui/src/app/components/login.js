@@ -4,7 +4,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextBox from './textBox';
 import Button from './button';
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router';
 import Notification from './notification';
 import api from '../services/api';
 import session from '../models/session';
@@ -109,4 +109,4 @@ class Login extends React.Component {
   }
 }
 
-export default withRouter(Login)
+export default withRouter(Login);
