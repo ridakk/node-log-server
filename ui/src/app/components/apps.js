@@ -27,7 +27,6 @@ class Apps extends React.Component {
     super(props);
     this.state = {
       token: session.get('token'),
-      admin: session.get('role') === ROLES.ADMIN,
       applications: [],
       selectedApp: null
     };
@@ -43,7 +42,7 @@ class Apps extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <TopBar admin={this.state.admin} title={'Apps'}/>
+          <TopBar title={'Apps'}/>
           {this.state.applications.length > 0 && <DataList
             content={this.state.applications}
             idKey={'id'}

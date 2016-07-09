@@ -39,7 +39,6 @@ class NewUser extends React.Component {
       notificationOpen: false,
       notificationMessage: '',
       token: session.get('token'),
-      admin: session.get('role') === ROLES.ADMIN,
       role: ROLES.GUEST
     };
   }
@@ -85,7 +84,7 @@ class NewUser extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <TopBar admin={this.state.admin} title={'Create User'}/>
+          <TopBar title={'Create User'}/>
           <TextBox
             onChange={this.handleUsernameChange}
             type={'text'} hint={'jhonsnow'}

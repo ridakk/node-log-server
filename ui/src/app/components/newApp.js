@@ -35,8 +35,7 @@ class NewApp extends React.Component {
       buttonDisabled: true,
       notificationOpen: false,
       notificationMessage: '',
-      token: session.get('token'),
-      admin: session.get('role') === ROLES.ADMIN
+      token: session.get('token')
     };
   }
 
@@ -72,7 +71,7 @@ class NewApp extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <TopBar admin={this.state.admin} title={'Create Application'}/>
+          <TopBar title={'Create Application'}/>
           <TextBox
             onChange={this.handleAppNameChange}
             type={'text'} hint={'my-app'}

@@ -7,10 +7,16 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import Divider from 'material-ui/Divider';
 import { withRouter } from 'react-router';
+import session from '../models/session';
+
+let ROLES = require('../../../../constants/roles.js');
 
 class TopBar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      admin: session.get('role') === ROLES.ADMIN,
+    };
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
   }
 
@@ -41,11 +47,11 @@ class TopBar extends React.Component {
             onItemTouchTap={this.handleMenuItemClick}
           >
             <MenuItem primaryText="My Apps" path={'/myApps'}/>
-            {this.props.admin && <MenuItem primaryText="Apps" path={'/apps'}/>}
-            {this.props.admin && <MenuItem primaryText="Users" path={'/users'}/>}
-            {this.props.admin && <Divider />}
-            {this.props.admin && <MenuItem primaryText="Create New Application" path={'/newApp'}/>}
-            {this.props.admin && <MenuItem primaryText="Create New User" path={'/newUser'}/>}
+            {this.state.admin && <MenuItem primaryText="Apps" path={'/apps'}/>}
+            {this.state.admin && <MenuItem primaryText="Users" path={'/users'}/>}
+            {this.state.admin && <Divider />}
+            {this.state.admin && <MenuItem primaryText="Create New Application" path={'/newApp'}/>}
+            {this.state.admin && <MenuItem primaryText="Create New User" path={'/newUser'}/>}
             <Divider />
             <MenuItem primaryText="Log out"/>
           </IconMenu>
