@@ -29,7 +29,9 @@
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-http": "^0.3.0",
-    "passport-jwt": "^2.1.0"
+    "passport-jwt": "^2.1.0",
+    "react-router-redux": "^4.0.5",
+    "redux": "^3.5.2"
   },
   "devDependencies": {
     "babel": "^6.5.2",
