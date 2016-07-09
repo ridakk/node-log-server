@@ -8,7 +8,7 @@ let ReasonTexts = require('../constants/reasonTexts.js');
 exports.findByAppId = (appid) => {
   return new Promise((resolve, reject) => {
     Application.findOne({
-      id: name
+      id: appid
     }, (err, application) => {
       if (err) {
         console.log('application retrieve err: \n');

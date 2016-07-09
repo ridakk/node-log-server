@@ -44,6 +44,7 @@ module.exports = (app) => {
     });
   });
 
+  // TODO: find users with application id is missing, implement it.
   // TODO: delete app from user is missing, implement it.
   app.post('/user/:username/:appId', passport.authenticate('jwt', {
     session: false
@@ -54,7 +55,7 @@ module.exports = (app) => {
     };
 
     UserCtrl.findByUsername(req.params.username).then((user) => {
-      AppCtrl.findByUsername(req.params.appId).then((application) => {
+      AppCtrl.findByAppId(req.params.appId).then((application) => {
         user.applications.push({
           id: application.id,
           name: application.name
@@ -110,7 +111,7 @@ module.exports = (app) => {
   app.get('/user/:username', passport.authenticate('jwt', {
     session: false
   }), (req, res) => {
-    if (req.params.username !== req.user.username || req.user.role !== ROLES.ADMIN) {
+    if (req.params.username !== req.user.username && req.user.role !== ROLES.ADMIN) {
       res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
       return;
     };

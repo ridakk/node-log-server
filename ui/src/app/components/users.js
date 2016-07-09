@@ -10,8 +10,6 @@ import {UserRightMenu} from '../constants/rightMenu';
 import {personIcon} from '../constants/icons';
 import { withRouter } from 'react-router';
 
-let ROLES = require('../../../../constants/roles.js');
-
 const styles = {
   container: {
     textAlign: 'center'

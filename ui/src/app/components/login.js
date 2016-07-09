@@ -59,26 +59,26 @@ class Login extends React.Component {
 
   handleLoginButtonClick() {
     console.log('login clicked', this.state);
-    // api.auth(this.state.username, this.state.password).then((data) => {
-    //   console.log('auth success ', data);
-    //   session.set('username', data.username);
-    //   session.set('role', data.role);
-    //   session.set('applications', data.applications);
-    //   session.set('token', data.token);
-    //   this.props.router.push('/myApps');
-    // }, (data) => {
-    //   //if(data.status === 401) {
-    //   this.setState({
-    //     notificationOpen: true,
-    //     notificationMessage: 'Username or Password is wrong'
-    //   });
-    //   //}
-    // });
+    api.auth(this.state.username, this.state.password).then((data) => {
+      console.log('auth success ', data);
+      session.set('username', data.username);
+      session.set('role', data.role);
+      session.set('applications', data.applications);
+      session.set('token', data.token);
+      this.props.router.push('/myApps');
+    }, (data) => {
+      //if(data.status === 401) {
+      this.setState({
+        notificationOpen: true,
+        notificationMessage: 'Username or Password is wrong'
+      });
+      //}
+    });
 
-    session.set('role', 'Admin');
-    session.set('applications', [{id:1, name: 'asd', url: 'a@a.com'}, {id:2, name: 'qwe', url: 'b@b.com'}]);
-
-    this.props.router.push('/myApps');
+    // session.set('role', 'Admin');
+    // session.set('applications', [{id:1, name: 'asd', url: 'a@a.com'}, {id:2, name: 'qwe', url: 'b@b.com'}]);
+    //
+    // this.props.router.push('/myApps');
   }
 
   render() {

@@ -14,7 +14,7 @@ exports.findByAppId = (appid) => {
                 console.log('keys retrieve err: \n');
                 console.log(err);
                 console.log(err.code);
-                reject(ErrorCodes.ROUTE_KEY, ReasonTexts.UNKNOWN);
+                reject(ReasonTexts.UNKNOWN);
                 return;
             }
 

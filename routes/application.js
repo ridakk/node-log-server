@@ -60,9 +60,9 @@ module.exports = (app) => {
   app.get('/application/:id', passport.authenticate('jwt', {
     session: false
   }), (req, res) => {
-    AppCtrl.findByUsername(req.params.id).then((application) => {
-      if (application.createdBy !== req.user.username ||
-        req.user.applications.indexOf(application.id) === -1 ||
+    AppCtrl.findByAppId(req.params.id).then((application) => {
+      if ((application.createdBy !== req.user.username ||
+        req.user.applications.indexOf(application.id) === -1) &&
         req.user.role !== ROLES.ADMIN) {
         res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
         return;

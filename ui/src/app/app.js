@@ -6,6 +6,7 @@ import MyApps from './components/myApps';
 import NewApp from './components/newApp';
 import NewUser from './components/newUser';
 import Apps from './components/apps';
+import AppEdit from './components/appEdit';
 import Users from './components/users';
 import Login from './components/login';
 
@@ -26,6 +27,7 @@ ReactDOM.render(
     <Route path='/newApp' component={NewApp}/>
     <Route path='/newUser' component={NewUser}/>
     <Route path='/apps' component={Apps}/>
+    <Route path='/appEdit' component={AppEdit}/>
     <Route path='/users' component={Users}/>
   </Router>, document.getElementById('app')
 );

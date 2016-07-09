@@ -11,8 +11,6 @@ import { withRouter } from 'react-router';
 
 import ChipList from './chipList';
 
-let ROLES = require('../../../../constants/roles.js');
-
 const styles = {
   container: {
     textAlign: 'center'
@@ -39,7 +37,7 @@ class MyApps extends React.Component {
 
   handleRightIconMenuClick(event, child) {
     console.log('selected app id', child.props.id);
-    session.set('selectedAppId', child.props.id);
+    session.set('selectedApp', child.props.id);
     this.props.router.push(child.props.path);
   }
 

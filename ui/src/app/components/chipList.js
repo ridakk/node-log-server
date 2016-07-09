@@ -2,6 +2,16 @@ import React from 'react';
 import Chip from 'material-ui/Chip';
 import Button from './button';
 
+const styles = {
+  chip: {
+    margin: 4,
+  },
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+};
+
 class ChipList extends React.Component {
   constructor(props) {
     super(props);
@@ -23,9 +33,10 @@ class ChipList extends React.Component {
   render() {
     let self = this;
     return (
-      <div>
+      <div style={styles.wrapper}>
         {self.state.chipData.map(function(data) {
             return <Chip
+                      style={styles.chip}
                       key={data[self.props.idKey]}
                       onRequestDelete={() => self.handleRequestDelete(data[self.props.idKey])}
                    >

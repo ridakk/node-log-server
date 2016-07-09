@@ -10,8 +10,6 @@ import {AppRightMenu} from '../constants/rightMenu';
 import {folderIcon} from '../constants/icons';
 import { withRouter } from 'react-router';
 
-let ROLES = require('../../../../constants/roles.js');
-
 const styles = {
   container: {
     textAlign: 'center'
@@ -42,7 +40,7 @@ class Apps extends React.Component {
 
   handleRightIconMenuClick(event, child) {
     console.log('selected app id', child.props.id);
-    session.set('selectedAppId', child.props.id);
+    session.set('selectedApp', child.props.id);
     this.props.router.push(child.props.path);
   }
 
