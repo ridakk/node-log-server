@@ -4,7 +4,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TopBar from './topBar';
 import DataList from './dataList';
-import userModel from '../models/userModel';
+import session from '../models/session';
 import {RightMenu, leftIcon} from '../constants/appDataList';
 
 import ChipList from './chipList';
@@ -27,10 +27,10 @@ class MyApps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: userModel.getToken(),
-      admin: userModel.getRole() === ROLES.ADMIN,
-      username: userModel.getUsername(),
-      applications: userModel.getApplications(),
+      token: session.get('token'),
+      admin: session.get('role') === ROLES.ADMIN,
+      username: session.get('username'),
+      applications: session.get('applications'),
       selectedApp: null
     };
     console.log('home page state: ', this.state)

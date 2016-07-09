@@ -7,7 +7,7 @@ import Button from './button';
 import { withRouter } from 'react-router'
 import Notification from './notification';
 import api from '../services/api';
-import userModel from '../models/userModel';
+import session from '../models/session';
 
 const styles = {
   container: {
@@ -61,7 +61,10 @@ class Login extends React.Component {
     console.log('login clicked', this.state);
     // api.auth(this.state.username, this.state.password).then((data) => {
     //   console.log('auth success ', data);
-    //   userModel.set(data);
+    //   session.set('username', data.username);
+    //   session.set('role', data.role);
+    //   session.set('applications', data.applications);
+    //   session.set('token', data.token);
     //   this.props.router.push('/myApps');
     // }, (data) => {
     //   //if(data.status === 401) {
@@ -72,10 +75,9 @@ class Login extends React.Component {
     //   //}
     // });
 
-    userModel.set({
-      role: 'Admin',
-      applications: [{id:1, name: 'asd', url: 'a@a.com'}, {id:2, name: 'qwe', url: 'b@b.com'}]
-    });
+    session.set('role', 'Admin');
+    session.set('applications', [{id:1, name: 'asd', url: 'a@a.com'}, {id:2, name: 'qwe', url: 'b@b.com'}]);
+
     this.props.router.push('/myApps');
   }
 

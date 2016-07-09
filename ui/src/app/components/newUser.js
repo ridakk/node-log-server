@@ -5,7 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextBox from './textBox';
 import Button from './button';
 import TopBar from './topBar';
-import userModel from '../models/userModel';
+import session from '../models/session';
 import Notification from './notification';
 import api from '../services/api';
 import DropDownMenu from 'material-ui/DropDownMenu';
@@ -38,8 +38,8 @@ class NewUser extends React.Component {
       disabled: true,
       notificationOpen: false,
       notificationMessage: '',
-      token: userModel.getToken(),
-      admin: userModel.getRole() === ROLES.ADMIN,
+      token: session.get('token'),
+      admin: session.get('role') === ROLES.ADMIN,
       role: ROLES.GUEST
     };
   }

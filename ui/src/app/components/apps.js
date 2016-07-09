@@ -4,7 +4,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TopBar from './topBar';
 import DataList from './dataList';
-import userModel from '../models/userModel';
+import session from '../models/session';
 import api from '../services/api';
 import {RightMenu, leftIcon} from '../constants/appDataList';
 
@@ -26,8 +26,8 @@ class Apps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: userModel.getToken(),
-      admin: userModel.getRole() === ROLES.ADMIN,
+      token: session.get('token'),
+      admin: session.get('role') === ROLES.ADMIN,
       applications: [],
       selectedApp: null
     };
