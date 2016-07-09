@@ -1,3 +1,5 @@
+import session from '../models/session';
+
 let Api = () => {
   function sendRequest(url, method, headers, data) {
     return new Promise((resolve, reject) => {
@@ -30,11 +32,11 @@ let Api = () => {
         'Authorization': 'Basic ' + btoa(username + ':' + password)
       }));
     },
-    send: (token, url, method, data) => {
+    send: (url, method, data) => {
       return sendRequest(url, method, new Headers({
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + token
+        'Authorization': 'JWT ' + session.get('token')
       }), data);
     }
   };

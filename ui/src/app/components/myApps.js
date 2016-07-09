@@ -27,7 +27,6 @@ class MyApps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: session.get('token'),
       username: session.get('username'),
       applications: session.get('applications'),
       selectedApp: null

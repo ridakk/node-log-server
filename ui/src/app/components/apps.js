@@ -26,12 +26,11 @@ class Apps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: session.get('token'),
       applications: [],
       selectedApp: null
     };
     console.log('home page state: ', this.state);
-    api.send(this.state.token, '/applications', 'GET').then((applications)=>{
+    api.send('/applications', 'GET').then((applications)=>{
       this.setState({
         applications: applications
       });

@@ -38,7 +38,6 @@ class NewUser extends React.Component {
       disabled: true,
       notificationOpen: false,
       notificationMessage: '',
-      token: session.get('token'),
       role: ROLES.GUEST
     };
   }
@@ -65,7 +64,7 @@ class NewUser extends React.Component {
 
   handleCreateButtonClick() {
     console.log('app create clicked', this.state);
-    api.send(this.state.token, '/user', 'POST', {
+    api.send('/user', 'POST', {
       username: this.state.username,
       password: this.state.password,
       role: this.state.role

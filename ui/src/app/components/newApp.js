@@ -34,8 +34,7 @@ class NewApp extends React.Component {
       appUrl: '',
       buttonDisabled: true,
       notificationOpen: false,
-      notificationMessage: '',
-      token: session.get('token')
+      notificationMessage: ''
     };
   }
 
@@ -61,7 +60,7 @@ class NewApp extends React.Component {
 
   handleCreateButtonClick() {
     console.log('app create clicked', this.state);
-    api.send(this.state.token, '/application', 'POST', {
+    api.send('/application', 'POST', {
       name: this.state.appName,
       url: this.state.appUrl
     })
