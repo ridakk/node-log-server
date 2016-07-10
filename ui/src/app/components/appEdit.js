@@ -45,15 +45,16 @@ class AppEdit extends React.Component {
       newKey: {},
       userToAdd: '',
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
+      appId: session.get('selectedApp')
     };
     console.log('app edit state: ', this.state);
-    api.send('/application/' + session.get('selectedApp'), 'GET').then((application)=>{
+    api.send('/application/' + this.state.appId, 'GET').then((application)=>{
       this.setState({
         application: application
       });
     });
-    api.send('/key/' + session.get('selectedApp'), 'GET').then((keys)=>{
+    api.send('/key/' + this.state.appId, 'GET').then((keys)=>{
       this.setState({
         keys: keys
       });
@@ -69,17 +70,18 @@ class AppEdit extends React.Component {
 
   handleGenerateNewKey() {
     console.log('key create clicked');
-    let self = this;
-    api.send('/key/' + session.get('selectedApp'), 'POST').then((newKey) => {
-      self.setState({
-        keys: self.state.keys.push(newKey),
+    api.send('/key/' + this.state.appId, 'POST').then((newKey) => {
+      let keys = this.state.keys;
+      keys.push(newKey);
+      this.setState({
+        keys: keys,
         notificationOpen: false,
         notificationMessage: '',
         newKeyDialog: true,
         newKey: newKey
       });
     }, (err) => {
-      self.setState({
+      this.setState({
         notificationOpen: true,
         notificationMessage: 'Failed to generate key: ' + err.reasonText
       });
@@ -97,15 +99,16 @@ class AppEdit extends React.Component {
 
   handleAddUser() {
     console.log('add user clicked');
-    let self = this;
-    api.send('/user/' + this.state.userToAdd + '/' + session.get('selectedApp'), 'POST').then((newUser) => {
-      self.setState({
-        users: self.state.users.push(newUser),
+    api.send('/user/' + this.state.userToAdd.username + '/' + this.state.appId, 'POST').then((newUser) => {
+      let users = this.state.users;
+      users.push(newUser);
+      this.setState({
+        users: users,
         notificationOpen: false,
         notificationMessage: ''
       });
     }, (err) => {
-      self.setState({
+      this.setState({
         notificationOpen: true,
         notificationMessage: 'Failed to add user: ' + err.reasonText
       });
@@ -125,6 +128,9 @@ class AppEdit extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
           <TopBar title={'App Edit'}/>
+          <h4>{this.state.application.name}</h4>
+          <h4>{this.state.application.url}</h4>
+          <h4>{this.state.appId}</h4>
           <Subheader>Keys</Subheader>
           <ChipList
             content={this.state.keys}

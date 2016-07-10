@@ -16,25 +16,17 @@ class ChipList extends React.Component {
   constructor(props) {
     super(props);
     this.handleRequestDelete = this.handleRequestDelete.bind(this);
-    this.state = {
-      chipData: this.props.content ? this.props.content : []
-    }
   }
 
   handleRequestDelete(key){
     console.log('chip delete for item: ' + key)
-
-    this.chipData = this.state.chipData;
-    const chipToDelete = this.chipData.map((chip) => chip.key).indexOf(key);
-    this.chipData.splice(chipToDelete, 1);
-    this.setState({chipData: this.chipData});
   };
 
   render() {
     let self = this;
     return (
       <div style={styles.wrapper}>
-        {self.state.chipData.map(function(data) {
+        {self.props.content.map(function(data) {
             return <Chip
                       style={styles.chip}
                       key={data[self.props.idKey]}
