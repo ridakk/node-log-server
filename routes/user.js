@@ -2,6 +2,7 @@
 
 let passport = require('passport');
 let UserCtrl = require('../controllers/userController');
+let AppCtrl = require('../controllers/applicationController');
 let RouteUserError = require('../utils/routeUserError');
 let ReasonTexts = require('../constants/reasonTexts.js');
 let ROLES = require('../constants/roles.js');
@@ -56,6 +57,7 @@ module.exports = (app) => {
 
     UserCtrl.findByUsername(req.params.username).then((user) => {
       AppCtrl.findByAppId(req.params.appId).then((application) => {
+        // TODO: need to handle array update in mongoose way, this is not working
         user.applications.push({
           id: application.id,
           name: application.name
