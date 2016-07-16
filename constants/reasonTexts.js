@@ -10,5 +10,6 @@ module.exports = {
   USERNAME_MANDATORY: 'Username is mandatory',
   APP_NAME_MANDATORY: 'Application name is mandatory',
   APP_URL_MANDATORY: 'Application url is mandatory',
+  APP_ID_MANDATORY: 'Application id is mandatory',
   DUP_KEY: 'Duplicate key'
 }

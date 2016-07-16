@@ -64,7 +64,7 @@ class AppEdit extends React.Component {
         userDataSource: users
       });
     });
-    api.send('/user/' + this.state.appId, 'GET').then((users)=>{
+    api.send('/user/applications/' + this.state.appId, 'GET').then((users)=>{
       this.setState({
         users: users
       });
@@ -132,8 +132,7 @@ class AppEdit extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <TopBar title={'App Edit'}/>
-          <h4>{this.state.application.name}</h4>
+          <TopBar title={this.state.application.name}/>
           <h4>{this.state.application.url}</h4>
           <h4>{this.state.appId}</h4>
           <Subheader>Keys</Subheader>

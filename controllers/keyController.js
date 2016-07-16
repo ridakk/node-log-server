@@ -11,7 +11,7 @@ const KEY_FILTER = {
 
 exports.findByAppId = (appid) => {
   return new Promise((resolve, reject) => {
-    Key.findOne({
+    Key.find({
       applicationId: appid
     }, KEY_FILTER, (err, keys) => {
       if (err) {

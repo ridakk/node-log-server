@@ -53,6 +53,16 @@ module.exports = (app) => {
       return;
     };
 
+    if (req.params.username === "undefined") {
+      res.status(400).json(new RouteUserError(ReasonTexts.USERNAME_MANDATORY));
+      return;
+    };
+
+    if (req.params.appId === "undefined") {
+      res.status(400).json(new RouteUserError(ReasonTexts.APP_ID_MANDATORY));
+      return;
+    };
+
     AppCtrl.findByAppId(req.params.appId).then((application) => {
       UserCtrl.addAppId(req.params.username, application.id).then(() => {
         res.status(200).json({
@@ -133,7 +143,7 @@ module.exports = (app) => {
     });
   });
 
-  app.get('/user/:appId', passport.authenticate('jwt', {
+  app.get('/user/applications/:appId', passport.authenticate('jwt', {
     session: false
   }), (req, res) => {
     if (req.params.username !== req.user.username && req.user.role !== ROLES.ADMIN) {
