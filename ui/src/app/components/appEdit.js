@@ -99,9 +99,11 @@ class AppEdit extends React.Component {
 
   handleAddUser() {
     console.log('add user clicked');
-    api.send('/user/' + this.state.userToAdd.username + '/' + this.state.appId, 'POST').then((newUser) => {
+    api.send('/user/' + this.state.userToAdd.username + '/' + this.state.appId, 'POST').then(() => {
       let users = this.state.users;
-      users.push(newUser);
+      users.push({
+        username: this.state.userToAdd.username
+      });
       this.setState({
         users: users,
         notificationOpen: false,
