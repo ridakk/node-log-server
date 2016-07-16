@@ -45,7 +45,6 @@ module.exports = (app) => {
     });
   });
 
-  // TODO: find users with application id is missing, implement it.
   app.post('/user/:username/:appId', passport.authenticate('jwt', {
     session: false
   }), (req, res) => {
@@ -131,6 +130,21 @@ module.exports = (app) => {
       } else {
         res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
       }
+    });
+  });
+
+  app.get('/user/:appId', passport.authenticate('jwt', {
+    session: false
+  }), (req, res) => {
+    if (req.params.username !== req.user.username && req.user.role !== ROLES.ADMIN) {
+      res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+      return;
+    };
+
+    UserCtrl.findByAppId(req.params.appId).then((users) => {
+      res.status(200).json(users);
+    }, (reason) => {
+      res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
     });
   });
 

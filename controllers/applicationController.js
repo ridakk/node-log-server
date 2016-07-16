@@ -5,11 +5,15 @@ let uuid = require('node-uuid');
 let Promise = require('es6-promise').Promise;
 let ReasonTexts = require('../constants/reasonTexts.js');
 
+const APPLICATION_FILTER = {
+  _id: 0
+};
+
 exports.findByAppId = (appid) => {
   return new Promise((resolve, reject) => {
-    Application.findOne({
+    Application.find({
       id: appid
-    }, (err, application) => {
+    }, APPLICATION_FILTER, (err, application) => {
       if (err) {
         console.log('application retrieve err: \n');
         console.log(err);
@@ -30,7 +34,7 @@ exports.findByAppId = (appid) => {
 
 exports.getAll = () => {
   return new Promise((resolve, reject) => {
-    Application.find({}, (err, applications) => {
+    Application.find({}, APPLICATION_FILTER, (err, applications) => {
       if (err) {
         console.log('application retrieve err: \n');
         console.log(err);

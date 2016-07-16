@@ -5,13 +5,25 @@ let Promise = require('es6-promise').Promise;
 let ReasonTexts = require('../constants/reasonTexts.js');
 let ROLES = require('../constants/roles.js');
 
+const USER_FILTER = {
+  _id: 0,
+  username: 1,
+  role: 1,
+  applications: 1
+};
+
+const USERNAME_FILTER = {
+  _id: 0,
+  username: 1
+};
+
 exports.findByUsername = (username) => {
   console.log('UserCtrl.findByUsername' + username);
   return new Promise((resolve, reject) => {
     console.log('UserCtrl.findOne' + username);
-    User.findOne({
+    User.find({
       username: username
-    }, (err, user) => {
+    }, USER_FILTER, (err, user) => {
       if (err) {
         console.log('UserCtrl user retrieve err: \n');
         console.log(err);
@@ -34,9 +46,38 @@ exports.findByUsername = (username) => {
   });
 }
 
+exports.findByAppId = (appId) => {
+  console.log('UserCtrl.findByAppId' + appId);
+  return new Promise((resolve, reject) => {
+    User.find({
+      applications: {
+        "$in": [appId]
+      }
+    }, USERNAME_FILTER, (err, users) => {
+      if (err) {
+        console.log('UserCtrl user retrieve err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+        return;
+      }
+
+      if (!users) {
+        console.log('UserCtrl users with appId not found: ');
+        resolve([]);
+        return;
+      }
+
+      console.log('UserCtrl users:\n');
+      console.log(users);
+      resolve(users);
+    });
+  });
+}
+
 exports.getAll = () => {
   return new Promise((resolve, reject) => {
-    User.find({}, (err, users) => {
+    User.find({}, USER_FILTER, (err, users) => {
       if (err) {
         console.log('user retrieve err: \n');
         console.log(err);
