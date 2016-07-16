@@ -146,15 +146,25 @@ module.exports = (app) => {
   app.get('/user/applications/:appId', passport.authenticate('jwt', {
     session: false
   }), (req, res) => {
-    if (req.params.username !== req.user.username && req.user.role !== ROLES.ADMIN) {
-      res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
-      return;
-    };
+    AppCtrl.findByAppId(req.params.appId).then((application) => {
+      if (application.createdBy !== req.user.username &&
+        req.user.applications.indexOf(application.id) === -1 &&
+        req.user.role !== ROLES.ADMIN) {
+        res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+        return;
+      }
 
-    UserCtrl.findByAppId(req.params.appId).then((users) => {
-      res.status(200).json(users);
+      UserCtrl.findByAppId(req.params.appId).then((users) => {
+        res.status(200).json(users);
+      }, (reason) => {
+        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+      });
     }, (reason) => {
-      res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+      if (reason === ReasonTexts.APP_NOT_FOUND) {
+        res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
+      } else {
+        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+      }
     });
   });
 
