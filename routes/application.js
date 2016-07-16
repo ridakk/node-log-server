@@ -33,7 +33,7 @@ module.exports = (app) => {
       }, (reason) => {
         console.log('failed\n')
           // TODO: need to refactor how to send status and error obj.
-        res.status(500).send(new RouteAppError(ReasonTexts.UNKNOWN));
+        res.status(500).json(new RouteAppError(ReasonTexts.UNKNOWN));
       });
     }
   );
@@ -50,9 +50,9 @@ module.exports = (app) => {
       res.status(200).json(applications);
     }, (reason) => {
       if (reason === ReasonTexts.APP_NOT_FOUND) {
-        res.status(404).send(new RouteAppError(ReasonTexts.APP_NOT_FOUND));
+        res.status(404).json(new RouteAppError(ReasonTexts.APP_NOT_FOUND));
       } else {
-        res.status(500).send(new RouteAppError(ReasonTexts.UNKNOWN));
+        res.status(500).json(new RouteAppError(ReasonTexts.UNKNOWN));
       }
     });
   });
@@ -71,9 +71,9 @@ module.exports = (app) => {
       res.status(200).json(application);
     }, (reason) => {
       if (reason === ReasonTexts.APP_NOT_FOUND) {
-        res.status(404).send(new RouteAppError(ReasonTexts.APP_NOT_FOUND));
+        res.status(404).json(new RouteAppError(ReasonTexts.APP_NOT_FOUND));
       } else {
-        res.status(500).send(new RouteAppError(ReasonTexts.UNKNOWN));
+        res.status(500).json(new RouteAppError(ReasonTexts.UNKNOWN));
       }
     });
   });

@@ -19,8 +19,7 @@ let applicationSchema = new Schema({
   url: {
     type: String,
     required: true
-  },
-  keys: [String]
+  }
 });
 
 module.exports = mongoose.model('Application', applicationSchema);

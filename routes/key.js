@@ -51,16 +51,16 @@ module.exports = (app) => {
         res.status(200).json(keys);
       }, (reason) => {
         if (reason === ReasonTexts.KEY_NOT_FOUND) {
-          res.status(404).send(new RouteKeyError(ReasonTexts.KEY_NOT_FOUND));
+          res.status(404).json(new RouteKeyError(ReasonTexts.KEY_NOT_FOUND));
         } else {
-          res.status(500).send(new RouteKeyError(ReasonTexts.UNKNOWN));
+          res.status(500).json(new RouteKeyError(ReasonTexts.UNKNOWN));
         }
       });
     }, (reason) => {
       if (reason === ReasonTexts.APP_NOT_FOUND) {
-        res.status(404).send(new RouteKeyError(ReasonTexts.APP_NOT_FOUND));
+        res.status(404).json(new RouteKeyError(ReasonTexts.APP_NOT_FOUND));
       } else {
-        res.status(500).send(new RouteKeyError(ReasonTexts.UNKNOWN));
+        res.status(500).json(new RouteKeyError(ReasonTexts.UNKNOWN));
       }
     });
   });

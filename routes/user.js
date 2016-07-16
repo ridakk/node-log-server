@@ -41,12 +41,11 @@ module.exports = (app) => {
     UserCtrl.create(req.body.username, req.body.password, req.body.role).then((user) => {
       res.status(202).json(user);
     }, (reason) => {
-      res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
+      res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
     });
   });
 
   // TODO: find users with application id is missing, implement it.
-  // TODO: delete app from user is missing, implement it.
   app.post('/user/:username/:appId', passport.authenticate('jwt', {
     session: false
   }), (req, res) => {
@@ -55,38 +54,44 @@ module.exports = (app) => {
       return;
     };
 
-    UserCtrl.findByUsername(req.params.username).then((user) => {
-      AppCtrl.findByAppId(req.params.appId).then((application) => {
-        // TODO: need to handle array update in mongoose way, this is not working
-        user.applications.push({
-          id: application.id,
-          name: application.name
-        });
-
-        //TODO: move this user save to user controller
-        // save the user
-        user.save((err) => {
-          if (err) {
-            // TODO: need to map mongo errors to user friendly error objects.
-            console.log('user save err: \n');
-            console.log(err);
-            res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
-          } else {
-            res.status(200).json(user);
-          }
+    AppCtrl.findByAppId(req.params.appId).then((application) => {
+      UserCtrl.addAppId(req.params.username, application.id).then(() => {
+        res.status(200).json({
+          status: 'ok'
         });
       }, (reason) => {
-        if (reason === ReasonTexts.APP_NOT_FOUND) {
-          res.status(404).send(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
-        } else {
-          res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
-        }
+        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
       });
     }, (reason) => {
-      if (reason === ReasonTexts.USER_NOT_FOUND) {
-        res.status(404).send(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
+      if (reason === ReasonTexts.APP_NOT_FOUND) {
+        res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
       } else {
-        res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
+        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+      }
+    });
+  });
+
+  app.delete('/user/:username/:appId', passport.authenticate('jwt', {
+    session: false
+  }), (req, res) => {
+    if (req.user.role !== ROLES.ADMIN) {
+      res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+      return;
+    };
+
+    AppCtrl.findByAppId(req.params.appId).then((application) => {
+      UserCtrl.removeAppId(req.params.username, application.id).then(() => {
+        res.status(200).json({
+          status: 'ok'
+        });
+      }, (reason) => {
+        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+      });
+    }, (reason) => {
+      if (reason === ReasonTexts.APP_NOT_FOUND) {
+        res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
+      } else {
+        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
       }
     });
   });
@@ -103,9 +108,9 @@ module.exports = (app) => {
       res.status(200).json(user);
     }, (reason) => {
       if (reason === ReasonTexts.USER_NOT_FOUND) {
-        res.status(404).send(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
+        res.status(404).json(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
       } else {
-        res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
+        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
       }
     });
   });
@@ -122,9 +127,9 @@ module.exports = (app) => {
       res.status(200).json(user);
     }, (reason) => {
       if (reason === ReasonTexts.USER_NOT_FOUND) {
-        res.status(404).send(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
+        res.status(404).json(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
       } else {
-        res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
+        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
       }
     });
   });

@@ -7,31 +7,31 @@ let ROLES = require('../constants/roles.js');
 
 exports.findByUsername = (username) => {
   console.log('UserCtrl.findByUsername' + username);
-    return new Promise((resolve, reject) => {
-      console.log('UserCtrl.findOne' + username);
-        User.findOne({
-            username: username
-        }, (err, user) => {
-            if (err) {
-                console.log('UserCtrl user retrieve err: \n');
-                console.log(err);
-                console.log(err.code);
-                reject(ReasonTexts.UNKNOWN);
-                return;
-            }
+  return new Promise((resolve, reject) => {
+    console.log('UserCtrl.findOne' + username);
+    User.findOne({
+      username: username
+    }, (err, user) => {
+      if (err) {
+        console.log('UserCtrl user retrieve err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+        return;
+      }
 
-            if (!user) {
-              console.log('UserCtrl user not found: ');
-              console.log(ReasonTexts.USER_NOT_FOUND + '...\n');
-                reject(ReasonTexts.USER_NOT_FOUND);
-                return;
-            }
+      if (!user) {
+        console.log('UserCtrl user not found: ');
+        console.log(ReasonTexts.USER_NOT_FOUND + '...\n');
+        reject(ReasonTexts.USER_NOT_FOUND);
+        return;
+      }
 
-            console.log('UserCtrl user:\n');
-            console.log(user);
-            resolve(user);
-        });
+      console.log('UserCtrl user:\n');
+      console.log(user);
+      resolve(user);
     });
+  });
 }
 
 exports.getAll = () => {
@@ -56,28 +56,72 @@ exports.getAll = () => {
 }
 
 exports.create = (username, password, role) => {
-    return new Promise((resolve, reject) => {
-        let newUser = new User();
+  return new Promise((resolve, reject) => {
+    let newUser = new User();
 
-        newUser.username = username;
-        newUser.password = newUser.generateHash(password);
+    newUser.username = username;
+    newUser.password = newUser.generateHash(password);
 
-        newUser.role = ROLES.GUEST;
-        if (role === ROLES.ADMIN) {
-            newUser.role = ROLES.ADMIN;
-        }
+    newUser.role = ROLES.GUEST;
+    if (role === ROLES.ADMIN) {
+      newUser.role = ROLES.ADMIN;
+    }
 
-        // save the user
-        newUser.save((err) => {
-            if (err) {
-                // TODO: need to map mongo errors to user friendly error objects.
-                console.log('user create err: \n');
-                console.log(err);
-                console.log(err.code);
-                reject(ReasonTexts.UNKNOWN);
-            } else {
-                resolve(newUser);
-            }
-        });
+    // save the user
+    newUser.save((err) => {
+      if (err) {
+        // TODO: need to map mongo errors to user friendly error objects.
+        console.log('user create err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+      } else {
+        resolve(newUser);
+      }
     });
+  });
+}
+
+exports.addAppId = (username, appId) => {
+  return new Promise((resolve, reject) => {
+    User.update({
+      username: username
+    }, {
+      $addToSet: {
+        applications: appId
+      }
+    }, (err) => {
+      if (err) {
+        // TODO: need to map mongo errors to user friendly error objects.
+        console.log('app id add err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+      } else {
+        resolve();
+      }
+    })
+  });
+}
+
+exports.removeAppId = (username, appId) => {
+  return new Promise((resolve, reject) => {
+    User.update({
+      username: username
+    }, {
+      $pull: {
+        applications: appId
+      }
+    }, (err) => {
+      if (err) {
+        // TODO: need to map mongo errors to user friendly error objects.
+        console.log('app id remove err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+      } else {
+        resolve();
+      }
+    })
+  });
 }
