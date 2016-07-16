@@ -11,7 +11,7 @@ const APPLICATION_FILTER = {
 
 exports.findByAppId = (appid) => {
   return new Promise((resolve, reject) => {
-    Application.find({
+    Application.findOne({
       id: appid
     }, APPLICATION_FILTER, (err, application) => {
       if (err) {

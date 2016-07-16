@@ -64,8 +64,11 @@ class AppEdit extends React.Component {
         userDataSource: users
       });
     });
-
-    // TODO: once server api is implemented, retrieve users that has permission to app
+    api.send('/user/' + this.state.appId, 'GET').then((users)=>{
+      this.setState({
+        users: users
+      });
+    });
   }
 
   handleGenerateNewKey() {

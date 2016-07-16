@@ -17,13 +17,13 @@ const USERNAME_FILTER = {
   username: 1
 };
 
-exports.findByUsername = (username) => {
+exports.findByUsername = (username, filter) => {
   console.log('UserCtrl.findByUsername' + username);
   return new Promise((resolve, reject) => {
     console.log('UserCtrl.findOne' + username);
-    User.find({
+    User.findOne({
       username: username
-    }, USER_FILTER, (err, user) => {
+    }, filter ? filter : USER_FILTER, (err, user) => {
       if (err) {
         console.log('UserCtrl user retrieve err: \n');
         console.log(err);
