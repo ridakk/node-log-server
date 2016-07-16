@@ -8,6 +8,7 @@ import session from '../models/session';
 import {AppRightMenu} from '../constants/rightMenu';
 import {folderIcon} from '../constants/icons';
 import { withRouter } from 'react-router';
+import api from '../services/api';
 
 import ChipList from './chipList';
 
@@ -29,10 +30,21 @@ class MyApps extends React.Component {
     this.handleRightIconMenuClick = this.handleRightIconMenuClick.bind(this);
     this.state = {
       username: session.get('username'),
-      applications: session.get('applications'),
+      applicationIds: session.get('applications'),
+      applications: [],
       selectedApp: null
     };
     console.log('home page state: ', this.state)
+
+    for (let [index, elem] of this.state.applicationIds.entries()) {
+      api.send('/application/' + elem, 'GET').then((application) => {
+        let applications = this.state.applications;
+        applications.push(application);
+        this.setState({
+          applications: applications
+        });
+      });
+    }
   }
 
   handleRightIconMenuClick(event, child) {
