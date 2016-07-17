@@ -1,24 +1,31 @@
 "use strict";
 
 let cors = require('cors');
+let CorsCtrl = require('../controllers/corsController');
 let logsModel = require('./../models/logs');
 
 module.exports = (app) => {
 
-  let whitelist = ['https://sg1.genband.com', 'https://spidr-ucc.genband.com'];
-  let corsOptions = {
-    origin: (origin, callback) => {
-      let originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-      callback(null, originIsWhitelisted);
-    }
+  var corsOptionsDelegate = function(req, callback) {
+    CorsCtrl.getWhiteListOfApp(req.params.appId).then((whitelist) => {
+      let corsOptions;
+      if (whitelist.has(req.header('Origin'))) {;
+        corsOptions = {
+          origin: true
+        }; // reflect (enable) the requested origin in the CORS response
+      } else {
+        corsOptions = {
+          origin: false
+        }; // disable CORS for this request
+      }
+      callback(null, corsOptions);
+    });
   };
 
-  app.post('/log', cors(corsOptions), (req, res) => {
-    res.status(200).send(logsModel.add(req.body));
-  });
-
-  app.get('/log/:id', cors(corsOptions), (req, res) => {
-    let log = logsModel.get(req.params.id);
-    res.status(200).send(log);
+  app.options('/log/:appId', cors());
+  app.post('/log/:appId', cors(corsOptionsDelegate), (req, res) => {
+    res.status(200).json({
+      status: 'ok'
+    });
   });
 };

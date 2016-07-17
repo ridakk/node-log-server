@@ -1,6 +1,7 @@
 "use strict";
 
 let Application = require('../models/application');
+let CorsCtrl = require('./corsController');
 let uuid = require('node-uuid');
 let Promise = require('es6-promise').Promise;
 let ReasonTexts = require('../constants/reasonTexts.js');
@@ -75,6 +76,7 @@ exports.create = (name, url, createdBy) => {
         console.log(err.code);
         reject(ReasonTexts.UNKNOWN);
       } else {
+        CorsCtrl.addUrlToWhiteListOfApp(newApplication.id, newApplication.url);
         resolve(newApplication);
       }
     });

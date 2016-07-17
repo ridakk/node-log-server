@@ -32,6 +32,30 @@ exports.findByAppId = (appid) => {
   });
 }
 
+exports.findByApiKeys = (jsKey, productKey) => {
+  return new Promise((resolve, reject) => {
+    Key.findOne({
+      jsKey: jsKey,
+      productKey: productKey
+    }, KEY_FILTER, (err, keys) => {
+      if (err) {
+        console.log('keys retrieve err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+        return;
+      }
+
+      if (!keys) {
+        reject(ReasonTexts.KEY_NOT_FOUND);
+        return;
+      }
+
+      resolve(keys);
+    });
+  });
+}
+
 exports.create = (appId) => {
   return new Promise((resolve, reject) => {
     let newKey = new Key();
