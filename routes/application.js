@@ -17,6 +17,11 @@ module.exports = (app) => {
         return;
       }
 
+      if (req.user.role !== ROLES.ADMIN) {
+        res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
+        return;
+      }
+
       if (!req.body.name) {
         res.status(400).json(new RouteAppError(ReasonTexts.APP_NAME_MANDATORY));
         return;

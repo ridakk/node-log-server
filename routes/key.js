@@ -15,7 +15,6 @@ module.exports = (app) => {
   }), (req, res) => {
     AppCtrl.findByAppId(req.params.appid).then((application) => {
       if (application.createdBy !== req.user.username &&
-        req.user.applications.indexOf(application.id) === -1 &&
         req.user.role !== ROLES.ADMIN) {
         res.status(403).json(new RouteKeyError(ReasonTexts.NOT_AUTHORIZED));
         return;

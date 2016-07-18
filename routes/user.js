@@ -11,13 +11,10 @@ let config = require('../config');
 module.exports = (app) => {
 
     app.post('/userdev', (req, res) => {
-
         if (!config.userdevApiEnabled) {
             res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
             return;
         }
-
-        console.log(req.body);
 
         UserCtrl.create(req.body.username, req.body.password, ROLES.ADMIN).then((user) => {
             res.status(202).json(user);
@@ -150,28 +147,27 @@ module.exports = (app) => {
     });
 
     app.get('/user/applications/:appId', passport.authenticate('jwt', {
-        session: false
+      session: false
     }), (req, res) => {
-        AppCtrl.findByAppId(req.params.appId).then((application) => {
-            if (application.createdBy !== req.user.username &&
-                req.user.applications.indexOf(application.id) === -1 &&
-                req.user.role !== ROLES.ADMIN) {
-                res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
-                return;
-            }
+      if (req.user.role !== ROLES.ADMIN) {
+        res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+        return;
+      };
 
-            UserCtrl.findByAppId(req.params.appId).then((users) => {
-                res.status(200).json(users);
-            }, (reason) => {
-                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-            });
+      AppCtrl.findByAppId(req.params.appId).then((application) => {
+
+        UserCtrl.findByAppId(req.params.appId).then((users) => {
+          res.status(200).json(users);
         }, (reason) => {
-            if (reason === ReasonTexts.APP_NOT_FOUND) {
-                res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
-            } else {
-                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-            }
+          res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
         });
+      }, (reason) => {
+        if (reason === ReasonTexts.APP_NOT_FOUND) {
+          res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
+        } else {
+          res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+        }
+      });
     });
 
 };
