@@ -64,4 +64,21 @@ module.exports = (app) => {
     });
   });
 
+  app.delete('/key/:keyId', passport.authenticate('jwt', {
+    session: false
+  }), (req, res) => {
+    if (req.user.role !== ROLES.ADMIN) {
+      res.status(403).json(new RouteKeyError(ReasonTexts.NOT_AUTHORIZED));
+      return;
+    }
+
+    KeyCtrl.delete(req.params.keyId).then((keys) => {
+      res.status(200).json({
+        status: 'ok'
+      });
+    }, () => {
+      res.status(500).json(new RouteKeyError(ReasonTexts.UNKNOWN));
+    });
+  });
+
 };

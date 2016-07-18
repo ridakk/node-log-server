@@ -36,6 +36,7 @@ class AppEdit extends React.Component {
     this.handleAddUser = this.handleAddUser.bind(this);
     this.handleUpdateInput = this.handleUpdateInput.bind(this);
     this.handleNewKeyDialogClose = this.handleNewKeyDialogClose.bind(this);
+    this.handleKeyDeleteRequest = this.handleKeyDeleteRequest.bind(this);
     this.state = {
       application: {},
       users: [],
@@ -91,6 +92,24 @@ class AppEdit extends React.Component {
     });
   }
 
+  handleKeyDeleteRequest(keyId) {
+    console.log('key delete clicked');
+    api.send('/key/' + keyId, 'DELETE').then(() => {
+      let keys = this.state.keys;
+      keys.splice(keys.indexOf(keys.find(key => key.id === keyId)), 1);
+      this.setState({
+        keys: keys,
+        notificationOpen: false,
+        notificationMessage: ''
+      });
+    }, (err) => {
+      this.setState({
+        notificationOpen: true,
+        notificationMessage: 'Failed to remove key: ' + err.reasonText
+      });
+    });
+  }
+
   handleNewKeyDialogClose() {
     this.setState({
       notificationOpen: false,
@@ -139,7 +158,8 @@ class AppEdit extends React.Component {
           <ChipList
             content={this.state.keys}
             idKey={'id'}
-            labelKey={'id'}/>
+            labelKey={'id'}
+            onRequestDelete={this.handleKeyDeleteRequest}/>
             <Button
               label={'Generate new key'}
               disabled={false}

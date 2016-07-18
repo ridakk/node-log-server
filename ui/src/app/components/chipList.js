@@ -15,12 +15,7 @@ const styles = {
 class ChipList extends React.Component {
   constructor(props) {
     super(props);
-    this.handleRequestDelete = this.handleRequestDelete.bind(this);
   }
-
-  handleRequestDelete(key){
-    console.log('chip delete for item: ' + key)
-  };
 
   render() {
     let self = this;
@@ -30,7 +25,7 @@ class ChipList extends React.Component {
             return <Chip
                       style={styles.chip}
                       key={data[self.props.idKey]}
-                      onRequestDelete={() => self.handleRequestDelete(data[self.props.idKey])}
+                      onRequestDelete={() => self.props.onRequestDelete(data[self.props.idKey])}
                    >
                       {data[self.props.labelKey]}
                    </Chip>

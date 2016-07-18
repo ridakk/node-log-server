@@ -100,3 +100,22 @@ exports.create = (appId) => {
     });
   });
 }
+
+exports.delete = (keyId) => {
+  return new Promise((resolve, reject) => {
+    Key.remove({
+      id: keyId
+    }, (err, key) => {
+      if (err) {
+        console.log('key remove err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+        return;
+      }
+      else {
+        resolve();
+      }
+    });
+  });
+}
