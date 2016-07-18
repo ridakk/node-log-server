@@ -30,7 +30,7 @@ keySchema.methods.generateHash = function(key) {
 
 // checking if product key is valid
 keySchema.methods.validProductKey = function(productKey) {
-  return bcrypt.compareSync(prodKey, this.productKey);
+  return bcrypt.compareSync(productKey, this.productKey);
 };
 
 // checking if javascript key is valid

@@ -16,10 +16,8 @@ exports.getWhiteListOfApp = (appId) => {
     }
 
     cachedWhiteList = new Set();
-    AppCtrl.getAll().then((applications) => {
-      for (let i = 0; i < applications.length; i++) {
-        cachedWhiteList.add(applications[i].url);
-      }
+    AppCtrl.findByAppId(appId).then((application) => {
+      cachedWhiteList.add(application.url);
       whiteList.set(appId, cachedWhiteList);
       resolve(cachedWhiteList);
     }, () => {

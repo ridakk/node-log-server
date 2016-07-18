@@ -32,28 +32,42 @@ exports.findByAppId = (appid) => {
   });
 }
 
-exports.findByApiKeys = (jsKey, productKey) => {
-  return new Promise((resolve, reject) => {
-    Key.findOne({
-      jsKey: jsKey,
-      productKey: productKey
-    }, KEY_FILTER, (err, keys) => {
-      if (err) {
-        console.log('keys retrieve err: \n');
-        console.log(err);
-        console.log(err.code);
-        reject(ReasonTexts.UNKNOWN);
-        return;
-      }
+exports.validateApiKeys = (appId, productKey, jsKey) => {
+    return new Promise((resolve, reject) => {
+        Key.find({
+            applicationId: appId
+        }, KEY_FILTER, (err, keys) => {
+            if (err) {
+                console.log('keys retrieve err: \n');
+                console.log(err);
+                console.log(err.code);
+                reject(ReasonTexts.UNKNOWN);
+                return;
+            }
 
-      if (!keys) {
-        reject(ReasonTexts.KEY_NOT_FOUND);
-        return;
-      }
+            if (!keys) {
+                reject(ReasonTexts.KEY_NOT_FOUND);
+                return;
+            }
 
-      resolve(keys);
+            let len = keys.length;
+            let valid = false;
+            for (let i = 0; i < len; i++) {
+                let key = keys[i];
+                if (key.validProductKey(productKey) &&
+                    key.validJsKey(jsKey)) {
+                    valid = true;
+                    break;
+                }
+            }
+
+            if (valid) {
+                resolve();
+            } else {
+                reject(ReasonTexts.INVALID_KEY);
+            }
+        });
     });
-  });
 }
 
 exports.create = (appId) => {

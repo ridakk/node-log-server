@@ -6,6 +6,7 @@ module.exports = {
   USER_NOT_FOUND: 'User not found',
   APP_NOT_FOUND: 'Application not found',
   KEY_NOT_FOUND: 'Key not found',
+  INVALID_KEY: 'Invalid product or js key',
   PWD_MANDATORY: 'Password is mandatory',
   USERNAME_MANDATORY: 'Username is mandatory',
   APP_NAME_MANDATORY: 'Application name is mandatory',

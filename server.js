@@ -31,7 +31,8 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 // load auth strategies
-require('./auth/basicStrategy')(app);
+require('./auth/logApiStrategy')(app);
+require('./auth/userLoginStrategy')(app);
 require('./auth/JwtStrategy')(app);
 
 require('./routes/log')(app);

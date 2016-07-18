@@ -8,16 +8,9 @@ let ReasonTexts = require('../constants/reasonTexts.js');
 
 module.exports = (app) => {
 
-  // Configure the Basic strategy for use by Passport.
-  //
-  // The Basic strategy requires a `verify` function which receives the
-  // credentials (`username` and `password`) contained in the request.  The
-  // function must verify that the password is correct and then invoke `cb` with
-  // a user object, which will be set at `req.user` in route handlers after
-  // authentication.
-  passport.use('basic', new Strategy(
+  passport.use('user-login', new Strategy(
     (username, password, cb) => {
-      console.log('BasicStrategy' + username + ':' + password);
+      console.log('UserLoginStrategy' + username + ':' + password);
       UserCtrl.findByUsername(username, {
         _id: 0,
         username: 1,
@@ -48,16 +41,10 @@ module.exports = (app) => {
           token: token
         });
       }, (reason) => {
-        console.log('auth error: unkown');
-        if (reason === ReasonTexts.USER_NOT_FOUND) {
-          console.log('auth error: user not found');
-          return cb(null, false, {
-            message: 'Incorrect username.'
-          });
-        } else {
-          console.log('auth error: unkown');
-          return cb(err);
-        }
+        console.log('auth error: ' + reason);
+        return cb(null, false, {
+          message: 'auth error: ' + reason
+        });
       });
     }));
 

@@ -5,7 +5,7 @@ let passport = require('passport');
 module.exports = (app) => {
 
   app.get('/auth',
-    passport.authenticate('basic', {
+    passport.authenticate('user-login', {
       session: false
     }),
     function(req, res) {
