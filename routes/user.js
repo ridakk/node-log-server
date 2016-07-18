@@ -6,7 +6,7 @@ let AppCtrl = require('../controllers/applicationController');
 let RouteUserError = require('../utils/routeUserError');
 let ReasonTexts = require('../constants/reasonTexts.js');
 let ROLES = require('../constants/roles.js');
-let config = require('./config');
+let config = require('../config');
 
 module.exports = (app) => {
 
