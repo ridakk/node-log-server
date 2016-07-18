@@ -4,6 +4,7 @@ module.exports = {
   UNKNOWN: 'Unknown error',
   NOT_AUTHORIZED: 'Not Authorized',
   USER_NOT_FOUND: 'User not found',
+  SELF_DELETE: 'Can not delete your self',
   APP_NOT_FOUND: 'Application not found',
   KEY_NOT_FOUND: 'Key not found',
   INVALID_KEY: 'Invalid product or js key',

@@ -146,6 +146,28 @@ module.exports = (app) => {
         });
     });
 
+    app.delete('/user/:username', passport.authenticate('jwt', {
+        session: false
+    }), (req, res) => {
+        if (req.params.username === req.user.username) {
+            res.status(403).json(new RouteUserError(ReasonTexts.SELF_DELETE));
+            return;
+        };
+
+        if (req.user.role !== ROLES.ADMIN) {
+            res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+            return;
+        };
+
+        UserCtrl.delete(req.params.username).then((user) => {
+            res.status(200).json({
+              status: 'ok'
+            });
+        }, () => {
+            res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+        });
+    });
+
     app.get('/user/applications/:appId', passport.authenticate('jwt', {
       session: false
     }), (req, res) => {

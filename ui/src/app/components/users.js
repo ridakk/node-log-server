@@ -38,7 +38,14 @@ class Apps extends React.Component {
   }
 
   handleRightIconMenuClick(event, child) {
-    console.log('selected user id', child.props.id)
+    console.log('user delete clicked' + child.props.id);
+    api.send('/user/' + child.props.id, 'DELETE').then(() => {
+      let users = this.state.users;
+      users.splice(users.indexOf(users.find(user => users.username === child.props.id)), 1);
+      this.setState({
+        users: users
+      });
+    });
   }
 
   render() {

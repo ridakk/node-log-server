@@ -123,6 +123,25 @@ exports.create = (username, password, role) => {
   });
 }
 
+exports.delete = (username) => {
+  return new Promise((resolve, reject) => {
+    User.remove({
+      username: username
+    }, (err, username) => {
+      if (err) {
+        console.log('username remove err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+        return;
+      }
+      else {
+        resolve();
+      }
+    });
+  });
+}
+
 exports.addAppId = (username, appId) => {
   return new Promise((resolve, reject) => {
     User.update({
