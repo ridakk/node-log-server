@@ -2,7 +2,9 @@
 
 let cors = require('cors');
 let CorsCtrl = require('../controllers/corsController');
+let LogCtrl = require('../controllers/logController');
 let passport = require('passport');
+let RouteLogError = require('../utils/routeLogError');
 
 module.exports = (app) => {
 
@@ -27,8 +29,10 @@ module.exports = (app) => {
     app.post('/log/:appId', cors(corsOptionsDelegate), passport.authenticate('log-api', {
         session: false
     }), (req, res) => {
-        res.status(200).json({
-            status: 'ok'
-        });
+      LogCtrl.create(req.params.appId, req.body).then((data) => {
+          res.status(202).json(data);
+      }, () => {
+          res.status(500).send(new RouteLogError(ReasonTexts.UNKNOWN));
+      });
     });
 };
