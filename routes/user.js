@@ -6,166 +6,172 @@ let AppCtrl = require('../controllers/applicationController');
 let RouteUserError = require('../utils/routeUserError');
 let ReasonTexts = require('../constants/reasonTexts.js');
 let ROLES = require('../constants/roles.js');
+let config = require('./config');
 
 module.exports = (app) => {
 
-  // // TODO: Development only api, remove before production !!!
-  // app.post('/userdev', (req, res) => {
-  //   console.log(req.body);
-  //
-  //   UserCtrl.create(req.body.username, req.body.password, ROLES.ADMIN).then((user) => {
-  //     res.status(202).json(user);
-  //   }, (reason) => {
-  //     res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
-  //   });
-  // });
+    app.post('/userdev', (req, res) => {
 
-  app.post('/user', passport.authenticate('jwt', {
-    session: false
-  }), (req, res) => {
-    if (req.user.role !== ROLES.ADMIN) {
-      res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
-      return;
-    }
+        if (!config.userdevApiEnabled) {
+            res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+            return;
+        }
 
-    if (!req.body.username) {
-      res.status(400).json(new RouteUserError(ReasonTexts.USERNAME_MANDATORY));
-      return;
-    };
+        console.log(req.body);
 
-    if (!req.body.password) {
-      res.status(400).json(new RouteUserError(ReasonTexts.PWD_MANDATORY));
-      return;
-    };
-
-    UserCtrl.create(req.body.username, req.body.password, req.body.role).then((user) => {
-      res.status(202).json(user);
-    }, (reason) => {
-      res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-    });
-  });
-
-  app.post('/user/:username/:appId', passport.authenticate('jwt', {
-    session: false
-  }), (req, res) => {
-    if (req.user.role !== ROLES.ADMIN) {
-      res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
-      return;
-    };
-
-    if (req.params.username === "undefined") {
-      res.status(400).json(new RouteUserError(ReasonTexts.USERNAME_MANDATORY));
-      return;
-    };
-
-    if (req.params.appId === "undefined") {
-      res.status(400).json(new RouteUserError(ReasonTexts.APP_ID_MANDATORY));
-      return;
-    };
-
-    AppCtrl.findByAppId(req.params.appId).then((application) => {
-      UserCtrl.addAppId(req.params.username, application.id).then(() => {
-        res.status(200).json({
-          status: 'ok'
+        UserCtrl.create(req.body.username, req.body.password, ROLES.ADMIN).then((user) => {
+            res.status(202).json(user);
+        }, () => {
+            res.status(500).send(new RouteUserError(ReasonTexts.UNKNOWN));
         });
-      }, (reason) => {
-        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-      });
-    }, (reason) => {
-      if (reason === ReasonTexts.APP_NOT_FOUND) {
-        res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
-      } else {
-        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-      }
     });
-  });
 
-  app.delete('/user/:username/:appId', passport.authenticate('jwt', {
-    session: false
-  }), (req, res) => {
-    if (req.user.role !== ROLES.ADMIN) {
-      res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
-      return;
-    };
+    app.post('/user', passport.authenticate('jwt', {
+        session: false
+    }), (req, res) => {
+        if (req.user.role !== ROLES.ADMIN) {
+            res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+            return;
+        }
 
-    AppCtrl.findByAppId(req.params.appId).then((application) => {
-      UserCtrl.removeAppId(req.params.username, application.id).then(() => {
-        res.status(200).json({
-          status: 'ok'
+        if (!req.body.username) {
+            res.status(400).json(new RouteUserError(ReasonTexts.USERNAME_MANDATORY));
+            return;
+        };
+
+        if (!req.body.password) {
+            res.status(400).json(new RouteUserError(ReasonTexts.PWD_MANDATORY));
+            return;
+        };
+
+        UserCtrl.create(req.body.username, req.body.password, req.body.role).then((user) => {
+            res.status(202).json(user);
+        }, (reason) => {
+            res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
         });
-      }, (reason) => {
-        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-      });
-    }, (reason) => {
-      if (reason === ReasonTexts.APP_NOT_FOUND) {
-        res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
-      } else {
-        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-      }
     });
-  });
 
-  app.get('/users', passport.authenticate('jwt', {
-    session: false
-  }), (req, res) => {
-    if (req.user.role !== ROLES.ADMIN) {
-      res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
-      return;
-    };
+    app.post('/user/:username/:appId', passport.authenticate('jwt', {
+        session: false
+    }), (req, res) => {
+        if (req.user.role !== ROLES.ADMIN) {
+            res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+            return;
+        };
 
-    UserCtrl.getAll(req.params.username).then((user) => {
-      res.status(200).json(user);
-    }, (reason) => {
-      if (reason === ReasonTexts.USER_NOT_FOUND) {
-        res.status(404).json(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
-      } else {
-        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-      }
+        if (req.params.username === "undefined") {
+            res.status(400).json(new RouteUserError(ReasonTexts.USERNAME_MANDATORY));
+            return;
+        };
+
+        if (req.params.appId === "undefined") {
+            res.status(400).json(new RouteUserError(ReasonTexts.APP_ID_MANDATORY));
+            return;
+        };
+
+        AppCtrl.findByAppId(req.params.appId).then((application) => {
+            UserCtrl.addAppId(req.params.username, application.id).then(() => {
+                res.status(200).json({
+                    status: 'ok'
+                });
+            }, (reason) => {
+                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+            });
+        }, (reason) => {
+            if (reason === ReasonTexts.APP_NOT_FOUND) {
+                res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
+            } else {
+                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+            }
+        });
     });
-  });
 
-  app.get('/user/:username', passport.authenticate('jwt', {
-    session: false
-  }), (req, res) => {
-    if (req.params.username !== req.user.username && req.user.role !== ROLES.ADMIN) {
-      res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
-      return;
-    };
+    app.delete('/user/:username/:appId', passport.authenticate('jwt', {
+        session: false
+    }), (req, res) => {
+        if (req.user.role !== ROLES.ADMIN) {
+            res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+            return;
+        };
 
-    UserCtrl.findByUsername(req.params.username).then((user) => {
-      res.status(200).json(user);
-    }, (reason) => {
-      if (reason === ReasonTexts.USER_NOT_FOUND) {
-        res.status(404).json(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
-      } else {
-        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-      }
+        AppCtrl.findByAppId(req.params.appId).then((application) => {
+            UserCtrl.removeAppId(req.params.username, application.id).then(() => {
+                res.status(200).json({
+                    status: 'ok'
+                });
+            }, (reason) => {
+                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+            });
+        }, (reason) => {
+            if (reason === ReasonTexts.APP_NOT_FOUND) {
+                res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
+            } else {
+                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+            }
+        });
     });
-  });
 
-  app.get('/user/applications/:appId', passport.authenticate('jwt', {
-    session: false
-  }), (req, res) => {
-    AppCtrl.findByAppId(req.params.appId).then((application) => {
-      if (application.createdBy !== req.user.username &&
-        req.user.applications.indexOf(application.id) === -1 &&
-        req.user.role !== ROLES.ADMIN) {
-        res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
-        return;
-      }
+    app.get('/users', passport.authenticate('jwt', {
+        session: false
+    }), (req, res) => {
+        if (req.user.role !== ROLES.ADMIN) {
+            res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+            return;
+        };
 
-      UserCtrl.findByAppId(req.params.appId).then((users) => {
-        res.status(200).json(users);
-      }, (reason) => {
-        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-      });
-    }, (reason) => {
-      if (reason === ReasonTexts.APP_NOT_FOUND) {
-        res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
-      } else {
-        res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
-      }
+        UserCtrl.getAll(req.params.username).then((user) => {
+            res.status(200).json(user);
+        }, (reason) => {
+            if (reason === ReasonTexts.USER_NOT_FOUND) {
+                res.status(404).json(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
+            } else {
+                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+            }
+        });
     });
-  });
+
+    app.get('/user/:username', passport.authenticate('jwt', {
+        session: false
+    }), (req, res) => {
+        if (req.params.username !== req.user.username && req.user.role !== ROLES.ADMIN) {
+            res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+            return;
+        };
+
+        UserCtrl.findByUsername(req.params.username).then((user) => {
+            res.status(200).json(user);
+        }, (reason) => {
+            if (reason === ReasonTexts.USER_NOT_FOUND) {
+                res.status(404).json(new RouteUserError(ReasonTexts.USER_NOT_FOUND));
+            } else {
+                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+            }
+        });
+    });
+
+    app.get('/user/applications/:appId', passport.authenticate('jwt', {
+        session: false
+    }), (req, res) => {
+        AppCtrl.findByAppId(req.params.appId).then((application) => {
+            if (application.createdBy !== req.user.username &&
+                req.user.applications.indexOf(application.id) === -1 &&
+                req.user.role !== ROLES.ADMIN) {
+                res.status(403).json(new RouteUserError(ReasonTexts.NOT_AUTHORIZED));
+                return;
+            }
+
+            UserCtrl.findByAppId(req.params.appId).then((users) => {
+                res.status(200).json(users);
+            }, (reason) => {
+                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+            });
+        }, (reason) => {
+            if (reason === ReasonTexts.APP_NOT_FOUND) {
+                res.status(404).json(new RouteUserError(ReasonTexts.APP_NOT_FOUND));
+            } else {
+                res.status(500).json(new RouteUserError(ReasonTexts.UNKNOWN));
+            }
+        });
+    });
 
 };
