@@ -10,11 +10,9 @@ const LOG_FILTER = {
   _id: 0
 };
 
-exports.findByAppId = (appid) => {
+exports.findBy = (criteria) => {
   return new Promise((resolve, reject) => {
-    Log.find({
-      applicationId: appid
-    }, LOG_FILTER, (err, logs) => {
+    Log.find(criteria, LOG_FILTER, (err, logs) => {
       if (err) {
         console.log('logs retrieve err: \n');
         console.log(err);
@@ -28,7 +26,7 @@ exports.findByAppId = (appid) => {
         return;
       }
 
-      resolve(keys);
+      resolve(logs);
     });
   });
 }

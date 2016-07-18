@@ -4,6 +4,9 @@ import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import session from '../models/session';
+
+let ROLES = require('../../../../constants/roles.js');
 
 const iconButtonElement = (
   <IconButton
@@ -14,11 +17,12 @@ const iconButtonElement = (
 );
 
 export const AppRightMenu = (id, fn) => {
+  let admin = session.get('role') === ROLES.ADMIN;
   return (
     <IconMenu onItemTouchTap={fn} iconButtonElement={iconButtonElement}>
       <MenuItem id={id} path={'/appLogs'}>Logs</MenuItem>
       <MenuItem id={id} path={'/appAnalytics'}>Analytics</MenuItem>
-      <MenuItem id={id} path={'/appEdit'}>Edit</MenuItem>
+      {admin && <MenuItem id={id} path={'/appEdit'}>Edit</MenuItem>}
     </IconMenu>
   );
 };
