@@ -13,13 +13,13 @@ import { withRouter } from 'react-router';
 const styles = {
   container: {
     textAlign: 'center'
-  },
+  }
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
-  },
+    accent1Color: deepOrange500
+  }
 });
 
 class Apps extends React.Component {
@@ -60,7 +60,7 @@ class Apps extends React.Component {
           {this.state.applications.length === 0 && <h3>Please create new application from left menu</h3>}
         </div>
       </MuiThemeProvider>
-    )
+    );
   }
 }
 

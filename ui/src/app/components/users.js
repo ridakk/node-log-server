@@ -13,13 +13,13 @@ import { withRouter } from 'react-router';
 const styles = {
   container: {
     textAlign: 'center'
-  },
+  }
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
-  },
+    accent1Color: deepOrange500
+  }
 });
 
 class Apps extends React.Component {
@@ -41,6 +41,7 @@ class Apps extends React.Component {
     console.log('user delete clicked' + child.props.id);
     api.send('/user/' + child.props.id, 'DELETE').then(() => {
       let users = this.state.users;
+
       users.splice(users.indexOf(users.find(user => users.username === child.props.id)), 1);
       this.setState({
         users: users
@@ -64,8 +65,8 @@ class Apps extends React.Component {
           {this.state.users.length === 0 && <h3>You can create new user from left menu</h3>}
         </div>
       </MuiThemeProvider>
-    )
+    );
   }
 }
 
-export default  withRouter(Apps);
+export default withRouter(Apps);

@@ -15,7 +15,7 @@ class TopBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      admin: session.get('role') === ROLES.ADMIN,
+      admin: session.get('role') === ROLES.ADMIN
     };
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
   }
@@ -57,7 +57,7 @@ class TopBar extends React.Component {
           </IconMenu>
         }
       />
-    )
+    );
   }
 }
 

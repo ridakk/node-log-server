@@ -12,11 +12,11 @@ class DataList extends React.Component {
 
   render() {
     let self = this;
-    return (
 
+    return (
         <List>
           {self.props.subheader && <Subheader inset={true}>{self.props.subheader}</Subheader>}
-          {self.props.content.map(function(data) {
+          {self.props.content.map((data) => {
               return <ListItem key={data[self.props.idKey]}
                 leftAvatar={self.props.leftAvatar}
                 rightIconButton={self.props.rightIconMenu(data[self.props.idKey], self.props.rightIconMenuClick)}
@@ -26,7 +26,7 @@ class DataList extends React.Component {
           })}
         </List>
 
-    )
+    );
   }
 }
 

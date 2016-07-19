@@ -1,6 +1,5 @@
 import React from 'react';
 import Chip from 'material-ui/Chip';
-import Button from './button';
 
 const styles = {
   chip: {
@@ -9,19 +8,17 @@ const styles = {
   wrapper: {
     display: 'flex',
     flexWrap: 'wrap',
-  },
+  }
 };
 
 class ChipList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
-    let self = this;
+    const self = this;
+
     return (
       <div style={styles.wrapper}>
-        {self.props.content.map(function(data) {
+        {self.props.content.map((data) => {
             return <Chip
                       style={styles.chip}
                       key={data[self.props.idKey]}
@@ -31,7 +28,7 @@ class ChipList extends React.Component {
                    </Chip>
         })}
       </div>
-    )
+    );
   }
 }
 

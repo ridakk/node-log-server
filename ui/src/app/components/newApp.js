@@ -14,13 +14,13 @@ let ROLES = require('../../../../constants/roles.js');
 const styles = {
   container: {
     textAlign: 'center'
-  },
+  }
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
-  },
+    accent1Color: deepOrange500
+  }
 });
 
 class NewApp extends React.Component {
@@ -91,7 +91,7 @@ class NewApp extends React.Component {
           />
         </div>
       </MuiThemeProvider>
-    )
+    );
   }
 }
 

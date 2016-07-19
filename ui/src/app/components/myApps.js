@@ -10,18 +10,16 @@ import {folderIcon} from '../constants/icons';
 import { withRouter } from 'react-router';
 import api from '../services/api';
 
-import ChipList from './chipList';
-
 const styles = {
   container: {
     textAlign: 'center'
-  },
+  }
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
-  },
+    accent1Color: deepOrange500
+  }
 });
 
 class MyApps extends React.Component {
@@ -34,11 +32,12 @@ class MyApps extends React.Component {
       applications: [],
       selectedApp: null
     };
-    console.log('home page state: ', this.state)
+    console.log('home page state: ', this.state);
 
     for (let [index, elem] of this.state.applicationIds.entries()) {
       api.send('/application/' + elem, 'GET').then((application) => {
         let applications = this.state.applications;
+
         applications.push(application);
         this.setState({
           applications: applications
@@ -70,7 +69,7 @@ class MyApps extends React.Component {
         </div>
       </MuiThemeProvider>
     )
-  }
+  };
 }
 
 export default  withRouter(MyApps);
