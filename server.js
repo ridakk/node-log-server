@@ -8,6 +8,7 @@ let https = require('https');
 let morgan = require('morgan');
 let mongoose = require('mongoose');
 let config = require('./config');
+var helmet = require('helmet')
 
 let privateKey = fs.readFileSync('server.key', 'utf8');
 let certificate = fs.readFileSync('server.crt', 'utf8');
@@ -18,6 +19,8 @@ let credentials = {
   passphrase: 'odun'
 };
 
+app.use(helmet());
+
 mongoose.connect(config.database);
 app.set('superSecret', config.secret);
 
@@ -27,7 +30,7 @@ app.use(express.static(__dirname + '/ui/dist/'));
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '5mb'}));
 app.use(morgan('dev'));
 
 // load auth strategies
