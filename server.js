@@ -8,7 +8,9 @@ let https = require('https');
 let morgan = require('morgan');
 let mongoose = require('mongoose');
 let config = require('./config');
-var helmet = require('helmet')
+let helmet = require('helmet')
+let h5bp = require('h5bp');
+let compression = require('compression');
 
 let privateKey = fs.readFileSync('server.key', 'utf8');
 let certificate = fs.readFileSync('server.crt', 'utf8');
@@ -19,13 +21,14 @@ let credentials = {
   passphrase: 'odun'
 };
 
-app.use(helmet());
-
 mongoose.connect(config.database);
-app.set('superSecret', config.secret);
 
+app.set('superSecret', config.secret);
 app.set('port', (process.env.PORT || 8443));
 
+app.use(helmet());
+app.use(h5bp({ root: __dirname + '/ui/dist/' }));
+app.use(compression());
 app.use(express.static(__dirname + '/ui/dist/'));
 app.use(bodyParser.urlencoded({
   extended: false
