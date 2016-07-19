@@ -6,6 +6,7 @@ let AppCtrl = require('../controllers/applicationController');
 let LogCtrl = require('../controllers/logController');
 let passport = require('passport');
 let RouteLogError = require('../utils/routeLogError');
+let LogFilters = require('../constants/logFilters.js');
 
 module.exports = (app) => {
 
@@ -81,6 +82,62 @@ module.exports = (app) => {
                 applicationId: application.id,
                 id: req.params.logId
             }).then((logs) => {
+                res.status(200).json(logs);
+            }, () => {
+                res.status(500).send(new RouteLogError(ReasonTexts.UNKNOWN));
+            });
+        }, (reason) => {
+            if (reason === ReasonTexts.APP_NOT_FOUND) {
+                res.status(404).json(new RouteLogError(ReasonTexts.APP_NOT_FOUND));
+            } else {
+                res.status(500).json(new RouteLogError(ReasonTexts.UNKNOWN));
+            }
+        });
+    });
+
+    app.get('/log/:appId/:logId/log', passport.authenticate('jwt', {
+        session: false
+    }), (req, res) => {
+        AppCtrl.findByAppId(req.params.appId).then((application) => {
+            if (application.createdBy !== req.user.username &&
+                req.user.applications.indexOf(application.id) === -1 &&
+                req.user.role !== ROLES.ADMIN) {
+                res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
+                return;
+            }
+
+            LogCtrl.findBy({
+                applicationId: application.id,
+                id: req.params.logId
+            }, LogFilters.LOG_ONLY).then((logs) => {
+                res.status(200).json(logs);
+            }, () => {
+                res.status(500).send(new RouteLogError(ReasonTexts.UNKNOWN));
+            });
+        }, (reason) => {
+            if (reason === ReasonTexts.APP_NOT_FOUND) {
+                res.status(404).json(new RouteLogError(ReasonTexts.APP_NOT_FOUND));
+            } else {
+                res.status(500).json(new RouteLogError(ReasonTexts.UNKNOWN));
+            }
+        });
+    });
+
+    app.get('/log/:appId/:logId/screenShot', passport.authenticate('jwt', {
+        session: false
+    }), (req, res) => {
+        AppCtrl.findByAppId(req.params.appId).then((application) => {
+            if (application.createdBy !== req.user.username &&
+                req.user.applications.indexOf(application.id) === -1 &&
+                req.user.role !== ROLES.ADMIN) {
+                res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
+                return;
+            }
+
+            LogCtrl.findBy({
+                applicationId: application.id,
+                id: req.params.logId
+            }, LogFilters.SCREENSHOT_ONLY).then((logs) => {
                 res.status(200).json(logs);
             }, () => {
                 res.status(500).send(new RouteLogError(ReasonTexts.UNKNOWN));

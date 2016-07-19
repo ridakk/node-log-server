@@ -4,15 +4,14 @@ let Log = require('../models/log');
 let uuid = require('node-uuid');
 let Promise = require('es6-promise').Promise;
 let ReasonTexts = require('../constants/reasonTexts.js');
-let LogStatus = require('../constants/LogStatus.js');
+let LogStatus = require('../constants/logStatus.js');
+let LogFilters = require('../constants/logFilters.js');
 
-const LOG_FILTER = {
-  _id: 0
-};
 
-exports.findBy = (criteria) => {
+exports.findBy = (criteria, filter) => {
   return new Promise((resolve, reject) => {
-    Log.find(criteria, LOG_FILTER, (err, logs) => {
+    let mongoFilter = filter ? filter : LogFilters.DEFAULT;
+    Log.find(criteria, mongoFilter, (err, logs) => {
       if (err) {
         console.log('logs retrieve err: \n');
         console.log(err);
@@ -24,6 +23,19 @@ exports.findBy = (criteria) => {
       if (!logs) {
         resolve([]);
         return;
+      }
+
+      if (mongoFilter === LogFilters.DEFAULT) {
+        let len = logs.length;
+        for (let i = 0; i < len; i++) {
+            let log = logs[i];
+            if (log.log) {
+                log.log = true;
+            }
+            if (log.screenShot) {
+                log.screenShot = true;
+            }
+        }
       }
 
       resolve(logs);
