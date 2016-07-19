@@ -34,6 +34,7 @@ class AppEdit extends React.Component {
     super(props);
     this.handleGenerateNewKey = this.handleGenerateNewKey.bind(this);
     this.handleAddUser = this.handleAddUser.bind(this);
+    this.handleUserDeleteRequest = this.handleUserDeleteRequest.bind(this);
     this.handleUpdateInput = this.handleUpdateInput.bind(this);
     this.handleNewKeyDialogClose = this.handleNewKeyDialogClose.bind(this);
     this.handleKeyDeleteRequest = this.handleKeyDeleteRequest.bind(this);
@@ -139,6 +140,24 @@ class AppEdit extends React.Component {
     });
   }
 
+  handleUserDeleteRequest(username) {
+    console.log('remove user clicked: ' + username);
+    api.send('/user/' + username + '/' + this.state.appId, 'DELETE').then(() => {
+      let users = this.state.users;
+      users.splice(users.indexOf(users.find(user => user.username === username)), 1);
+      this.setState({
+        users: users,
+        notificationOpen: false,
+        notificationMessage: ''
+      });
+    }, (err) => {
+      this.setState({
+        notificationOpen: true,
+        notificationMessage: 'Failed to remove user: ' + err.reasonText
+      });
+    });
+  }
+
   handleUpdateInput(value) {
     this.setState({
       userToAdd: value,
@@ -170,7 +189,8 @@ class AppEdit extends React.Component {
           <ChipList
             content={this.state.users}
             idKey={'username'}
-            labelKey={'username'}/>
+            labelKey={'username'}
+            onRequestDelete={this.handleUserDeleteRequest}/>
             <AutoComplete
               hintText="Type username"
               dataSource={this.state.userDataSource}

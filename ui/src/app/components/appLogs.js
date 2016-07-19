@@ -54,6 +54,12 @@ class AppLogs extends React.Component {
                 <TableHeaderColumn>ID</TableHeaderColumn>
                 <TableHeaderColumn>Status</TableHeaderColumn>
                 <TableHeaderColumn>Description</TableHeaderColumn>
+                <TableHeaderColumn>Log</TableHeaderColumn>
+                <TableHeaderColumn>ScreenShot</TableHeaderColumn>
+                <TableHeaderColumn>Reporter</TableHeaderColumn>
+                <TableHeaderColumn>Platform</TableHeaderColumn>
+                <TableHeaderColumn>Version</TableHeaderColumn>
+                <TableHeaderColumn>Config</TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody
@@ -64,6 +70,12 @@ class AppLogs extends React.Component {
                     <TableRowColumn>{log.id}</TableRowColumn>
                     <TableRowColumn>{log.status}</TableRowColumn>
                     <TableRowColumn>{log.description}</TableRowColumn>
+                    <TableRowColumn>{log.log}</TableRowColumn>
+                    <TableRowColumn>{log.screenShot}</TableRowColumn>
+                    <TableRowColumn>{log.reporter}</TableRowColumn>
+                    <TableRowColumn>{log.platform}</TableRowColumn>
+                    <TableRowColumn>{log.version}</TableRowColumn>
+                    <TableRowColumn>{log.config}</TableRowColumn>
                   </TableRow>
               })}
             </TableBody>
