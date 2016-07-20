@@ -11,56 +11,56 @@ import api from '../services/api';
 const styles = {
   container: {
     textAlign: 'center'
-  },
+  }
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
-  },
+    accent1Color: deepOrange500
+  }
 });
 
 const COLUMNS = [{
-    header: 'ID',
-    rowProperty: 'id',
-    columnNumber: 1
+  header: 'ID',
+  rowProperty: 'id',
+  columnNumber: 1
 }, {
-    header: 'Status',
-    rowProperty: 'status',
-    columnNumber: 2
+  header: 'Status',
+  rowProperty: 'status',
+  columnNumber: 2
 }, {
-    header: 'Description',
-    rowProperty: 'description',
-    columnNumber: 3
+  header: 'Description',
+  rowProperty: 'description',
+  columnNumber: 3
 }, {
-    header: 'Log',
-    rowProperty: 'log',
-    columnNumber: 4,
-    file: true,
-    title: 'Click to download log file'
+  header: 'Log',
+  rowProperty: 'log',
+  columnNumber: 4,
+  file: true,
+  title: 'Click to download log file'
 }, {
-    header: 'ScreenShot',
-    rowProperty: 'screenShot',
-    columnNumber: 5,
-    file: true,
-    title: 'Click to download screen shot'
+  header: 'ScreenShot',
+  rowProperty: 'screenShot',
+  columnNumber: 5,
+  file: true,
+  title: 'Click to download screen shot'
 }, {
-    header: 'Reporter',
-    rowProperty: 'reporter',
-    columnNumber: 6
+  header: 'Reporter',
+  rowProperty: 'reporter',
+  columnNumber: 6
 }, {
-    header: 'Platform',
-    rowProperty: 'platform',
-    columnNumber: 7
+  header: 'Platform',
+  rowProperty: 'platform',
+  columnNumber: 7
 }, {
-    header: 'Version',
-    rowProperty: 'version',
-    columnNumber: 8
+  header: 'Version',
+  rowProperty: 'version',
+  columnNumber: 8
 }, {
-    header: 'Config',
-    rowProperty: 'config',
-    columnNumber: 9
-}]
+  header: 'Config',
+  rowProperty: 'config',
+  columnNumber: 9
+}];
 
 class AppLogs extends React.Component {
   constructor(props) {
@@ -86,14 +86,18 @@ class AppLogs extends React.Component {
     });
   }
 
-  handleCellClick(rowNumber , columnId) {
+  handleCellClick(rowNumber, columnId) {
     let column = this.state.columns.find(column => column.columnNumber === columnId);
+
     if (column.file) {
       let logId = this.state.logs[rowNumber].id;
+
       console.log('download ' + column.rowProperty + ' of log: ' + logId);
       api.send('/log/' + this.state.appId + '/' + logId + '/' + column.rowProperty, 'GET').then((logs) => {
         let w = window.open('');
-        w.document.write('<head><title>' + column.rowProperty + ': ' + logId + '</title></head><body><p>'+ logs[0][column.rowProperty] +'</p></body>');
+
+        w.document.write('<head><title>' + column.rowProperty + ': ' + logId +
+          '</title></head><body><p>' + logs[0][column.rowProperty] + '</p></body>');
       });
     }
   }
@@ -110,7 +114,7 @@ class AppLogs extends React.Component {
               displaySelectAll={false}
               adjustForCheckbox={false}>
               <TableRow>
-                {self.state.columns.map(function(column) {
+                {self.state.columns.map((column) => {
                     return <TableHeaderColumn key={column.columnNumber}>{column.header}</TableHeaderColumn>
                 })}
               </TableRow>
@@ -118,9 +122,9 @@ class AppLogs extends React.Component {
             <TableBody
               showRowHover={true}
               displayRowCheckbox={false}>
-              {self.state.logs.map(function(log) {
+              {self.state.logs.map((log) => {
                   return <TableRow key={log.id}>
-                    {self.state.columns.map(function(column) {
+                    {self.state.columns.map((column) => {
                       if(column.file){
                           return <TableRowColumn key={column.columnNumber}>{log[column.rowProperty] && <a title={column.title}><FileAttachment /></a>}</TableRowColumn>
                       }
@@ -134,7 +138,7 @@ class AppLogs extends React.Component {
           </Table>
         </div>
       </MuiThemeProvider>
-    )
+    );
   }
 }
 

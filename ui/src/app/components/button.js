@@ -6,19 +6,26 @@ const style = {
 };
 
 class Button extends React.Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     return (
       <div>
-        <RaisedButton label={this.props.label} primary={true} style={style}
-        onTouchTap={this.props.onClick}
-        disabled={this.props.disabled}/>
+        <RaisedButton
+          label={this.props.label}
+          primary
+          style={style}
+          onTouchTap={this.props.onClick}
+          disabled={this.props.disabled}
+        />
       </div>
-    )
+    );
   }
 }
 
-export default Button
+Button.propTypes = {
+  disabled: React.PropTypes.bool.isRequired,
+  label: React.PropTypes.string.isRequired,
+  onClick: React.PropTypes.func.isRequired,
+};
+
+export default Button;

@@ -12,14 +12,14 @@ import session from '../models/session';
 const styles = {
   container: {
     textAlign: 'center',
-    paddingTop: 100,
-  },
+    paddingTop: 100
+  }
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
-  },
+    accent1Color: deepOrange500
+  }
 });
 
 class Login extends React.Component {
@@ -67,12 +67,12 @@ class Login extends React.Component {
       session.set('token', data.token);
       this.props.router.push('/myApps');
     }, (data) => {
-      //if(data.status === 401) {
+      // if(data.status === 401) {
       this.setState({
         notificationOpen: true,
         notificationMessage: 'Username or Password is wrong'
       });
-      //}
+      // }
     });
 
     // session.set('role', 'Admin');

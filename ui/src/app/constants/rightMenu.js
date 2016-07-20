@@ -18,6 +18,7 @@ const iconButtonElement = (
 
 export const AppRightMenu = (id, fn) => {
   let admin = session.get('role') === ROLES.ADMIN;
+
   return (
     <IconMenu onItemTouchTap={fn} iconButtonElement={iconButtonElement}>
       <MenuItem id={id} path={'/appLogs'}>Logs</MenuItem>

@@ -1,13 +1,12 @@
 import React from 'react';
 import Snackbar from 'material-ui/Snackbar';
-import RaisedButton from 'material-ui/RaisedButton';
 
 class Notification extends React.Component {
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     this.state = {
       open: false,
-      message: ''
+      message: '',
     };
   }
   render() {
@@ -22,5 +21,10 @@ class Notification extends React.Component {
     );
   }
 }
+
+Notification.propTypes = {
+  open: React.PropTypes.boolean.isRequired,
+  message: React.PropTypes.string.isRequired,
+};
 
 export default Notification;

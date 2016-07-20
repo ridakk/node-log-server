@@ -19,11 +19,6 @@ const config = {
         filename: 'bundle.js', //Name of output file
     },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': JSON.stringify('production')
-            }
-        }),
         //Minify the bundle
         new webpack.optimize.UglifyJsPlugin({
             compress: {
@@ -39,6 +34,11 @@ const config = {
         }])
     ],
     module: {
+        // preLoaders: [{
+        //   test: /(\.jsx|\.js)$/,
+        //   loader: "eslint-loader",
+        //   exclude: /node_modules|ui\/dist|\.git/
+        // }],
         loaders: [{
             test: /\.js$/, // All .js files
             loaders: ['babel-loader'], //react-hot is like browser sync and babel loads jsx and es6-7
@@ -46,12 +46,8 @@ const config = {
         }, {
             test: /\.css$/,
             loader: "style-loader!css-loader"
-        }],
-    },
-    //Eslint config
-    eslint: {
-        configFile: '.eslintrc', //Rules for eslint
-    },
+        }]
+    }
 };
 
 module.exports = config;

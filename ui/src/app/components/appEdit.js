@@ -20,13 +20,13 @@ import FlatButton from 'material-ui/FlatButton';
 const styles = {
   container: {
     textAlign: 'center'
-  },
+  }
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500,
-  },
+    accent1Color: deepOrange500
+  }
 });
 
 class AppEdit extends React.Component {
@@ -77,6 +77,7 @@ class AppEdit extends React.Component {
     console.log('key create clicked');
     api.send('/key/' + this.state.appId, 'POST').then((newKey) => {
       let keys = this.state.keys;
+
       keys.push(newKey);
       this.setState({
         keys: keys,
@@ -97,6 +98,7 @@ class AppEdit extends React.Component {
     console.log('key delete clicked');
     api.send('/key/' + keyId, 'DELETE').then(() => {
       let keys = this.state.keys;
+
       keys.splice(keys.indexOf(keys.find(key => key.id === keyId)), 1);
       this.setState({
         keys: keys,
@@ -116,7 +118,7 @@ class AppEdit extends React.Component {
       notificationOpen: false,
       notificationMessage: '',
       newKeyDialog: false,
-      newKey: {},
+      newKey: {}
     });
   }
 
@@ -124,6 +126,7 @@ class AppEdit extends React.Component {
     console.log('add user clicked');
     api.send('/user/' + this.state.userToAdd.username + '/' + this.state.appId, 'POST').then(() => {
       let users = this.state.users;
+
       users.push({
         username: this.state.userToAdd.username
       });
@@ -144,6 +147,7 @@ class AppEdit extends React.Component {
     console.log('remove user clicked: ' + username);
     api.send('/user/' + username + '/' + this.state.appId, 'DELETE').then(() => {
       let users = this.state.users;
+
       users.splice(users.indexOf(users.find(user => user.username === username)), 1);
       this.setState({
         users: users,
@@ -209,7 +213,7 @@ class AppEdit extends React.Component {
               title="New key is generated"
               modal={false}
               contentStyle={{
-                width: '100%',
+                width: '100%'
               }}
               actions={<FlatButton
                 label="Close"
@@ -230,8 +234,8 @@ class AppEdit extends React.Component {
             />
         </div>
       </MuiThemeProvider>
-    )
+    );
   }
 }
 
-export default  AppEdit;
+export default AppEdit;
