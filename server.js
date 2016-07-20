@@ -4,7 +4,6 @@ let express = require('express');
 let fs = require('fs');
 let app = express();
 let bodyParser = require('body-parser');
-let https = require('https');
 let morgan = require('morgan');
 let mongoose = require('mongoose');
 let config = require('./config');
@@ -14,22 +13,6 @@ let compression = require('compression');
 
 console.log('env: ' + process.env.NODE_ENV);
 console.log('port: ' + process.env.PORT);
-
-let credentials = {
-  key: fs.readFileSync(config.key, 'utf8'),
-  cert: fs.readFileSync(config.cert, 'utf8')
-};
-
-if (process.env.NODE_ENV !== 'production') {
-    credentials.passphrase = config.passphrase;
-    app.use(morgan('dev'));
-} else {
-    app.use(morgan('combined', {
-        skip: function(req, res) {
-            return res.statusCode < 400
-        }
-    }));
-}
 
 mongoose.connect(config.database);
 
@@ -56,8 +39,32 @@ require('./routes/user')(app);
 require('./routes/application')(app);
 require('./routes/key')(app);
 
-let httpsServer = https.createServer(credentials, app);
+if (process.env.NODE_ENV !== 'production') {
+    app.use(morgan('dev'));
 
-httpsServer.listen(app.get('port'), () => {
-  console.log('Node app is running on port', app.get('port'));
-});
+    let credentials = {
+      key: fs.readFileSync(config.key, 'utf8'),
+      cert: fs.readFileSync(config.cert, 'utf8'),
+      passphrase: config.passphrase
+    };
+
+    let https = require('https');
+    let httpsServer = https.createServer(credentials, app);
+
+    httpsServer.listen(app.get('port'), () => {
+      console.log('Node https app is running on port', app.get('port'));
+    });
+} else {
+    app.use(morgan('combined', {
+        skip: function(req, res) {
+            return res.statusCode < 400
+        }
+    }));
+
+    let http = require('http');
+    let http = http.createServer(app);
+
+    http.listen(app.get('port'), () => {
+      console.log('Node http app is running on port', app.get('port'));
+    });
+}
