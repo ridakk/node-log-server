@@ -62,9 +62,9 @@ if (process.env.NODE_ENV !== 'production') {
     }));
 
     let http = require('http');
-    let http = http.createServer(app);
+    let httpServer = http.createServer(app);
 
-    http.listen(app.get('port'), () => {
+    httpServer.listen(app.get('port'), () => {
       console.log('Node http app is running on port', app.get('port'));
     });
 }
