@@ -31,6 +31,11 @@ const config = {
         filename: 'bundle.js',
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('development')
+            }
+        }),
         //Enables Hot Modules Replacement
         new webpack.HotModuleReplacementPlugin(),
         //Allows error warnings but does not stop compiling. Will remove when eslint is added

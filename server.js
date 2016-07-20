@@ -21,6 +21,9 @@ let credentials = {
   passphrase: 'odun'
 };
 
+console.log('env: ' + process.env.NODE_ENV);
+console.log('port: ' + process.env.PORT);
+
 mongoose.connect(config.database);
 
 app.set('superSecret', config.secret);
