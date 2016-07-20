@@ -19,6 +19,11 @@ const config = {
         filename: 'bundle.js', //Name of output file
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
         //Minify the bundle
         new webpack.optimize.UglifyJsPlugin({
             compress: {
