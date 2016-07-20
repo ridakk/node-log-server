@@ -48,7 +48,7 @@ app.use(bodyParser.json({limit: '5mb'}));
 // load auth strategies
 require('./auth/logApiStrategy')(app);
 require('./auth/userLoginStrategy')(app);
-require('./auth/JwtStrategy')(app);
+require('./auth/jwtStrategy')(app);
 
 require('./routes/log')(app);
 require('./routes/auth')(app);
