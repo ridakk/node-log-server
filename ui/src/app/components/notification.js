@@ -23,7 +23,7 @@ class Notification extends React.Component {
 }
 
 Notification.propTypes = {
-  open: React.PropTypes.boolean.isRequired,
+  open: React.PropTypes.bool.isRequired,
   message: React.PropTypes.string.isRequired,
 };
 
