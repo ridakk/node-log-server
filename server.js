@@ -12,17 +12,24 @@ let helmet = require('helmet')
 let h5bp = require('h5bp');
 let compression = require('compression');
 
-let privateKey = fs.readFileSync('server.key', 'utf8');
-let certificate = fs.readFileSync('server.crt', 'utf8');
-
-let credentials = {
-  key: privateKey,
-  cert: certificate,
-  passphrase: 'odun'
-};
-
 console.log('env: ' + process.env.NODE_ENV);
 console.log('port: ' + process.env.PORT);
+
+let credentials = {
+  key: fs.readFileSync(config.key, 'utf8'),
+  cert: fs.readFileSync(config.cert, 'utf8')
+};
+
+if (process.env.NODE_ENV !== 'production') {
+    credentials.passphrase = config.passphrase;
+    app.use(morgan('dev'));
+} else {
+    app.use(morgan('combined', {
+        skip: function(req, res) {
+            return res.statusCode < 400
+        }
+    }));
+}
 
 mongoose.connect(config.database);
 
@@ -37,7 +44,6 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(bodyParser.json({limit: '5mb'}));
-app.use(morgan('dev'));
 
 // load auth strategies
 require('./auth/logApiStrategy')(app);
