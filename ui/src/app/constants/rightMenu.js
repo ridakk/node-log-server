@@ -1,23 +1,21 @@
 import React from 'react';
-import {grey400} from 'material-ui/styles/colors';
+import { grey400 } from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import session from '../models/session';
 
-let ROLES = require('../../../../constants/roles.js');
+const ROLES = require('../../../../constants/roles.js');
 
 const iconButtonElement = (
-  <IconButton
-    touch={true}
-  >
+  <IconButton touch>
     <MoreVertIcon color={grey400} />
   </IconButton>
 );
 
 export const AppRightMenu = (id, fn) => {
-  let admin = session.get('role') === ROLES.ADMIN;
+  const admin = session.get('role') === ROLES.ADMIN;
 
   return (
     <IconMenu onItemTouchTap={fn} iconButtonElement={iconButtonElement}>
@@ -28,10 +26,8 @@ export const AppRightMenu = (id, fn) => {
   );
 };
 
-export const UserRightMenu = (id, fn) => {
-  return (
-    <IconMenu onItemTouchTap={fn} iconButtonElement={iconButtonElement}>
-      <MenuItem id={id}>Delete</MenuItem>
-    </IconMenu>
-  );
-};
+export const UserRightMenu = (id, fn) => (
+  <IconMenu onItemTouchTap={fn} iconButtonElement={iconButtonElement}>
+    <MenuItem id={id}>Delete</MenuItem>
+  </IconMenu>
+);
