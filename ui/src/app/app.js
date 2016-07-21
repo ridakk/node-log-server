@@ -23,13 +23,13 @@ injectTapEventPlugin();
 // For more details see: https://facebook.github.io/react/docs/top-level-api.html#react.render
 ReactDOM.render(
   <Router history={hashHistory}>
-    <Route path='/' component={Login}/>
-    <Route path='/myApps' component={MyApps}/>
-    <Route path='/newApp' component={NewApp}/>
-    <Route path='/newUser' component={NewUser}/>
-    <Route path='/apps' component={Apps}/>
-    <Route path='/appEdit' component={AppEdit}/>
-    <Route path='/appLogs' component={AppLogs}/>
-    <Route path='/users' component={Users}/>
+    <Route path="/" component={Login} />
+    <Route path="/myApps" component={MyApps} />
+    <Route path="/newApp" component={NewApp} />
+    <Route path="/newUser" component={NewUser} />
+    <Route path="/apps" component={Apps} />
+    <Route path="/appEdit" component={AppEdit} />
+    <Route path="/appLogs" component={AppLogs} />
+    <Route path="/users" component={Users} />
   </Router>, document.getElementById('app')
 );
