@@ -6,7 +6,7 @@
   "scripts": {
     "lint:ui": "eslint --ignore-path .gitignore ui/src/**/*.js",
     "ui-dev": "webpack-dev-server --config webpack-dev-server.config.ui.js --progress --inline --colors",
-    "ui-prod": "cross-env NODE_ENV=production webpack --config webpack-production.config.ui.js --progress --colors",
+    "ui-prod": "webpack --config webpack-production.config.ui.js --progress --colors",
     "server-dev": "cross-env NODE_ENV=development nodemon --ignore ui/ server",
     "server-prod": "cross-env NODE_ENV=production nodemon --ignore ui/ server"
   },
