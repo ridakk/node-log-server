@@ -34,7 +34,7 @@ class MyApps extends React.Component {
     };
 
     for (const elem of this.state.applicationIds.entries()) {
-      api.send(`/application/${elem}`, 'GET').then((application) => {
+      api.send(`/application/${elem[1]}`, 'GET').then((application) => {
         const applications = this.state.applications;
 
         applications.push(application);

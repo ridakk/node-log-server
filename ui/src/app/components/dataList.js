@@ -1,33 +1,32 @@
 import React from 'react';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
-import Avatar from 'material-ui/Avatar';
-import FileFolder from 'material-ui/svg-icons/file/folder';
 
+const DataList = ({ subheader, content, idKey, leftAvatar,
+                    rightIconMenu, rightIconMenuClick,
+                    primaryTextKey, secondaryTextKey }) =>
+  <List>
+    {subheader && <Subheader inset>{subheader}</Subheader>}
+    {content.map((data) =>
+      <ListItem
+        key={data[idKey]}
+        leftAvatar={leftAvatar}
+        rightIconButton={rightIconMenu(data[idKey], rightIconMenuClick)}
+        primaryText={data[primaryTextKey]}
+        secondaryText={data[secondaryTextKey]}
+      />
+    )}
+  </List>;
 
-class DataList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    let self = this;
-
-    return (
-        <List>
-          {self.props.subheader && <Subheader inset={true}>{self.props.subheader}</Subheader>}
-          {self.props.content.map((data) => {
-              return <ListItem key={data[self.props.idKey]}
-                leftAvatar={self.props.leftAvatar}
-                rightIconButton={self.props.rightIconMenu(data[self.props.idKey], self.props.rightIconMenuClick)}
-                primaryText={data[self.props.primaryTextKey]}
-                secondaryText={data[self.props.secondaryTextKey]}
-              />
-          })}
-        </List>
-
-    );
-  }
-}
+DataList.propTypes = {
+  rightIconMenuClick: React.PropTypes.func.isRequired,
+  subheader: React.PropTypes.string.isRequired,
+  idKey: React.PropTypes.string.isRequired,
+  primaryTextKey: React.PropTypes.string.isRequired,
+  secondaryTextKey: React.PropTypes.string.isRequired,
+  content: React.PropTypes.array.isRequired,
+  leftAvatar: React.PropTypes.element.isRequired,
+  rightIconMenu: React.PropTypes.element.isRequired,
+};
 
 export default DataList;
