@@ -1,28 +1,27 @@
 import React from 'react';
-import {deepOrange500} from 'material-ui/styles/colors';
+import { deepOrange500 } from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextBox from './textBox';
 import Button from './button';
 import TopBar from './topBar';
-import session from '../models/session';
 import Notification from './notification';
 import api from '../services/api';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 
-let ROLES = require('../../../../constants/roles.js');
+const ROLES = require('../../../../constants/roles.js');
 
 const styles = {
   container: {
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500
-  }
+    accent1Color: deepOrange500,
+  },
 });
 
 class NewUser extends React.Component {
@@ -38,7 +37,7 @@ class NewUser extends React.Component {
       disabled: true,
       notificationOpen: false,
       notificationMessage: '',
-      role: ROLES.GUEST
+      role: ROLES.GUEST,
     };
   }
 
@@ -48,7 +47,7 @@ class NewUser extends React.Component {
       disabled: this.state.username.length === 0 ||
         this.state.password.length === 0,
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
     });
   }
 
@@ -58,16 +57,15 @@ class NewUser extends React.Component {
       disabled: this.state.username.length === 0 ||
         this.state.password.length === 0,
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
     });
   }
 
   handleCreateButtonClick() {
-    console.log('app create clicked', this.state);
     api.send('/user', 'POST', {
       username: this.state.username,
       password: this.state.password,
-      role: this.state.role
+      role: this.state.role,
     });
   }
 
@@ -75,33 +73,36 @@ class NewUser extends React.Component {
     this.setState({
       role: value,
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
     });
-  };
+  }
 
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <TopBar title={'Create User'}/>
+          <TopBar title={'Create User'} />
           <TextBox
             onChange={this.handleUsernameChange}
-            type={'text'} hint={'jhonsnow'}
-            floatingLabel={'User name'}/>
+            type={'text'}
+            hint={'jhonsnow'}
+            floatingLabel={'User name'}
+          />
           <TextBox
             onChange={this.handlePasswordChange}
             type={'text'}
             hint={'winteriscoming'}
-            floatingLabel={'Password'}/>
-            <DropDownMenu
-              value={this.state.role}
-              onChange={this.handleRoleChange}
-              autoWidth={true}
-              disabled={this.state.disabled}
-            >
-              <MenuItem value={ROLES.GUEST} primaryText={ROLES.GUEST} />
-              <MenuItem value={ROLES.ADMIN} primaryText={ROLES.ADMIN} />
-            </DropDownMenu>
+            floatingLabel={'Password'}
+          />
+          <DropDownMenu
+            value={this.state.role}
+            onChange={this.handleRoleChange}
+            autoWidth
+            disabled={this.state.disabled}
+          >
+            <MenuItem value={ROLES.GUEST} primaryText={ROLES.GUEST} />
+            <MenuItem value={ROLES.ADMIN} primaryText={ROLES.ADMIN} />
+          </DropDownMenu>
           <Button
             label={'Create'}
             disabled={this.state.disabled}
