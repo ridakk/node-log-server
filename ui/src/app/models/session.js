@@ -1,16 +1,15 @@
-let Session = () => {
+const Session = () => {
   let data = {};
 
   return {
     set: (key, value) => {
       data[key] = value;
     },
-    get: (key) => {
-      return data[key];
-    },
+    get: (key) =>
+      data[key],
     clear: () => {
       data = {};
-    }
+    },
   };
 };
 
