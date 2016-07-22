@@ -5,22 +5,16 @@ const style = {
   margin: 12,
 };
 
-class Button extends React.Component {
-
-  render() {
-    return (
-      <div>
-        <RaisedButton
-          label={this.props.label}
-          primary
-          style={style}
-          onTouchTap={this.props.onClick}
-          disabled={this.props.disabled}
-        />
-      </div>
-    );
-  }
-}
+const Button = ({ label, onClick, disabled }) =>
+  <div>
+    <RaisedButton
+      label={label}
+      primary
+      style={style}
+      onTouchTap={onClick}
+      disabled={disabled}
+    />
+  </div>;
 
 Button.propTypes = {
   disabled: React.PropTypes.bool.isRequired,
