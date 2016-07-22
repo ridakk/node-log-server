@@ -11,7 +11,7 @@ import AppLogs from './components/appLogs';
 import Users from './components/users';
 import Login from './components/login';
 
-require('./main.css');
+require('./main.scss');
 
 // Needed for onTouchTap
 // Can go away when react 1.0 release

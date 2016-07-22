@@ -44,7 +44,7 @@ const COLUMNS = [
     style: { width: '1rem' },
     title: 'Click to download log file',
   }, {
-    header: 'ScreenShot',
+    header: 'Screen',
     rowProperty: 'screenShot',
     columnNumber: 5,
     file: true,
@@ -105,8 +105,12 @@ class AppLogs extends React.Component {
               <TableRow>
               {
                 self.state.columns.map((column) =>
-                  <TableHeaderColumn key={column.columnNumber}>
-                    {column.header}</TableHeaderColumn>)
+                  <TableHeaderColumn
+                    style={column.style}
+                    key={column.columnNumber}
+                  >
+                    {column.header}
+                  </TableHeaderColumn>)
               }
               </TableRow>
             </TableHeader>

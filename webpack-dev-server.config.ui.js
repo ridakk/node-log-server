@@ -52,8 +52,8 @@ const config = {
             loaders: ['react-hot', 'babel-loader'], //react-hot is like browser sync and babel loads jsx and es6-7
             exclude: [nodeModulesPath],
         }, {
-            test: /\.css$/,
-            loader: "style-loader!css-loader"
+            test: /\.scss$/,
+            loaders: ["style", "css", "sass"]
         }],
     },
     //eslint config options. Part of the eslint-loader package

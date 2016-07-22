@@ -40,17 +40,17 @@ const config = {
     ],
     module: {
         preLoaders: [{
-          test: /(\.jsx|\.js)$/,
-          loader: "eslint-loader",
-          exclude: /node_modules|ui\/dist|\.git/
+            test: /(\.jsx|\.js)$/,
+            loader: "eslint-loader",
+            exclude: /node_modules|ui\/dist|\.git/
         }],
         loaders: [{
             test: /\.js$/, // All .js files
             loaders: ['babel-loader'], //react-hot is like browser sync and babel loads jsx and es6-7
             exclude: [nodeModulesPath],
         }, {
-            test: /\.css$/,
-            loader: "style-loader!css-loader"
+            test: /\.scss$/,
+            loaders: ["style", "css", "sass"]
         }]
     }
 };
