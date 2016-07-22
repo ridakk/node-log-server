@@ -26,10 +26,12 @@ const COLUMNS = [
     header: 'ID',
     rowProperty: 'id',
     columnNumber: 1,
+    style: { width: '17rem' },
   }, {
     header: 'Status',
     rowProperty: 'status',
     columnNumber: 2,
+    style: { width: '4rem' },
   }, {
     header: 'Description',
     rowProperty: 'description',
@@ -39,29 +41,15 @@ const COLUMNS = [
     rowProperty: 'log',
     columnNumber: 4,
     file: true,
+    style: { width: '1rem' },
     title: 'Click to download log file',
   }, {
     header: 'ScreenShot',
     rowProperty: 'screenShot',
     columnNumber: 5,
     file: true,
+    style: { width: '1rem' },
     title: 'Click to download screen shot',
-  }, {
-    header: 'Reporter',
-    rowProperty: 'reporter',
-    columnNumber: 6,
-  }, {
-    header: 'Platform',
-    rowProperty: 'platform',
-    columnNumber: 7,
-  }, {
-    header: 'Version',
-    rowProperty: 'version',
-    columnNumber: 8,
-  }, {
-    header: 'Config',
-    rowProperty: 'config',
-    columnNumber: 9,
   },
 ];
 
@@ -132,12 +120,12 @@ class AppLogs extends React.Component {
                   {
                     self.state.columns.map((column) => {
                       if (column.file) {
-                        return (<TableRowColumn key={column.columnNumber}>
+                        return (<TableRowColumn key={column.columnNumber} style={column.style}>
                           {log[column.rowProperty] &&
                             <a title={column.title}><FileAttachment /></a>}
                         </TableRowColumn>);
                       }
-                      return (<TableRowColumn key={column.columnNumber}>
+                      return (<TableRowColumn key={column.columnNumber} style={column.style}>
                         <a title={log[column.rowProperty]}>
                           {log[column.rowProperty]}</a>
                       </TableRowColumn>);
