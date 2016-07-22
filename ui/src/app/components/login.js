@@ -1,5 +1,5 @@
 import React from 'react';
-import {deepOrange500} from 'material-ui/styles/colors';
+import { deepOrange500 } from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextBox from './textBox';
@@ -12,14 +12,14 @@ import session from '../models/session';
 const styles = {
   container: {
     textAlign: 'center',
-    paddingTop: 100
-  }
+    paddingTop: 100,
+  },
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500
-  }
+    accent1Color: deepOrange500,
+  },
 });
 
 class Login extends React.Component {
@@ -33,7 +33,7 @@ class Login extends React.Component {
       password: '',
       buttonDisabled: true,
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
     };
   }
 
@@ -43,7 +43,7 @@ class Login extends React.Component {
       buttonDisabled: this.state.username.length === 0 ||
         this.state.password.length === 0,
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
     });
   }
 
@@ -53,32 +53,24 @@ class Login extends React.Component {
       buttonDisabled: this.state.username.length === 0 ||
         this.state.password.length === 0,
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
     });
   }
 
   handleLoginButtonClick() {
-    console.log('login clicked', this.state);
     api.auth(this.state.username, this.state.password).then((data) => {
-      console.log('auth success ', data);
       session.set('username', data.username);
       session.set('role', data.role);
       session.set('applications', data.applications);
       session.set('token', data.token);
       this.props.router.push('/myApps');
-    }, (data) => {
-      // if(data.status === 401) {
+    }, () => {
+      // TODO: need to show proper error messages
       this.setState({
         notificationOpen: true,
-        notificationMessage: 'Username or Password is wrong'
+        notificationMessage: 'Username or Password is wrong',
       });
-      // }
     });
-
-    // session.set('role', 'Admin');
-    // session.set('applications', [{id:1, name: 'asd', url: 'a@a.com'}, {id:2, name: 'qwe', url: 'b@b.com'}]);
-    //
-    // this.props.router.push('/myApps');
   }
 
   render() {
@@ -88,12 +80,14 @@ class Login extends React.Component {
           <TextBox
             onChange={this.handleUsernameChange}
             type={'text'} hint={'Enter your user name'}
-            floatingLabel={'Username'}/>
+            floatingLabel={'Username'}
+          />
           <TextBox
             onChange={this.handlePasswordChange}
             type={'password'}
             hint={'Enter your password'}
-            floatingLabel={'Password'}/>
+            floatingLabel={'Password'}
+          />
           <Button
             label={'Login'}
             disabled={this.state.buttonDisabled}
@@ -108,5 +102,9 @@ class Login extends React.Component {
     );
   }
 }
+
+Login.propTypes = {
+  router: React.PropTypes.func.isRequired,
+};
 
 export default withRouter(Login);
