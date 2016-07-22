@@ -9,16 +9,16 @@ class TextBox extends React.Component {
   }
 
   onChange(event) {
-    let text = event.target.value.trim();
+    const text = event.target.value.trim();
 
     if (text.length === 0) {
       this.setState({
-        errorText: 'This field is required'
+        errorText: 'This field is required',
       });
       this.props.onChange('');
     } else {
       this.setState({
-        errorText: ''
+        errorText: '',
       });
       this.props.onChange(text);
     }
@@ -32,12 +32,21 @@ class TextBox extends React.Component {
           hintText={this.props.hint}
           floatingLabelText={this.props.floatingLabel}
           type={this.props.type}
-          errorText= {this.state.errorText}
+          errorText={this.state.errorText}
           onChange={this.onChange}
         /><br />
       </div>
     );
   }
 }
+
+TextBox.propTypes = {
+  onChange: React.PropTypes.func.isRequired,
+  value: React.PropTypes.string.isRequired,
+  hint: React.PropTypes.string.isRequired,
+  floatingLabel: React.PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
+  errorText: React.PropTypes.string.isRequired,
+};
 
 export default TextBox;
