@@ -8,28 +8,28 @@ const styles = {
   wrapper: {
     display: 'flex',
     flexWrap: 'wrap',
-  }
+  },
 };
 
-class ChipList extends React.Component {
+const ChipList = ({ content, idKey, onRequestDelete,
+                    labelKey }) =>
+  <div style={styles.wrapper}>
+    {content.map((data) =>
+      <Chip
+        style={styles.chip}
+        key={data[idKey]}
+        onRequestDelete={() => onRequestDelete(data[idKey])}
+      >
+        {data[labelKey]}
+      </Chip>
+    )}
+  </div>;
 
-  render() {
-    const self = this;
-
-    return (
-      <div style={styles.wrapper}>
-        {self.props.content.map((data) => {
-            return <Chip
-                      style={styles.chip}
-                      key={data[self.props.idKey]}
-                      onRequestDelete={() => self.props.onRequestDelete(data[self.props.idKey])}
-                   >
-                      {data[self.props.labelKey]}
-                   </Chip>
-        })}
-      </div>
-    );
-  }
-}
+ChipList.propTypes = {
+  onRequestDelete: React.PropTypes.func.isRequired,
+  idKey: React.PropTypes.string.isRequired,
+  labelKey: React.PropTypes.string.isRequired,
+  content: React.PropTypes.array.isRequired,
+};
 
 export default ChipList;
