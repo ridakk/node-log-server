@@ -1,26 +1,23 @@
 import React from 'react';
-import {deepOrange500} from 'material-ui/styles/colors';
+import { deepOrange500 } from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextBox from './textBox';
 import Button from './button';
 import TopBar from './topBar';
-import session from '../models/session';
 import Notification from './notification';
 import api from '../services/api';
 
-let ROLES = require('../../../../constants/roles.js');
-
 const styles = {
   container: {
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 };
 
 const muiTheme = getMuiTheme({
   palette: {
-    accent1Color: deepOrange500
-  }
+    accent1Color: deepOrange500,
+  },
 });
 
 class NewApp extends React.Component {
@@ -34,7 +31,7 @@ class NewApp extends React.Component {
       appUrl: '',
       buttonDisabled: true,
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
     };
   }
 
@@ -44,7 +41,7 @@ class NewApp extends React.Component {
       buttonDisabled: this.state.appName.length === 0 ||
         this.state.appUrl.length === 0,
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
     });
   }
 
@@ -54,32 +51,33 @@ class NewApp extends React.Component {
       buttonDisabled: this.state.appName.length === 0 ||
         this.state.appUrl.length === 0,
       notificationOpen: false,
-      notificationMessage: ''
+      notificationMessage: '',
     });
   }
 
   handleCreateButtonClick() {
-    console.log('app create clicked', this.state);
     api.send('/application', 'POST', {
       name: this.state.appName,
-      url: this.state.appUrl
-    })
+      url: this.state.appUrl,
+    });
   }
 
   render() {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <TopBar title={'Create Application'}/>
+          <TopBar title={'Create Application'} />
           <TextBox
             onChange={this.handleAppNameChange}
             type={'text'} hint={'my-app'}
-            floatingLabel={'Application name'}/>
+            floatingLabel={'Application name'}
+          />
           <TextBox
             onChange={this.handleAppUrlChange}
             type={'text'}
             hint={'https://my-app.com'}
-            floatingLabel={'Application url'}/>
+            floatingLabel={'Application url'}
+          />
           <Button
             label={'Create'}
             disabled={this.state.buttonDisabled}
