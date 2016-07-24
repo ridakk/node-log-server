@@ -18,7 +18,10 @@ export const AppRightMenu = (id, fn) => {
   const admin = session.get('role') === ROLES.ADMIN;
 
   return (
-    <IconMenu onItemTouchTap={fn} iconButtonElement={iconButtonElement}>
+    <IconMenu
+      onItemTouchTap={(event, child) => fn(child.props.id, child.props.path)}
+      iconButtonElement={iconButtonElement}
+    >
       <MenuItem id={id} path={'/appLogs'}>Logs</MenuItem>
       <MenuItem id={id} path={'/appAnalytics'}>Analytics</MenuItem>
       {admin && <MenuItem id={id} path={'/appEdit'}>Edit</MenuItem>}
@@ -27,7 +30,10 @@ export const AppRightMenu = (id, fn) => {
 };
 
 export const UserRightMenu = (id, fn) => (
-  <IconMenu onItemTouchTap={fn} iconButtonElement={iconButtonElement}>
+  <IconMenu
+    onItemTouchTap={(event, child) => fn(child.props.id)}
+    iconButtonElement={iconButtonElement}
+  >
     <MenuItem id={id}>Delete</MenuItem>
   </IconMenu>
 );

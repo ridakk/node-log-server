@@ -26,6 +26,7 @@ class Apps extends React.Component {
   constructor(props) {
     super(props);
     this.handleRightIconMenuClick = this.handleRightIconMenuClick.bind(this);
+    this.handleItemClick = this.handleItemClick.bind(this);
     this.state = {
       applications: [],
       selectedApp: null,
@@ -37,9 +38,14 @@ class Apps extends React.Component {
     });
   }
 
-  handleRightIconMenuClick(event, child) {
-    session.set('selectedApp', child.props.id);
-    this.props.router.push(child.props.path);
+  handleRightIconMenuClick(selectedAppId, path) {
+    session.set('selectedApp', selectedAppId);
+    this.props.router.push(path);
+  }
+
+  handleItemClick(selectedAppId) {
+    session.set('selectedApp', selectedAppId);
+    this.props.router.push('/appLogs');
   }
 
   render() {
@@ -55,6 +61,7 @@ class Apps extends React.Component {
               secondaryTextKey={'url'}
               rightIconMenu={AppRightMenu}
               rightIconMenuClick={this.handleRightIconMenuClick}
+              onClick={this.handleItemClick}
               leftAvatar={folderIcon}
             />
           }

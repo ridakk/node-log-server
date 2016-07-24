@@ -35,11 +35,11 @@ class Apps extends React.Component {
     });
   }
 
-  handleRightIconMenuClick(event, child) {
-    api.send(`/user/${child.props.id}`, 'DELETE').then(() => {
+  handleRightIconMenuClick(userId) {
+    api.send(`/user/${userId}`, 'DELETE').then(() => {
       const users = this.state.users;
 
-      users.splice(users.indexOf(users.find(user => user.username === child.props.id)), 1);
+      users.splice(users.indexOf(users.find(user => user.username === userId)), 1);
       this.setState({
         users,
       });

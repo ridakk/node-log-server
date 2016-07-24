@@ -4,7 +4,7 @@ import Subheader from 'material-ui/Subheader';
 
 const DataList = ({ subheader, content, idKey, leftAvatar,
                     rightIconMenu, rightIconMenuClick,
-                    primaryTextKey, secondaryTextKey }) =>
+                    primaryTextKey, secondaryTextKey, onClick }) =>
   <List>
     {subheader && <Subheader inset>{subheader}</Subheader>}
     {content.map((data) =>
@@ -14,6 +14,7 @@ const DataList = ({ subheader, content, idKey, leftAvatar,
         rightIconButton={rightIconMenu(data[idKey], rightIconMenuClick)}
         primaryText={data[primaryTextKey]}
         secondaryText={data[secondaryTextKey]}
+        onTouchTap={() => onClick(data[idKey])}
       />
     )}
   </List>;
@@ -27,6 +28,7 @@ DataList.propTypes = {
   content: React.PropTypes.array.isRequired,
   leftAvatar: React.PropTypes.element.isRequired,
   rightIconMenu: React.PropTypes.element.isRequired,
+  onClick: React.PropTypes.func.isRequired,
 };
 
 export default DataList;

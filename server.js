@@ -1,18 +1,21 @@
 "use strict";
 
-let express = require('express');
-let fs = require('fs');
-let app = express();
-let bodyParser = require('body-parser');
-let morgan = require('morgan');
-let mongoose = require('mongoose');
-let config = require('./config');
-let helmet = require('helmet')
-let h5bp = require('h5bp');
-let compression = require('compression');
+const path = require('path');
+const express = require('express');
+const fs = require('fs');
+const app = express();
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const config = require('./config');
+const helmet = require('helmet')
+const compression = require('compression');
+const uiDistPath = path.resolve(__dirname, 'ui/dist/');
 
 console.log('env: ' + process.env.NODE_ENV);
 console.log('port: ' + process.env.PORT);
+console.log('__dirname: ' + __dirname);
+console.log('uiDistPath: ' + uiDistPath);
 
 mongoose.connect(config.database);
 
@@ -20,9 +23,8 @@ app.set('superSecret', config.secret);
 app.set('port', (process.env.PORT || 8443));
 
 app.use(helmet());
-app.use(h5bp({ root: __dirname + '/ui/dist/' }));
 app.use(compression());
-app.use(express.static(__dirname + '/ui/dist/'));
+app.use(express.static(uiDistPath));
 app.use(bodyParser.urlencoded({
   extended: false
 }));

@@ -8,6 +8,11 @@ import FileAttachment from 'material-ui/svg-icons/file/attachment';
 import TopBar from './topBar';
 import session from '../models/session';
 import api from '../services/api';
+import Dialog from 'material-ui/Dialog';
+import IconButton from 'material-ui/IconButton';
+import FlatButton from 'material-ui/FlatButton';
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
 
 const styles = {
   container: {
@@ -26,42 +31,30 @@ const COLUMNS = [
     header: 'ID',
     rowProperty: 'id',
     columnNumber: 1,
-    style: { width: '17rem' },
   }, {
     header: 'Status',
     rowProperty: 'status',
     columnNumber: 2,
-    style: { width: '4rem' },
   }, {
     header: 'Description',
     rowProperty: 'description',
     columnNumber: 3,
-  }, {
-    header: 'Log',
-    rowProperty: 'log',
-    columnNumber: 4,
-    file: true,
-    style: { width: '1rem' },
-    title: 'Click to download log file',
-  }, {
-    header: 'Screen',
-    rowProperty: 'screenShot',
-    columnNumber: 5,
-    file: true,
-    style: { width: '1rem' },
-    title: 'Click to download screen shot',
   },
 ];
 
 class AppLogs extends React.Component {
   constructor(props) {
     super(props);
-    this.handleCellClick = this.handleCellClick.bind(this);
+    this.handleRowSelection = this.handleRowSelection.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
     this.state = {
       application: {},
       columns: COLUMNS,
       appId: session.get('selectedApp'),
       logs: [],
+      dialogOpen: false,
+      dialogTitle: '',
+      dialogContent: '',
     };
 
     api.send(`/application/${this.state.appId}`, 'GET').then((application) => {
@@ -76,19 +69,23 @@ class AppLogs extends React.Component {
     });
   }
 
-  handleCellClick(rowNumber, columnId) {
-    const column = this.state.columns.find(col => col.columnNumber === columnId);
+  handleDialogClose() {
+    this.setState({
+      dialogOpen: false,
+    });
+  }
 
-    if (column.file) {
-      const logId = this.state.logs[rowNumber].id;
+  handleRowSelection(rowId) {
+    const logId = this.state.logs[rowId].id;
 
-      api.send(`/log/${this.state.appId}/${logId}/${column.rowProperty}`, 'GET').then((logs) => {
-        const w = window.open('');
-
-        w.document.write(`<head><title>${column.rowProperty}:${logId}</title></head>
-          <body><p>${logs[0][column.rowProperty]}</p></body>`);
+    api.send(`/log/${this.state.appId}/${logId}/all`, 'GET').then((logs) => {
+      const log = logs[0];
+      this.setState({
+        dialogOpen: true,
+        dialogTitle: log.id,
+        dialogContent: log
       });
-    }
+    });
   }
 
   render() {
@@ -97,7 +94,7 @@ class AppLogs extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
           <TopBar title={this.state.application.name} />
-          <Table onCellClick={this.handleCellClick}>
+          <Table onRowSelection={this.handleRowSelection}>
             <TableHeader
               displaySelectAll={false}
               adjustForCheckbox={false}
@@ -106,7 +103,6 @@ class AppLogs extends React.Component {
               {
                 self.state.columns.map((column) =>
                   <TableHeaderColumn
-                    style={column.style}
                     key={column.columnNumber}
                   >
                     {column.header}
@@ -123,13 +119,13 @@ class AppLogs extends React.Component {
                   <TableRow key={log.id}>
                   {
                     self.state.columns.map((column) => {
-                      if (column.file) {
-                        return (<TableRowColumn key={column.columnNumber} style={column.style}>
+                      if (column.icon) {
+                        return (<TableRowColumn key={column.columnNumber}>
                           {log[column.rowProperty] &&
                             <a title={column.title}><FileAttachment /></a>}
                         </TableRowColumn>);
                       }
-                      return (<TableRowColumn key={column.columnNumber} style={column.style}>
+                      return (<TableRowColumn key={column.columnNumber}>
                         <a title={log[column.rowProperty]}>
                           {log[column.rowProperty]}</a>
                       </TableRowColumn>);
@@ -140,6 +136,40 @@ class AppLogs extends React.Component {
               }
             </TableBody>
           </Table>
+          <Dialog
+            title={this.state.dialogTitle}
+            modal={false}
+            actions={<FlatButton
+              label="Close"
+              primary
+              keyboardFocused
+              onTouchTap={this.handleDialogClose}
+            />}
+            open={this.state.dialogOpen}
+          >
+            <div>Description: {this.state.dialogContent.description}</div>
+            <div>Reporter: {this.state.dialogContent.reporter}</div>
+            <div>Version: {this.state.dialogContent.version}</div>
+            <div>Platform: {this.state.dialogContent.platform}</div>
+            <Divider />
+            <List>
+              {this.state.dialogContent.config &&
+                <ListItem
+                  primaryText='Config File'
+                  rightIcon={<FileAttachment />}
+                />}
+                {this.state.dialogContent.log &&
+                  <ListItem
+                    primaryText='Log File'
+                    rightIcon={<FileAttachment />}
+                />}
+                {this.state.dialogContent.screenShot &&
+                  <ListItem
+                    primaryText='Screen Shot'
+                    rightIcon={<FileAttachment />}
+                />}
+            </List>
+          </Dialog>
         </div>
       </MuiThemeProvider>
     );

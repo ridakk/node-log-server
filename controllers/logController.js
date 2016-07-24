@@ -25,7 +25,7 @@ exports.findBy = (criteria, filter) => {
         return;
       }
 
-      if (mongoFilter === LogFilters.DEFAULT) {
+      if (mongoFilter === LogFilters.ALL) {
         let len = logs.length;
         for (let i = 0; i < len; i++) {
             let log = logs[i];
@@ -34,6 +34,9 @@ exports.findBy = (criteria, filter) => {
             }
             if (log.screenShot) {
                 log.screenShot = true;
+            }
+            if (log.config) {
+                log.config = true;
             }
         }
       }
