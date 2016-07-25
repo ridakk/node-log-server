@@ -9,9 +9,8 @@ import TopBar from './topBar';
 import session from '../models/session';
 import api from '../services/api';
 import Dialog from 'material-ui/Dialog';
-import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 const styles = {
@@ -47,6 +46,8 @@ class AppLogs extends React.Component {
     super(props);
     this.handleRowSelection = this.handleRowSelection.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.handleDownloadFile = this.handleDownloadFile.bind(this);
+    this.handleDownloadScreenShot = this.handleDownloadScreenShot.bind(this);
     this.state = {
       application: {},
       columns: COLUMNS,
@@ -83,8 +84,38 @@ class AppLogs extends React.Component {
       this.setState({
         dialogOpen: true,
         dialogTitle: log.id,
-        dialogContent: log
+        dialogContent: log,
       });
+    });
+  }
+
+  handleDownloadFile(logId, resourceIdentifier) {
+    api.send(`/log/${this.state.appId}/${logId}/${resourceIdentifier}`, 'GET').then((logs) => {
+      const log = logs[0];
+
+      this.setState({
+        dialogOpen: false,
+      });
+
+      const w = window.open('');
+
+      w.document.write(`<head><title>${resourceIdentifier}:${logId}</title></head>
+          <body><p>${log[resourceIdentifier]}</p></body>`);
+    });
+  }
+
+  handleDownloadScreenShot(logId) {
+    api.send(`/log/${this.state.appId}/${logId}/screenShot`, 'GET').then((logs) => {
+      const log = logs[0];
+
+      this.setState({
+        dialogOpen: false,
+      });
+
+      const w = window.open('');
+
+      w.document.write(`<head><title>Screen Shot:${logId}</title></head>
+          <body><img src='${log.screenShot}'></img></body>`);
     });
   }
 
@@ -145,6 +176,7 @@ class AppLogs extends React.Component {
               keyboardFocused
               onTouchTap={this.handleDialogClose}
             />}
+            onRequestClose={this.handleDialogClose}
             open={this.state.dialogOpen}
           >
             <div>Description: {this.state.dialogContent.description}</div>
@@ -155,19 +187,25 @@ class AppLogs extends React.Component {
             <List>
               {this.state.dialogContent.config &&
                 <ListItem
-                  primaryText='Config File'
+                  primaryText="Config File"
                   rightIcon={<FileAttachment />}
+                  onTouchTap={() => this.handleDownloadFile(this.state.dialogContent.id,
+                    'config')}
                 />}
                 {this.state.dialogContent.log &&
                   <ListItem
-                    primaryText='Log File'
+                    primaryText="Log File"
                     rightIcon={<FileAttachment />}
-                />}
+                    onTouchTap={() => this.handleDownloadFile(this.state.dialogContent.id,
+                      'log')}
+                  />}
                 {this.state.dialogContent.screenShot &&
                   <ListItem
-                    primaryText='Screen Shot'
+                    primaryText="Screen Shot"
                     rightIcon={<FileAttachment />}
-                />}
+                    onTouchTap={() => this.handleDownloadScreenShot(this.state.dialogContent.id,
+                      'screenShot')}
+                  />}
             </List>
           </Dialog>
         </div>

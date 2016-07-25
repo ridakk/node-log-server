@@ -21,7 +21,7 @@ module.exports = {
   },
   CONFIG_ONLY: {
     _id: 0,
-    screenShot: 1,
+    config: 1,
   },
   ALL: {
     _id: 0,
