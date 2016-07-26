@@ -9,8 +9,6 @@ exports.getWhiteListOfApp = (appId) => {
   return new Promise((resolve, reject) => {
     let cachedWhiteList = whiteList.get(appId);
     if (cachedWhiteList) {
-      console.log('cached while list exists for app id: ' + appId);
-      console.log(cachedWhiteList);
       resolve(cachedWhiteList);
       return;
     }

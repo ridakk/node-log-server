@@ -64,9 +64,6 @@ exports.create = (name, url, createdBy) => {
     newApplication.url = url;
     newApplication.createdBy = createdBy;
 
-    console.log('new app: \n');
-    console.log(newApplication);
-
     // save the user
     newApplication.save((err) => {
       if (err) {
