@@ -29,6 +29,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(bodyParser.json({limit: '5mb'}));
+app.use(morgan('dev'));
 
 // load auth strategies
 require('./auth/logApiStrategy')(app);
@@ -42,8 +43,6 @@ require('./routes/application')(app);
 require('./routes/key')(app);
 
 if (process.env.NODE_ENV !== 'production') {
-    app.use(morgan('dev'));
-
     let credentials = {
       key: fs.readFileSync(config.key, 'utf8'),
       cert: fs.readFileSync(config.cert, 'utf8'),
@@ -57,12 +56,6 @@ if (process.env.NODE_ENV !== 'production') {
       console.log('Node https app is running on port', app.get('port'));
     });
 } else {
-    app.use(morgan('combined', {
-        skip: function(req, res) {
-            return res.statusCode < 400
-        }
-    }));
-
     let http = require('http');
     let httpServer = http.createServer(app);
 
