@@ -7,6 +7,8 @@ let LogCtrl = require('../controllers/logController');
 let passport = require('passport');
 let RouteLogError = require('../utils/routeLogError');
 let LogFilters = require('../constants/logFilters.js');
+let ReasonTexts = require('../constants/reasonTexts.js');
+let ROLES = require('../constants/roles.js');
 
 module.exports = (app) => {
 
@@ -47,7 +49,7 @@ module.exports = (app) => {
             if (application.createdBy !== req.user.username &&
                 req.user.applications.indexOf(application.id) === -1 &&
                 req.user.role !== ROLES.ADMIN) {
-                res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
+                res.status(403).json(new RouteLogError(ReasonTexts.NOT_AUTHORIZED));
                 return;
             }
 
@@ -74,7 +76,7 @@ module.exports = (app) => {
             if (application.createdBy !== req.user.username &&
                 req.user.applications.indexOf(application.id) === -1 &&
                 req.user.role !== ROLES.ADMIN) {
-                res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
+                res.status(403).json(new RouteLogError(ReasonTexts.NOT_AUTHORIZED));
                 return;
             }
 
@@ -102,7 +104,7 @@ module.exports = (app) => {
             if (application.createdBy !== req.user.username &&
                 req.user.applications.indexOf(application.id) === -1 &&
                 req.user.role !== ROLES.ADMIN) {
-                res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
+                res.status(403).json(new RouteLogError(ReasonTexts.NOT_AUTHORIZED));
                 return;
             }
 
@@ -130,7 +132,7 @@ module.exports = (app) => {
             if (application.createdBy !== req.user.username &&
                 req.user.applications.indexOf(application.id) === -1 &&
                 req.user.role !== ROLES.ADMIN) {
-                res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
+                res.status(403).json(new RouteLogError(ReasonTexts.NOT_AUTHORIZED));
                 return;
             }
 
@@ -158,7 +160,7 @@ module.exports = (app) => {
             if (application.createdBy !== req.user.username &&
                 req.user.applications.indexOf(application.id) === -1 &&
                 req.user.role !== ROLES.ADMIN) {
-                res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
+                res.status(403).json(new RouteLogError(ReasonTexts.NOT_AUTHORIZED));
                 return;
             }
 
@@ -186,7 +188,7 @@ module.exports = (app) => {
             if (application.createdBy !== req.user.username &&
                 req.user.applications.indexOf(application.id) === -1 &&
                 req.user.role !== ROLES.ADMIN) {
-                res.status(403).json(new RouteAppError(ReasonTexts.NOT_AUTHORIZED));
+                res.status(403).json(new RouteLogError(ReasonTexts.NOT_AUTHORIZED));
                 return;
             }
 
