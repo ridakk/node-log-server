@@ -10,7 +10,6 @@ module.exports = (app) => {
 
   passport.use('user-login', new Strategy(
     (username, password, cb) => {
-      console.log('UserLoginStrategy' + username + ':' + password);
       UserCtrl.findByUsername(username, {
         _id: 0,
         username: 1,
@@ -33,7 +32,6 @@ module.exports = (app) => {
           expiresIn: 3600 // expires in 1 hour
         });
 
-        console.log('returning success');
         return cb(null, {
           username: user.username,
           role: user.role,

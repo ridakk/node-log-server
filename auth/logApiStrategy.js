@@ -12,10 +12,7 @@ module.exports = (app) => {
       passReqToCallback: true // allows us to pass back the entire request to the callback
     },
     (req, productKey, jsKey, cb) => {
-      console.log('req.params.appId- ' + req.params.appId);
-      console.log('LogApiStrategy- ' + productKey + ':' + jsKey);
       KeyCtrl.validateApiKeys(req.params.appId, productKey, jsKey).then(() => {
-        console.log('returning success');
         return cb(null, {
           valid: true
         });

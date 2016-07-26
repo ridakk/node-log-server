@@ -14,10 +14,6 @@ module.exports = (app) => {
   opts.secretOrKey = app.get('superSecret');
 
   passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
-    console.log('jwt_payload: \n');
-    console.log(jwt_payload);
-    console.log('user: \n');
-    console.log(jwt_payload.user);
     if (jwt_payload && jwt_payload.user) {
       done(null, jwt_payload.user);
     } else {

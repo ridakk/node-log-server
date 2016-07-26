@@ -18,9 +18,7 @@ const USERNAME_FILTER = {
 };
 
 exports.findByUsername = (username, filter) => {
-  console.log('UserCtrl.findByUsername' + username);
   return new Promise((resolve, reject) => {
-    console.log('UserCtrl.findOne' + username);
     User.findOne({
       username: username
     }, filter ? filter : USER_FILTER, (err, user) => {
@@ -39,15 +37,12 @@ exports.findByUsername = (username, filter) => {
         return;
       }
 
-      console.log('UserCtrl user:\n');
-      console.log(user);
       resolve(user);
     });
   });
 }
 
 exports.findByAppId = (appId) => {
-  console.log('UserCtrl.findByAppId' + appId);
   return new Promise((resolve, reject) => {
     User.find({
       applications: {
@@ -68,8 +63,6 @@ exports.findByAppId = (appId) => {
         return;
       }
 
-      console.log('UserCtrl users:\n');
-      console.log(users);
       resolve(users);
     });
   });
