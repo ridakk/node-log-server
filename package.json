@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "lint:ui": "eslint --ignore-path .gitignore ui/src/**/*.js",
+    "lint:server": "eslint --ignore-path .gitignore --ignore-pattern ui/* .",
     "ui-dev": "webpack-dev-server --config webpack-dev-server.config.ui.js --progress --inline --colors",
     "ui-prod": "webpack --config webpack-production.config.ui.js --progress --colors",
     "server-dev": "cross-env NODE_ENV=development nodemon --ignore ui/ server",
