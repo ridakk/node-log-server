@@ -66,6 +66,11 @@ class NewUser extends React.Component {
       username: this.state.username,
       password: this.state.password,
       role: this.state.role,
+    }).then(() => {
+      this.setState({
+        notificationOpen: true,
+        notificationMessage: 'new user created',
+      });
     });
   }
 

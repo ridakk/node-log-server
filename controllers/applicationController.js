@@ -5,7 +5,7 @@ let CorsCtrl = require('./corsController');
 let UserCtrl = require('./userController');
 let uuid = require('node-uuid');
 let Promise = require('es6-promise').Promise;
-let ReasonTexts = require('../constants/reasonTexts.js');
+let ReasonTexts = require('../constants/reasonTexts');
 
 const APPLICATION_FILTER = {
   _id: 0
