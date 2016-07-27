@@ -1,10 +1,6 @@
-'use strict'
-
-let Error = function(errorCode, reasonText) {
-  return {
-    errorCode: errorCode,
-    reasonText: reasonText
-  }
-}
+const Error = (errorCode, reasonText) => ({
+  errorCode,
+  reasonText,
+});
 
 module.exports = Error;

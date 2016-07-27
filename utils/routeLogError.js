@@ -1,10 +1,7 @@
-'use strict'
+const Error = require('../utils/error');
+const ErrorCodes = require('../constants/errorCodes.js');
 
-let Error = require('../utils/error');
-let ErrorCodes = require('../constants/errorCodes.js');
-
-let RouteLogError = function(reasonText) {
-  return new Error(ErrorCodes.ROUTE_LOG, reasonText);
-}
+const RouteLogError = (reasonText) =>
+  new Error(ErrorCodes.ROUTE_LOG, reasonText);
 
 module.exports = RouteLogError;
