@@ -26,7 +26,8 @@ app.use(helmet());
 app.use(compression());
 app.use(express.static(uiDistPath));
 app.use(bodyParser.urlencoded({
-  extended: false
+  extended: false,
+  limit: '5mb'
 }));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(morgan('dev'));
