@@ -5,6 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Table, TableBody, TableHeader,
   TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import FileAttachment from 'material-ui/svg-icons/file/attachment';
+import ImageImage from 'material-ui/svg-icons/image/image';
 import TopBar from './topBar';
 import session from '../models/session';
 import api from '../services/api';
@@ -202,7 +203,7 @@ class AppLogs extends React.Component {
                 {this.state.dialogContent.screenShot &&
                   <ListItem
                     primaryText="Screen Shot"
-                    rightIcon={<FileAttachment />}
+                    rightIcon={<ImageImage />}
                     onTouchTap={() => this.handleDownloadScreenShot(this.state.dialogContent.id,
                       'screenShot')}
                   />}
