@@ -13,6 +13,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import TextBox from './textBox';
 
 const styles = {
   container: {
@@ -49,6 +50,8 @@ class AppLogs extends React.Component {
     this.handleDialogClose = this.handleDialogClose.bind(this);
     this.handleDownloadFile = this.handleDownloadFile.bind(this);
     this.handleDownloadScreenShot = this.handleDownloadScreenShot.bind(this);
+    this.handleStatusChange = this.handleStatusChange.bind(this);
+    this.handleStatusUpdate = this.handleStatusUpdate.bind(this);
     this.state = {
       application: {},
       columns: COLUMNS,
@@ -57,6 +60,8 @@ class AppLogs extends React.Component {
       dialogOpen: false,
       dialogTitle: '',
       dialogContent: '',
+      newLogStatus: '',
+      statusUpdateButtonDisabled: true,
     };
 
     api.send(`/application/${this.state.appId}`, 'GET').then((application) => {
@@ -120,8 +125,38 @@ class AppLogs extends React.Component {
     });
   }
 
+  handleStatusChange(status) {
+    this.state.newLogStatus = status;
+    this.setState({
+      statusUpdateButtonDisabled: this.state.newLogStatus.length === 0 ||
+        this.state.dialogContent.status === status,
+    });
+  }
+
+  handleStatusUpdate() {
+    this.setState({
+      dialogOpen: false,
+    });
+  }
+
   render() {
     const self = this;
+    const actions = [
+      <FlatButton
+        label="Update"
+        primary
+        disabled={this.state.statusUpdateButtonDisabled}
+        keyboardFocused
+        onTouchTap={this.handleStatusUpdate}
+      />,
+      <FlatButton
+        label="Close"
+        primary
+        keyboardFocused
+        onTouchTap={this.handleDialogClose}
+      />,
+    ];
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
@@ -171,15 +206,16 @@ class AppLogs extends React.Component {
           <Dialog
             title={this.state.dialogTitle}
             modal={false}
-            actions={<FlatButton
-              label="Close"
-              primary
-              keyboardFocused
-              onTouchTap={this.handleDialogClose}
-            />}
+            actions={actions}
             onRequestClose={this.handleDialogClose}
             open={this.state.dialogOpen}
           >
+            <TextBox
+              value={this.state.dialogContent.status}
+              onChange={this.handleStatusChange}
+              type={'text'} hint={''}
+              floatingLabel={''}
+            />
             <div>Description: {this.state.dialogContent.description}</div>
             <div>Reporter: {this.state.dialogContent.reporter}</div>
             <div>Version: {this.state.dialogContent.version}</div>

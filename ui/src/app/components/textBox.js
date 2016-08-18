@@ -28,6 +28,7 @@ class TextBox extends React.Component {
     return (
       <div>
         <TextField
+          defaultValue={this.props.value}
           className="textFieldContainer"
           hintText={this.props.hint}
           floatingLabelText={this.props.floatingLabel}
