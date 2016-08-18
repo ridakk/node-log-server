@@ -46,11 +46,9 @@ exports.findBy = (criteria, filter) => {
   });
 }
 
-exports.update = (appid, data) => {
+exports.update = (selector, data) => {
   return new Promise((resolve, reject) => {
-    Log.update({
-      applicationId: appid
-    }, {
+    Log.update(selector, {
       $set: data
     }, (err) => {
       if (err) {

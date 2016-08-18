@@ -14,6 +14,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import TextBox from './textBox';
+import Notification from './notification';
 
 const styles = {
   container: {
@@ -62,6 +63,8 @@ class AppLogs extends React.Component {
       dialogContent: '',
       newLogStatus: '',
       statusUpdateButtonDisabled: true,
+      notificationOpen: false,
+      notificationMessage: '',
     };
 
     api.send(`/application/${this.state.appId}`, 'GET').then((application) => {
@@ -79,6 +82,8 @@ class AppLogs extends React.Component {
   handleDialogClose() {
     this.setState({
       dialogOpen: false,
+      notificationOpen: false,
+      notificationMessage: '',
     });
   }
 
@@ -89,8 +94,11 @@ class AppLogs extends React.Component {
       const log = logs[0];
       this.setState({
         dialogOpen: true,
+        statusUpdateButtonDisabled: true,
         dialogTitle: log.id,
         dialogContent: log,
+        notificationOpen: false,
+        notificationMessage: '',
       });
     });
   }
@@ -101,6 +109,8 @@ class AppLogs extends React.Component {
 
       this.setState({
         dialogOpen: false,
+        notificationOpen: false,
+        notificationMessage: '',
       });
 
       const w = window.open('');
@@ -116,6 +126,8 @@ class AppLogs extends React.Component {
 
       this.setState({
         dialogOpen: false,
+        notificationOpen: false,
+        notificationMessage: '',
       });
 
       const w = window.open('');
@@ -130,12 +142,29 @@ class AppLogs extends React.Component {
     this.setState({
       statusUpdateButtonDisabled: this.state.newLogStatus.length === 0 ||
         this.state.dialogContent.status === status,
+      notificationOpen: false,
+      notificationMessage: '',
     });
   }
 
   handleStatusUpdate() {
-    this.setState({
-      dialogOpen: false,
+    api.send(`/log/${this.state.appId}/${this.state.dialogContent.id}/status`, 'PUT', {
+      status: this.state.newLogStatus,
+    }).then(() => {
+      this.state.logs.find(item => item.id === this.state.dialogContent.id)
+        .status = this.state.newLogStatus;
+
+      this.setState({
+        logs: this.state.logs,
+        dialogOpen: false,
+        notificationOpen: false,
+        notificationMessage: '',
+      });
+    }, (err) => {
+      this.setState({
+        notificationOpen: true,
+        notificationMessage: `Failed to update status: ${err.reasonText}`,
+      });
     });
   }
 
@@ -245,6 +274,10 @@ class AppLogs extends React.Component {
                   />}
             </List>
           </Dialog>
+          <Notification
+            open={this.state.notificationOpen}
+            message={this.state.notificationMessage}
+          />
         </div>
       </MuiThemeProvider>
     );
