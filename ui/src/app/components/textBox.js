@@ -4,7 +4,9 @@ import TextField from 'material-ui/TextField';
 class TextBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { errorText: '', value: props.value };
+    this.state = {
+      errorText: '',
+    };
     this.onChange = this.onChange.bind(this);
   }
 
@@ -12,9 +14,11 @@ class TextBox extends React.Component {
     const text = event.target.value.trim();
 
     if (text.length === 0) {
-      this.setState({
-        errorText: 'This field is required',
-      });
+      if (!this.props.disableErrorText) {
+        this.setState({
+          errorText: 'This field is required',
+        });
+      }
       this.props.onChange('');
     } else {
       this.setState({
@@ -30,6 +34,7 @@ class TextBox extends React.Component {
         <TextField
           defaultValue={this.props.value}
           className="textFieldContainer"
+          fullWidth={this.props.fullWidth}
           hintText={this.props.hint}
           floatingLabelText={this.props.floatingLabel}
           type={this.props.type}
@@ -42,6 +47,8 @@ class TextBox extends React.Component {
 }
 
 TextBox.propTypes = {
+  fullWidth: React.PropTypes.bool.isRequired,
+  disableErrorText: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
   value: React.PropTypes.string.isRequired,
   hint: React.PropTypes.string.isRequired,

@@ -44,6 +44,8 @@ const COLUMNS = [
   },
 ];
 
+let allLogs = [];
+
 class AppLogs extends React.Component {
   constructor(props) {
     super(props);
@@ -53,6 +55,7 @@ class AppLogs extends React.Component {
     this.handleDownloadScreenShot = this.handleDownloadScreenShot.bind(this);
     this.handleStatusChange = this.handleStatusChange.bind(this);
     this.handleStatusUpdate = this.handleStatusUpdate.bind(this);
+    this.handleFilterChange = this.handleFilterChange.bind(this);
     this.state = {
       application: {},
       columns: COLUMNS,
@@ -73,6 +76,7 @@ class AppLogs extends React.Component {
       });
     });
     api.send(`/log/${this.state.appId}`, 'GET').then((logs) => {
+      allLogs = logs;
       this.setState({
         logs,
       });
@@ -168,6 +172,31 @@ class AppLogs extends React.Component {
     });
   }
 
+  handleFilterChange(filterString) {
+    // TODO: need to have debounce here
+    let filtered = allLogs;
+    if (filterString.length > 0) {
+      filtered = allLogs.filter((item) => {
+        let found = false;
+        Object.keys(item).forEach((key) => {
+          if (item && item.hasOwnProperty(key) &&
+              item[key].includes &&
+              item[key].toLowerCase().includes(filterString.toLowerCase())) {
+            found = true;
+          }
+        });
+        return found;
+      });
+    }
+
+    this.setState({
+      logs: filtered,
+      dialogOpen: false,
+      notificationOpen: false,
+      notificationMessage: '',
+    });
+  }
+
   render() {
     const self = this;
     const actions = [
@@ -190,6 +219,13 @@ class AppLogs extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
           <TopBar title={this.state.application.name} />
+          <TextBox
+            disableErrorText
+            fullWidth
+            onChange={this.handleFilterChange}
+            type={'text'} hint={'Filter...'}
+            floatingLabel={'Filter by ID, Status or Description'}
+          />
           <Table onRowSelection={this.handleRowSelection}>
             <TableHeader
               displaySelectAll={false}
@@ -215,10 +251,15 @@ class AppLogs extends React.Component {
                   <TableRow key={log.id}>
                   {
                     self.state.columns.map((column) => {
-                      if (column.icon) {
+                      if (log[column.rowProperty].match(/^(http|https|www)/)) {
                         return (<TableRowColumn key={column.columnNumber}>
-                          {log[column.rowProperty] &&
-                            <a title={column.title}><FileAttachment /></a>}
+                          <a
+                            title={log[column.rowProperty]}
+                            href={log[column.rowProperty]}
+                            target="_blank"
+                          >
+                            {log[column.rowProperty]}
+                          </a>
                         </TableRowColumn>);
                       }
                       return (<TableRowColumn key={column.columnNumber}>
@@ -240,6 +281,7 @@ class AppLogs extends React.Component {
             open={this.state.dialogOpen}
           >
             <TextBox
+              fullWidth
               value={this.state.dialogContent.status}
               onChange={this.handleStatusChange}
               type={'text'} hint={''}
