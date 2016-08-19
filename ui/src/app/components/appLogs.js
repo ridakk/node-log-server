@@ -41,6 +41,10 @@ const COLUMNS = [
     header: 'Description',
     rowProperty: 'description',
     columnNumber: 3,
+  }, {
+    header: 'Platform',
+    rowProperty: 'platform',
+    columnNumber: 4,
   },
 ];
 

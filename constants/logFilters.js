@@ -4,7 +4,6 @@ module.exports = {
   DEFAULT: {
     _id: 0,
     applicationId: 0,
-    platform: 0,
     version: 0,
     config: 0,
     reporter: 0,
