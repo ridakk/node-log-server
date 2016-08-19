@@ -9,6 +9,10 @@ const Api = () => {
         body: JSON.stringify(data),
       }).then((response) => {
         if (!response.ok) {
+          if (response.status === 401) {
+            window.location = '.';
+            return;
+          }
           reject({
             errorCode: response.status,
             reasonText: response.statusText,
