@@ -65,6 +65,23 @@ exports.update = (selector, data) => {
   });
 }
 
+exports.remove = (selector, logId) => {
+  return new Promise((resolve, reject) => {
+    Log.remove(selector, (err) => {
+      if (err) {
+        console.log('log delete err: \n');
+        console.log(err);
+        console.log(err.code);
+        reject(ReasonTexts.UNKNOWN);
+        return;
+      }
+      else {
+        resolve();
+      }
+    });
+  });
+}
+
 exports.create = (appId, data) => {
   return new Promise((resolve, reject) => {
     let newLog = new Log();

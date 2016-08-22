@@ -54,11 +54,12 @@ class AppLogs extends React.Component {
   constructor(props) {
     super(props);
     this.handleRowSelection = this.handleRowSelection.bind(this);
-    this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.handleLogDialogClose = this.handleLogDialogClose.bind(this);
     this.handleDownloadFile = this.handleDownloadFile.bind(this);
     this.handleDownloadScreenShot = this.handleDownloadScreenShot.bind(this);
     this.handleStatusChange = this.handleStatusChange.bind(this);
-    this.handleStatusUpdate = this.handleStatusUpdate.bind(this);
+    this.handleLogStatusUpdate = this.handleLogStatusUpdate.bind(this);
+    this.handleLogDelete = this.handleLogDelete.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.state = {
       application: {},
@@ -87,7 +88,7 @@ class AppLogs extends React.Component {
     });
   }
 
-  handleDialogClose() {
+  handleLogDialogClose() {
     this.setState({
       dialogOpen: false,
       notificationOpen: false,
@@ -155,7 +156,7 @@ class AppLogs extends React.Component {
     });
   }
 
-  handleStatusUpdate() {
+  handleLogStatusUpdate() {
     api.send(`/log/${this.state.appId}/${this.state.dialogContent.id}/status`, 'PUT', {
       status: this.state.newLogStatus,
     }).then(() => {
@@ -172,6 +173,26 @@ class AppLogs extends React.Component {
       this.setState({
         notificationOpen: true,
         notificationMessage: `Failed to update status: ${err.reasonText}`,
+      });
+    });
+  }
+
+  handleLogDelete() {
+    api.send(`/log/${this.state.appId}/${this.state.dialogContent.id}`, 'DELETE')
+    .then(() => {
+      const logs = this.state.logs;
+      logs.splice(logs.indexOf(logs.find(log => log.id === this.state.dialogContent.id)), 1);
+
+      this.setState({
+        logs,
+        dialogOpen: false,
+        notificationOpen: false,
+        notificationMessage: '',
+      });
+    }, (err) => {
+      this.setState({
+        notificationOpen: true,
+        notificationMessage: `Failed to delete log: ${err.reasonText}`,
       });
     });
   }
@@ -205,17 +226,24 @@ class AppLogs extends React.Component {
     const self = this;
     const actions = [
       <FlatButton
+        label="Delete"
+        secondary
+        disabled={false}
+        keyboardFocused
+        onTouchTap={this.handleLogDelete}
+      />,
+      <FlatButton
         label="Update"
         primary
         disabled={this.state.statusUpdateButtonDisabled}
         keyboardFocused
-        onTouchTap={this.handleStatusUpdate}
+        onTouchTap={this.handleLogStatusUpdate}
       />,
       <FlatButton
         label="Close"
         primary
         keyboardFocused
-        onTouchTap={this.handleDialogClose}
+        onTouchTap={this.handleLogDialogClose}
       />,
     ];
 
@@ -281,7 +309,7 @@ class AppLogs extends React.Component {
             title={this.state.dialogTitle}
             modal={false}
             actions={actions}
-            onRequestClose={this.handleDialogClose}
+            onRequestClose={this.handleLogDialogClose}
             open={this.state.dialogOpen}
           >
             <TextBox
