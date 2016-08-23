@@ -4,17 +4,18 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Table, TableBody, TableHeader,
   TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import FileAttachment from 'material-ui/svg-icons/file/attachment';
-import ImageImage from 'material-ui/svg-icons/image/image';
 import TopBar from './topBar';
 import session from '../models/session';
 import api from '../services/api';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { List, ListItem } from 'material-ui/List';
+import { List } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import TextBox from './textBox';
 import Notification from './notification';
+import ConfigFileListItem from './configFileListItem';
+import LogFileListItem from './logFileListItem';
+import ScreenShotListItem from './screenShotListItem';
 
 const styles = {
   container: {
@@ -326,25 +327,19 @@ class AppLogs extends React.Component {
             <Divider />
             <List>
               {this.state.dialogContent.config &&
-                <ListItem
-                  primaryText="Config File"
-                  rightIcon={<FileAttachment />}
-                  onTouchTap={() => this.handleDownloadFile(this.state.dialogContent.id,
-                    'config')}
+                <ConfigFileListItem
+                  logId={this.state.dialogContent.id}
+                  appId={this.state.appId}
                 />}
                 {this.state.dialogContent.log &&
-                  <ListItem
-                    primaryText="Log File"
-                    rightIcon={<FileAttachment />}
-                    onTouchTap={() => this.handleDownloadFile(this.state.dialogContent.id,
-                      'log')}
+                  <LogFileListItem
+                    logId={this.state.dialogContent.id}
+                    appId={this.state.appId}
                   />}
                 {this.state.dialogContent.screenShot &&
-                  <ListItem
-                    primaryText="Screen Shot"
-                    rightIcon={<ImageImage />}
-                    onTouchTap={() => this.handleDownloadScreenShot(this.state.dialogContent.id,
-                      'screenShot')}
+                  <ScreenShotListItem
+                    logId={this.state.dialogContent.id}
+                    appId={this.state.appId}
                   />}
             </List>
           </Dialog>
