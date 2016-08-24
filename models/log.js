@@ -10,6 +10,7 @@ let logSchema = new Schema({
     unique: true,
     required: true
   },
+  date: Date,
   applicationId: String,
   platform: String,
   version: String,

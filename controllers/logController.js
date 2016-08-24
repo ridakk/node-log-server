@@ -91,6 +91,7 @@ exports.create = (appId, data) => {
     newLog.id = uuid.v4();
     newLog.applicationId = appId;
     newLog.status = LogStatus.NEW;
+    newLog.date = new Date();
 
     // save the log
     newLog.save((err) => {

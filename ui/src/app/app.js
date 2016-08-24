@@ -8,6 +8,7 @@ import NewUser from './components/newUser';
 import Apps from './components/apps';
 import AppEdit from './components/appEdit';
 import AppLogs from './components/appLogs';
+import AppAnalytics from './components/appAnalytics';
 import Users from './components/users';
 import Login from './components/login';
 
@@ -30,6 +31,7 @@ ReactDOM.render(
     <Route path="/apps" component={Apps} />
     <Route path="/appEdit" component={AppEdit} />
     <Route path="/appLogs" component={AppLogs} />
+    <Route path="/appAnalytics" component={AppAnalytics} />
     <Route path="/users" component={Users} />
   </Router>, document.getElementById('app')
 );
