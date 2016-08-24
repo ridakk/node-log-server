@@ -42,6 +42,31 @@ module.exports = (app) => {
       });
     });
 
+    app.get('/log/:appId/analytics', passport.authenticate('jwt', {
+      session: false
+    }), (req, res) => {
+      AppCtrl.findByAppId(req.params.appId).then((application) => {
+        if (application.createdBy !== req.user.username &&
+          req.user.applications.indexOf(application.id) === -1 &&
+          req.user.role !== ROLES.ADMIN) {
+          res.status(403).json(new RouteLogError(ReasonTexts.NOT_AUTHORIZED));
+          return;
+        }
+
+        LogCtrl.getAnaltics(application.id).then((analytics) => {
+          res.status(200).json(analytics);
+        }, (reason) => {
+          res.status(500).json(new RouteLogError(ReasonTexts.UNKNOWN));
+        });
+      }, (reason) => {
+        if (reason === ReasonTexts.APP_NOT_FOUND) {
+          res.status(404).json(new RouteLogError(ReasonTexts.APP_NOT_FOUND));
+        } else {
+          res.status(500).json(new RouteLogError(ReasonTexts.UNKNOWN));
+        }
+      });
+    });
+
     app.get('/log/:appId', passport.authenticate('jwt', {
         session: false
     }), (req, res) => {

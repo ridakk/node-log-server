@@ -5,6 +5,7 @@ let uuid = require('node-uuid');
 let Promise = require('es6-promise').Promise;
 let ReasonTexts = require('../constants/reasonTexts.js');
 let LogStatus = require('../constants/logStatus.js');
+let LogAnalytics = require('../constants/logAnalytics.js');
 let LogFilters = require('../constants/logFilters.js');
 
 
@@ -108,4 +109,114 @@ exports.create = (appId, data) => {
       }
     });
   });
+}
+
+function aggregate(query, identifier) {
+  console.log(1111)
+    return new Promise((resolve, reject) => {
+        Log.aggregate(query,
+            (err, result) => {
+                if (err) {
+                    // TODO: need to map mongo errors to user friendly error objects.
+                    console.log('log analytics err: \n');
+                    console.log(err);
+                    console.log(err.code);
+                    reject(ReasonTexts.UNKNOWN);
+                } else {
+                    console.log(2222)
+                    resolve({
+                      [identifier]:result
+                    });
+                }
+            });
+    });
+}
+
+function getCreationCounts(appId) {
+    return aggregate([{
+        $match: {
+            applicationId: appId,
+        },
+    }, {
+        $sort: {
+            date: 1,
+        },
+    }, {
+        $group: {
+            _id: {
+                date: {
+                    $week: "$date",
+                },
+            },
+            count: {
+                $sum: 1,
+            },
+        },
+    }], LogAnalytics.ISSUE_CREATION_COUNT);
+}
+
+function getReporterCounts(appId) {
+    return aggregate([{
+        $match: {
+            applicationId: appId,
+        },
+    }, {
+        $group: {
+            _id: '$reporter',
+            count: {
+                $sum: 1,
+            },
+        },
+    }], LogAnalytics.REPORTER_COUNT);
+}
+
+function getPlatfromCounts(appId) {
+  return aggregate([{
+      $match: {
+          applicationId: appId,
+      },
+  }, {
+      $group: {
+          _id: '$platform',
+          count: {
+              $sum: 1,
+          },
+      },
+  }], LogAnalytics.PLATFORM_COUNT);
+}
+
+function getStatusCounts(appId) {
+  return aggregate([{
+      $match: {
+          applicationId: appId,
+      },
+  }, {
+      $group: {
+          _id: '$status',
+          count: {
+              $sum: 1,
+          },
+      },
+  }], LogAnalytics.STATUS_COUNT);
+}
+
+exports.getAnaltics = (appId) => {
+    return new Promise((resolve, reject) => {
+        let result = {};
+
+        Promise.all([
+            getCreationCounts(appId),
+            getReporterCounts(appId),
+            getPlatfromCounts(appId),
+            getStatusCounts(appId)
+        ]).then((data) => {
+            let i = 0;
+            for (i in data) {
+                Object.assign(result, data[i]);
+            }
+            resolve(result);
+        }, (err) => {
+            reject(ReasonTexts.UNKNOWN);
+        })
+    });
 }

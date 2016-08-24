@@ -1,12 +1,16 @@
+/* eslint no-underscore-dangle: 0 */
+
 import React from 'react';
 import { deepOrange500 } from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Subheader from 'material-ui/Subheader';
 import TopBar from './topBar';
 import session from '../models/session';
-// import api from '../services/api';
+import api from '../services/api';
 
 const LineChart = require('react-chartjs').Line;
+const BarChart = require('react-chartjs').Bar;
 
 const styles = {
   container: {
@@ -20,14 +24,156 @@ const muiTheme = getMuiTheme({
   },
 });
 
+const fillColor = 'rgba(220,220,220,0.2)';
+const pointColor = 'rgba(220,220,220,1)';
+const pointHighlightFill = '#fff';
+const pointHighlightStroke = 'rgba(220,220,220,1)';
+const pointStrokeColor = '#fff';
+const strokeColor = 'rgba(220,220,220,1)';
+
 class AppAnalytics extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       appId: session.get('selectedApp'),
-      lineChartData: [],
-      lineChartOptions: [],
+      analytics: {
+        issueCreationCountData: {
+          data: {
+            labels: [],
+            datasets: [
+              {
+                label: 'Issue creation counts per week',
+                data: [],
+                fillColor,
+                pointColor,
+                pointHighlightFill,
+                pointHighlightStroke,
+                pointStrokeColor,
+                strokeColor,
+              },
+            ],
+          },
+          options: {
+          },
+        },
+        platformCountData: {
+          data: {
+            labels: [],
+            datasets: [
+              {
+                label: 'Issue distribution by platfrom',
+                data: [],
+                fillColor,
+                pointColor,
+                pointHighlightFill,
+                pointHighlightStroke,
+                pointStrokeColor,
+                strokeColor,
+              },
+            ],
+          },
+          options: {
+          },
+        },
+        reporterCountData: {
+          data: {
+            labels: [],
+            datasets: [
+              {
+                label: 'Issue distribution by reporter',
+                data: [],
+                fillColor,
+                pointColor,
+                pointHighlightFill,
+                pointHighlightStroke,
+                pointStrokeColor,
+                strokeColor,
+              },
+            ],
+          },
+          options: {
+          },
+        },
+        statusCountData: {
+          data: {
+            labels: [],
+            datasets: [
+              {
+                label: 'Issue distribution by status',
+                data: [],
+                fillColor,
+                pointColor,
+                pointHighlightFill,
+                pointHighlightStroke,
+                pointStrokeColor,
+                strokeColor,
+              },
+            ],
+          },
+          options: {
+          },
+        },
+      },
     };
+
+    api.send(`/log/${this.state.appId}/analytics`, 'GET').then((result) => {
+      const analytics = this.state.analytics;
+      const issueCreationCount = result.issueCreationCount;
+      const platfromCount = result.platformCount;
+      const reporterCount = result.reporterCount;
+      const statusCount = result.statusCount;
+
+      for (const i of issueCreationCount.values()) {
+        analytics.issueCreationCountData.data.labels.push(i._id.date);
+        analytics.issueCreationCountData.data.datasets[0].data.push(i.count);
+      }
+
+      for (const i of platfromCount.values()) {
+        analytics.platformCountData.data.labels.push(i._id);
+        analytics.platformCountData.data.datasets[0].data.push(i.count);
+      }
+
+      for (const i of reporterCount.values()) {
+        analytics.reporterCountData.data.labels.push(i._id);
+        analytics.reporterCountData.data.datasets[0].data.push(i.count);
+      }
+
+      const noJiraNoDuplicateArray = statusCount.filter((item) =>
+        (item._id.indexOf('jira.genband.com') === -1 && item._id.indexOf('Duplicate: ') === -1)
+      );
+      for (const i of noJiraNoDuplicateArray.values()) {
+        analytics.statusCountData.data.labels.push(i._id);
+        analytics.statusCountData.data.datasets[0].data.push(i.count);
+      }
+
+      const onlyJiraArray = statusCount.filter((item) =>
+        (item._id.indexOf('jira.genband.com') !== -1)
+      );
+      if (onlyJiraArray.length > 0) {
+        analytics.statusCountData.data.labels.push('Jira');
+        let count = 0;
+        for (const i of onlyJiraArray.values()) {
+          count += i.count;
+        }
+        analytics.statusCountData.data.datasets[0].data.push(count);
+      }
+
+      const onlyDuplicateArray = statusCount.filter((item) =>
+        (item._id.indexOf('Duplicate: ') !== -1)
+      );
+      if (onlyDuplicateArray.length > 0) {
+        analytics.statusCountData.data.labels.push('Duplicate');
+        let count = 0;
+        for (const i of onlyDuplicateArray.values()) {
+          count += i.count;
+        }
+        analytics.statusCountData.data.datasets[0].data.push(count);
+      }
+
+      this.setState({
+        analytics,
+      });
+    });
   }
 
   render() {
@@ -35,9 +181,31 @@ class AppAnalytics extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
           <TopBar title={'App Analytics'} />
+          <Subheader>Issue creation counts per week</Subheader>
           <LineChart
-            data={this.state.lineChartData}
-            options={this.state.lineChartOptions}
+            data={this.state.analytics.issueCreationCountData.data}
+            options={this.state.analytics.issueCreationCountData.options}
+            width="600"
+            height="250"
+          />
+          <Subheader>Issue distribution by platfrom</Subheader>
+          <BarChart
+            data={this.state.analytics.platformCountData.data}
+            options={this.state.analytics.platformCountData.options}
+            width="600"
+            height="250"
+          />
+          <Subheader>Issue distribution by reporter</Subheader>
+          <BarChart
+            data={this.state.analytics.reporterCountData.data}
+            options={this.state.analytics.reporterCountData.options}
+            width="600"
+            height="250"
+          />
+          <Subheader>Issue distribution by status</Subheader>
+          <BarChart
+            data={this.state.analytics.statusCountData.data}
+            options={this.state.analytics.statusCountData.options}
             width="600"
             height="250"
           />

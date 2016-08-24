@@ -9,6 +9,7 @@ module.exports = {
     reporter: 0,
     log: 0,
     screenShot: 0,
+    date: 0,
   },
   LOG_ONLY: {
     _id: 0,
