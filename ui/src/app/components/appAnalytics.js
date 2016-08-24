@@ -24,12 +24,12 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const fillColor = 'rgba(220,220,220,0.2)';
-const pointColor = 'rgba(220,220,220,1)';
+const fillColor = 'rgba(151,187,205,0.2)';
+const pointColor = 'rgba(151,187,205,1)';
 const pointHighlightFill = '#fff';
-const pointHighlightStroke = 'rgba(220,220,220,1)';
+const pointHighlightStroke = 'rgba(151,187,205,1)';
 const pointStrokeColor = '#fff';
-const strokeColor = 'rgba(220,220,220,1)';
+const strokeColor = 'rgba(151,187,205,1)';
 
 class AppAnalytics extends React.Component {
   constructor(props) {
@@ -123,27 +123,27 @@ class AppAnalytics extends React.Component {
       const reporterCount = result.reporterCount;
       const statusCount = result.statusCount;
 
-      for (const i of issueCreationCount.values()) {
-        analytics.issueCreationCountData.data.labels.push(i._id.date);
-        analytics.issueCreationCountData.data.datasets[0].data.push(i.count);
+      for (const i of issueCreationCount.entries()) {
+        analytics.issueCreationCountData.data.labels.push(i[1]._id.date);
+        analytics.issueCreationCountData.data.datasets[0].data.push(i[1].count);
       }
 
-      for (const i of platfromCount.values()) {
-        analytics.platformCountData.data.labels.push(i._id);
-        analytics.platformCountData.data.datasets[0].data.push(i.count);
+      for (const i of platfromCount.entries()) {
+        analytics.platformCountData.data.labels.push(i[1]._id);
+        analytics.platformCountData.data.datasets[0].data.push(i[1].count);
       }
 
-      for (const i of reporterCount.values()) {
-        analytics.reporterCountData.data.labels.push(i._id);
-        analytics.reporterCountData.data.datasets[0].data.push(i.count);
+      for (const i of reporterCount.entries()) {
+        analytics.reporterCountData.data.labels.push(i[1]._id);
+        analytics.reporterCountData.data.datasets[0].data.push(i[1].count);
       }
 
       const noJiraNoDuplicateArray = statusCount.filter((item) =>
         (item._id.indexOf('jira.genband.com') === -1 && item._id.indexOf('Duplicate: ') === -1)
       );
-      for (const i of noJiraNoDuplicateArray.values()) {
-        analytics.statusCountData.data.labels.push(i._id);
-        analytics.statusCountData.data.datasets[0].data.push(i.count);
+      for (const i of noJiraNoDuplicateArray.entries()) {
+        analytics.statusCountData.data.labels.push(i[1]._id);
+        analytics.statusCountData.data.datasets[0].data.push(i[1].count);
       }
 
       const onlyJiraArray = statusCount.filter((item) =>
@@ -152,8 +152,8 @@ class AppAnalytics extends React.Component {
       if (onlyJiraArray.length > 0) {
         analytics.statusCountData.data.labels.push('Jira');
         let count = 0;
-        for (const i of onlyJiraArray.values()) {
-          count += i.count;
+        for (const i of onlyJiraArray.entries()) {
+          count += i[1].count;
         }
         analytics.statusCountData.data.datasets[0].data.push(count);
       }
@@ -164,8 +164,8 @@ class AppAnalytics extends React.Component {
       if (onlyDuplicateArray.length > 0) {
         analytics.statusCountData.data.labels.push('Duplicate');
         let count = 0;
-        for (const i of onlyDuplicateArray.values()) {
-          count += i.count;
+        for (const i of onlyDuplicateArray.entries()) {
+          count += i[1].count;
         }
         analytics.statusCountData.data.datasets[0].data.push(count);
       }
