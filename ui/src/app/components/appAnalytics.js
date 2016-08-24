@@ -187,13 +187,14 @@ class AppAnalytics extends React.Component {
             options={this.state.analytics.issueCreationCountData.options}
             width="600"
             height="250"
+            redraw
           />
           <Subheader>Issue distribution by platfrom</Subheader>
           <BarChart
             data={this.state.analytics.platformCountData.data}
-            options={this.state.analytics.platformCountData.options}
             width="600"
             height="250"
+            redraw
           />
           <Subheader>Issue distribution by reporter</Subheader>
           <BarChart
@@ -201,6 +202,7 @@ class AppAnalytics extends React.Component {
             options={this.state.analytics.reporterCountData.options}
             width="600"
             height="250"
+            redraw
           />
           <Subheader>Issue distribution by status</Subheader>
           <BarChart
@@ -208,6 +210,7 @@ class AppAnalytics extends React.Component {
             options={this.state.analytics.statusCountData.options}
             width="600"
             height="250"
+            redraw
           />
         </div>
       </MuiThemeProvider>
