@@ -112,7 +112,6 @@ exports.create = (appId, data) => {
 }
 
 function aggregate(query, identifier) {
-  console.log(1111)
     return new Promise((resolve, reject) => {
         Log.aggregate(query,
             (err, result) => {
@@ -123,7 +122,6 @@ function aggregate(query, identifier) {
                     console.log(err.code);
                     reject(ReasonTexts.UNKNOWN);
                 } else {
-                    console.log(2222)
                     resolve({
                       [identifier]:result
                     });
