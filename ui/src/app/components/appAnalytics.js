@@ -11,6 +11,7 @@ import api from '../services/api';
 
 const LineChart = require('react-chartjs').Line;
 const BarChart = require('react-chartjs').Bar;
+const DoughnutChart = require('react-chartjs').Doughnut;
 
 const styles = {
   container: {
@@ -31,6 +32,13 @@ const pointHighlightStroke = 'rgba(151,187,205,1)';
 const pointStrokeColor = '#fff';
 const strokeColor = 'rgba(151,187,205,1)';
 
+const fillColor2 = 'rgba(215,40,40,0.2)';
+const pointColor2 = 'rgba(215,40,40,1)';
+const pointHighlightFill2 = '#fff';
+const pointHighlightStroke2 = 'rgba(215,40,40,1)';
+const pointStrokeColor2 = '#fff';
+const strokeColor2 = 'rgba(215,40,40,1)';
+
 class AppAnalytics extends React.Component {
   constructor(props) {
     super(props);
@@ -42,19 +50,43 @@ class AppAnalytics extends React.Component {
             labels: [],
             datasets: [
               {
-                label: 'Issue creation counts per week',
-                data: [],
+                label: 'Issue',
                 fillColor,
+                strokeColor,
                 pointColor,
+                pointStrokeColor,
                 pointHighlightFill,
                 pointHighlightStroke,
-                pointStrokeColor,
-                strokeColor,
+                data: [],
+              },
+              {
+                label: 'Jira',
+                fillColor: fillColor2,
+                strokeColor: strokeColor2,
+                pointColor: pointColor2,
+                pointStrokeColor: pointStrokeColor2,
+                pointHighlightFill: pointHighlightFill2,
+                pointHighlightStroke: pointHighlightStroke2,
+                data: [],
               },
             ],
           },
-          options: {
-          },
+        },
+        issueVsJiraData: {
+          data: [
+            {
+              value: 0,
+              color: '#949FB1',
+              highlight: '#A8B3C5',
+              label: 'Issue',
+            },
+            {
+              value: 0,
+              color: '#F7464A',
+              highlight: '#FF5A5E',
+              label: 'Jira',
+            },
+          ],
         },
         platformCountData: {
           data: {
@@ -71,8 +103,6 @@ class AppAnalytics extends React.Component {
                 strokeColor,
               },
             ],
-          },
-          options: {
           },
         },
         reporterCountData: {
@@ -91,8 +121,6 @@ class AppAnalytics extends React.Component {
               },
             ],
           },
-          options: {
-          },
         },
         statusCountData: {
           data: {
@@ -110,8 +138,6 @@ class AppAnalytics extends React.Component {
               },
             ],
           },
-          options: {
-          },
         },
       },
     };
@@ -119,14 +145,29 @@ class AppAnalytics extends React.Component {
     api.send(`/log/${this.state.appId}/analytics`, 'GET').then((result) => {
       const analytics = this.state.analytics;
       const issueCreationCount = result.issueCreationCount;
+      const jiraCreationCount = result.jiraCreationCount;
       const platfromCount = result.platformCount;
       const reporterCount = result.reporterCount;
       const statusCount = result.statusCount;
+      let totalIssueCount = 0;
+      let totalJiraCount = 0;
 
       for (const i of issueCreationCount.entries()) {
         analytics.issueCreationCountData.data.labels.push(i[1]._id.date);
         analytics.issueCreationCountData.data.datasets[0].data.push(i[1].count);
+        totalIssueCount += i[1].count;
+
+        const jData = jiraCreationCount.find((item) =>
+          (item._id.date === i[1]._id.date)
+        );
+
+        const jiraCount = jData ? jData.count : 0;
+        analytics.issueCreationCountData.data.datasets[1].data.push(jiraCount);
+        totalJiraCount += jiraCount;
       }
+
+      analytics.issueVsJiraData.data[0].value = totalIssueCount - totalJiraCount;
+      analytics.issueVsJiraData.data[1].value = totalJiraCount;
 
       for (const i of platfromCount.entries()) {
         analytics.platformCountData.data.labels.push(i[1]._id);
@@ -181,10 +222,9 @@ class AppAnalytics extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
           <TopBar title={'App Analytics'} />
-          <Subheader>Issue creation counts per week</Subheader>
+          <Subheader>Issue-Jira creation counts per week</Subheader>
           <LineChart
             data={this.state.analytics.issueCreationCountData.data}
-            options={this.state.analytics.issueCreationCountData.options}
             width="600"
             height="250"
             redraw
@@ -199,7 +239,6 @@ class AppAnalytics extends React.Component {
           <Subheader>Issue distribution by reporter</Subheader>
           <BarChart
             data={this.state.analytics.reporterCountData.data}
-            options={this.state.analytics.reporterCountData.options}
             width="600"
             height="250"
             redraw
@@ -207,7 +246,13 @@ class AppAnalytics extends React.Component {
           <Subheader>Issue distribution by status</Subheader>
           <BarChart
             data={this.state.analytics.statusCountData.data}
-            options={this.state.analytics.statusCountData.options}
+            width="600"
+            height="250"
+            redraw
+          />
+          <Subheader>Issue vs Jira distribution</Subheader>
+          <DoughnutChart
+            data={this.state.analytics.issueVsJiraData.data}
             width="600"
             height="250"
             redraw

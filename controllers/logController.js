@@ -130,7 +130,7 @@ function aggregate(query, identifier) {
     });
 }
 
-function getCreationCounts(appId) {
+function getIssueCreationCounts(appId) {
     return aggregate([{
         $match: {
             applicationId: appId,
@@ -151,6 +151,32 @@ function getCreationCounts(appId) {
             },
         },
     }], LogAnalytics.ISSUE_CREATION_COUNT);
+}
+
+function getJiraCreationCounts(appId) {
+    return aggregate([{
+        $match: {
+            applicationId: appId,
+            status: {
+              $regex: /^(http:|https:)\/\/jira.genband.com\/browse\/ABE-\d+$/ 
+            },
+        },
+    }, {
+        $sort: {
+            date: 1,
+        },
+    }, {
+        $group: {
+            _id: {
+                date: {
+                    $week: "$date",
+                },
+            },
+            count: {
+                $sum: 1,
+            },
+        },
+    }], LogAnalytics.JIRA_CREATION_COUNT);
 }
 
 function getReporterCounts(appId) {
@@ -203,7 +229,8 @@ exports.getAnaltics = (appId) => {
         let result = {};
 
         Promise.all([
-            getCreationCounts(appId),
+            getIssueCreationCounts(appId),
+            getJiraCreationCounts(appId),
             getReporterCounts(appId),
             getPlatfromCounts(appId),
             getStatusCounts(appId)
