@@ -153,7 +153,7 @@ class AppAnalytics extends React.Component {
       let totalJiraCount = 0;
 
       for (const i of issueCreationCount.entries()) {
-        analytics.issueCreationCountData.data.labels.push(i[1]._id.date);
+        analytics.issueCreationCountData.data.labels.push(`Week ${i[1]._id.date}`);
         analytics.issueCreationCountData.data.datasets[0].data.push(i[1].count);
         totalIssueCount += i[1].count;
 
