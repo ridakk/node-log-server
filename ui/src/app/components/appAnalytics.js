@@ -78,7 +78,7 @@ class AppAnalytics extends React.Component {
               value: 0,
               color: '#949FB1',
               highlight: '#A8B3C5',
-              label: 'Issue',
+              label: 'Others',
             },
             {
               value: 0,

@@ -137,7 +137,7 @@ function getIssueCreationCounts(appId) {
         },
     }, {
         $sort: {
-            date: 1,
+            date: -1,
         },
     }, {
         $group: {
@@ -158,12 +158,12 @@ function getJiraCreationCounts(appId) {
         $match: {
             applicationId: appId,
             status: {
-              $regex: /^(http:|https:)\/\/jira.genband.com\/browse\/ABE-\d+$/ 
+              $regex: /^(http:|https:)\/\/jira.genband.com\/browse\/ABE-\d+$/
             },
         },
     }, {
         $sort: {
-            date: 1,
+            date: -1,
         },
     }, {
         $group: {

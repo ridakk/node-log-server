@@ -324,6 +324,7 @@ class AppLogs extends React.Component {
             <div>Reporter: {this.state.dialogContent.reporter}</div>
             <div>Version: {this.state.dialogContent.version}</div>
             <div>Platform: {this.state.dialogContent.platform}</div>
+            <div>Date: {new Date(this.state.dialogContent.date).toGMTString()}</div>
             <Divider />
             <List>
               {this.state.dialogContent.config &&
