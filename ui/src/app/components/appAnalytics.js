@@ -152,11 +152,11 @@ class AppAnalytics extends React.Component {
       let totalIssueCount = 0;
       let totalJiraCount = 0;
 
-      issueCreationCount.sort((a, b) => b._id.date < a._id.date);
-      for (const i of issueCreationCount.entries()) {
-        analytics.issueCreationCountData.data.labels.push(`Week ${i[1]._id.date}`);
-        analytics.issueCreationCountData.data.datasets[0].data.push(i[1].count);
-        totalIssueCount += i[1].count;
+      issueCreationCount.sort((a, b) => a._id.date - b._id.date);
+      for (let i = 0; i < issueCreationCount.length; i++) {
+        analytics.issueCreationCountData.data.labels.push(`Week ${issueCreationCount[i]._id.date}`);
+        analytics.issueCreationCountData.data.datasets[0].data.push(issueCreationCount[i].count);
+        totalIssueCount += issueCreationCount[i].count;
 
         const jData = jiraCreationCount.find((item) =>
           (item._id.date === i[1]._id.date)
