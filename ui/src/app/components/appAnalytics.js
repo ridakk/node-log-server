@@ -159,7 +159,7 @@ class AppAnalytics extends React.Component {
         totalIssueCount += issueCreationCount[i].count;
 
         const jData = jiraCreationCount.find((item) =>
-          (item._id.date === i[1]._id.date)
+          (item._id.date === issueCreationCount[i]._id.date)
         );
 
         const jiraCount = jData ? jData.count : 0;
