@@ -152,11 +152,12 @@ class AppAnalytics extends React.Component {
       let totalIssueCount = 0;
       let totalJiraCount = 0;
       const filteredReporterCount = {};
-      let reporterNumber = 0;
 
-      issueCreationCount.sort((a, b) => (a._id.year + a._id.date) - (b._id.year + b._id.date));
+      issueCreationCount.sort((a, b) =>
+        ((a._id.year * 100) + a._id.date) - ((b._id.year * 100) + b._id.date));
       for (let i = 0; i < issueCreationCount.length; i++) {
-        analytics.issueCreationCountData.data.labels.push(`Week ${issueCreationCount[i]._id.date}`);
+        const label = `${issueCreationCount[i]._id.year} Week ${issueCreationCount[i]._id.date}`;
+        analytics.issueCreationCountData.data.labels.push(label);
         analytics.issueCreationCountData.data.datasets[0].data.push(issueCreationCount[i].count);
         totalIssueCount += issueCreationCount[i].count;
 
@@ -187,13 +188,17 @@ class AppAnalytics extends React.Component {
         }
       }
 
-
-      for (const i of Object.keys(filteredReporterCount)) {
-        reporterNumber++;
-        analytics.reporterCountData.data.labels.push(i);
-        analytics.reporterCountData.data.datasets[0].data.push(filteredReporterCount[i]);
+      const filteredReporterArray = Object.keys(filteredReporterCount).map((key) => (
+        {
+          name: key,
+          count: filteredReporterCount[key],
+        }));
+      filteredReporterArray.sort((a, b) => a.count - b.count);
+      const top10Reporter = filteredReporterArray.slice(0, 10);
+      for (const i of top10Reporter.entries()) {
+        analytics.reporterCountData.data.labels.push(i[1].name);
+        analytics.reporterCountData.data.datasets[0].data.push(i[1].count);
       }
-      analytics.reporterCountData.data.datasets[0].label += `(${reporterNumber})`;
 
       const noJiraNoDuplicateArray = statusCount.filter((item) =>
         (item._id.indexOf('jira.genband.com') === -1 && item._id.indexOf('Duplicate: ') === -1)
@@ -252,7 +257,7 @@ class AppAnalytics extends React.Component {
             height="250"
             redraw
           />
-          <Subheader>Issue distribution by reporter</Subheader>
+          <Subheader>Top 10 Issue Reporter</Subheader>
           <BarChart
             data={this.state.analytics.reporterCountData.data}
             width="600"
