@@ -151,7 +151,7 @@ class AppAnalytics extends React.Component {
       const statusCount = result.statusCount;
       let totalIssueCount = 0;
       let totalJiraCount = 0;
-      let filteredReporterCount = {};
+      const filteredReporterCount = {};
       let reporterNumber = 0;
 
       issueCreationCount.sort((a, b) => (a._id.year + a._id.date) - (b._id.year + b._id.date));
@@ -179,11 +179,11 @@ class AppAnalytics extends React.Component {
 
       for (const i of reporterCount.entries()) {
         const reporter = i[1];
-        let reporterName = reporter._id.split('@')[0];
+        const reporterName = reporter._id.split('@')[0];
         if (!filteredReporterCount[reporterName]) {
           filteredReporterCount[reporterName] = reporter.count;
         } else {
-          filteredReporterCount[reporterName] += reporter.count
+          filteredReporterCount[reporterName] += reporter.count;
         }
       }
 
