@@ -193,7 +193,7 @@ class AppAnalytics extends React.Component {
           name: key,
           count: filteredReporterCount[key],
         }));
-      filteredReporterArray.sort((a, b) => a.count - b.count);
+      filteredReporterArray.sort((a, b) => b.count - a.count);
       const top10Reporter = filteredReporterArray.slice(0, 10);
       for (const i of top10Reporter.entries()) {
         analytics.reporterCountData.data.labels.push(i[1].name);
