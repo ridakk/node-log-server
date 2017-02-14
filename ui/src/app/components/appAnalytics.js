@@ -151,8 +151,10 @@ class AppAnalytics extends React.Component {
       const statusCount = result.statusCount;
       let totalIssueCount = 0;
       let totalJiraCount = 0;
+      let filteredReporterCount = {};
+      let reporterNumber = 0;
 
-      issueCreationCount.sort((a, b) => a._id.date - b._id.date);
+      issueCreationCount.sort((a, b) => (a._id.year + a._id.date) - (b._id.year + b._id.date));
       for (let i = 0; i < issueCreationCount.length; i++) {
         analytics.issueCreationCountData.data.labels.push(`Week ${issueCreationCount[i]._id.date}`);
         analytics.issueCreationCountData.data.datasets[0].data.push(issueCreationCount[i].count);
@@ -176,9 +178,22 @@ class AppAnalytics extends React.Component {
       }
 
       for (const i of reporterCount.entries()) {
-        analytics.reporterCountData.data.labels.push(i[1]._id);
-        analytics.reporterCountData.data.datasets[0].data.push(i[1].count);
+        const reporter = i[1];
+        let reporterName = reporter._id.split('@')[0];
+        if (!filteredReporterCount[reporterName]) {
+          filteredReporterCount[reporterName] = reporter.count;
+        } else {
+          filteredReporterCount[reporterName] += reporter.count
+        }
       }
+
+
+      for (const i of Object.keys(filteredReporterCount)) {
+        reporterNumber++;
+        analytics.reporterCountData.data.labels.push(i);
+        analytics.reporterCountData.data.datasets[0].data.push(filteredReporterCount[i]);
+      }
+      analytics.reporterCountData.data.datasets[0].label += `(${reporterNumber})`;
 
       const noJiraNoDuplicateArray = statusCount.filter((item) =>
         (item._id.indexOf('jira.genband.com') === -1 && item._id.indexOf('Duplicate: ') === -1)

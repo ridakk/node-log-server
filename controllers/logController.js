@@ -142,6 +142,9 @@ function getIssueCreationCounts(appId) {
     }, {
         $group: {
             _id: {
+                year: {
+                  $year: "$date"
+                },
                 date: {
                     $week: "$date",
                 },
