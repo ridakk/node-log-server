@@ -284,7 +284,8 @@ class AppLogs extends React.Component {
                   <TableRow key={log.id}>
                   {
                     self.state.columns.map((column) => {
-                      if (log[column.rowProperty].match(/^(http|https|www)/)) {
+                      if (log[column.rowProperty] &&
+                          log[column.rowProperty].match(/^(http|https|www)/)) {
                         return (<TableRowColumn key={column.columnNumber}>
                           <a
                             title={log[column.rowProperty]}
